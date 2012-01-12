@@ -62,6 +62,7 @@ class MeepExampleApp(object):
             s.append('message: %s<p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
             s.append('<hr>')
+            s.append('<hr>')
 
         s.append("<a href='../../'>index</a>")
             

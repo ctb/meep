@@ -18,7 +18,7 @@ class MeepExampleApp(object):
     def index(self, environ, start_response):
         start_response("200 OK", [('Content-type', 'text/html')])
 
-        username = 'test'
+        username = 'Angela'
 
         return ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (username,)]
 
@@ -29,7 +29,8 @@ class MeepExampleApp(object):
         # retrieve user
         user = meeplib.get_user(username)
 
-        # set content-type
+        # set content-ty
+        pe
         headers = [('Content-type', 'text/html')]
         
         # send back a redirect to '/'

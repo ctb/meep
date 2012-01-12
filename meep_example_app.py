@@ -61,9 +61,12 @@ class MeepExampleApp(object):
             s.append('title: %s<p>' % (m.title))
             s.append('message: %s<p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
-            s.append("<a href='../../'>Delete Message</a>")
+            #s.append("<a href='/m/delete'><form action = '' method = 'POST'><input type = 'button' value = 'Delete Post' value = '%s' name = 'id'></form></a>" % (m.id))
+            #s.append("<a href='/m/delete' action = 'delete_confirm method = 'POST' name = 'id' value = '%d'>Delete Message</a>" % m.id)
             s.append('<hr>')
 
+        s.append("<form action = 'delete_confirm' method = 'POST'>Delete Post # <input type = 'text' name = 'id'><br><input type = 'submit'></form>")
+        s.append("<a href = '/m/add'>Add Message</a>")
         s.append("<a href='../../'>index</a>")
             
         headers = [('Content-type', 'text/html')]
@@ -94,6 +97,40 @@ class MeepExampleApp(object):
         headers.append(('Location', '/m/list'))
         start_response("302 Found", headers)
         return ["message added"]
+
+    '''def del_message(self, environ, start_response):
+        start_response("200 OK", [('Content-type', 'text/html')])
+                           
+        return """Are you sure you want to delete this message?<p><p><a href = '/m/delete_confirm'>YUP</a><p><a href = '../'>NOPE</a>"""
+        '''
+    def del_message_action(self, environ, start_response):
+        print environ['wsgi.input']
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+        
+        messages = meeplib.get_all_messages()
+
+        s = []
+        found = False
+        valid = True
+        for c in form['id'].value:
+            if c.isdigit() == False:
+                s.append("Input string not a number.")
+                valid = False
+                break
+        if(valid):
+            for m in messages:
+                if m.id == int(form['id'].value):
+                    meeplib.delete_message(m)
+                    s.append("Post Successfully Deleted.")
+                    found = True
+                    break
+            if found == False:
+                s.append("No Post with that ID was found.")
+        
+        start_response("200 OK", [('Content-type', 'text/html')])
+        s.append("<p><p><a href = '../../'>Return to Index</a>")
+        return "".join(s)
+        
     
     def __call__(self, environ, start_response):
         # store url/function matches in call_dict
@@ -102,7 +139,9 @@ class MeepExampleApp(object):
                       '/logout': self.logout,
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,
-                      '/m/add_action': self.add_message_action
+                      '/m/add_action': self.add_message_action,
+                      #'/m/delete': self.del_message,
+                      '/m/delete_confirm': self.del_message_action
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.

@@ -1,3 +1,5 @@
 meeplib for CSE 491, 2011, at MSU.
 
 Titus Brown, ctb@msu.edu.
+
+CHANGING THE README TEXT FOR IN CLASS EXERCISE AHHH

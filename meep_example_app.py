@@ -61,12 +61,12 @@ class MeepExampleApp(object):
             s.append('title: %s<p>' % (m.title))
             s.append('message: %s<p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
-            #s.append("<a href='/m/delete'><form action = '' method = 'POST'><input type = 'button' value = 'Delete Post' value = '%s' name = 'id'></form></a>" % (m.id))
+            s.append("<a href='/m/delete_confirm?id=%d'>Delete Post</a>" % (m.id))
             #s.append("<a href='/m/delete' action = 'delete_confirm method = 'POST' name = 'id' value = '%d'>Delete Message</a>" % m.id)
             s.append('<hr>')
 
-        s.append("<form action = 'delete_confirm' method = 'POST'>Delete Post # <input type = 'text' name = 'id'><br><input type = 'submit'></form>")
-        s.append("<a href = '/m/add'>Add Message</a>")
+        #s.append("<form action = 'delete_confirm' method = 'GET'>Delete Post # <input type = 'text' name = 'id'><br><input type = 'submit'></form>")
+        s.append("<a href = '/m/add'>Add Message</a><p>")
         s.append("<a href='../../'>index</a>")
             
         headers = [('Content-type', 'text/html')]

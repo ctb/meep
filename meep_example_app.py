@@ -20,7 +20,7 @@ class MeepExampleApp(object):
 
         username = 'test'
 
-        return ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (username,)]
+        return ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a><p><a href='/m/delete'>Delete a message</a>""" % (username,)]
 
     def login(self, environ, start_response):
         # hard code the username for now; this should come from Web input!
@@ -61,7 +61,7 @@ class MeepExampleApp(object):
             s.append('title: %s<p>' % (m.title))
             s.append('message: %s<p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
-            s.append('<hr>')
+	    s.append('<hr>')
 
         s.append("<a href='../../'>index</a>")
             
@@ -93,6 +93,25 @@ class MeepExampleApp(object):
         headers.append(('Location', '/m/list'))
         start_response("302 Found", headers)
         return ["message added"]
+
+    def delete_message(self, environ, start_response):
+        headers = [('Content-type', 'text/html')]
+        start_response("200 OK", headers)
+	
+        return """<form action='delete_action' method='POST'>id: <input type='text' name='id'><br><input type='submit'></form>"""
+	
+    def delete_message_action(self, environ, start_response):
+	print environ['wsgi.input']
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+	
+	id = int(form['id'].value)
+	print id, ' A';
+	meeplib.delete_message(meeplib.get_message(id))
+	
+	headers = [('Content-type', 'text/html')]
+        headers.append(('Location', '/'))
+        start_response("302 Found", headers)
+	return ["message deleted"]
     
     def __call__(self, environ, start_response):
         # store url/function matches in call_dict
@@ -101,7 +120,9 @@ class MeepExampleApp(object):
                       '/logout': self.logout,
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,
-                      '/m/add_action': self.add_message_action
+		      '/m/delete': self.delete_message,
+                      '/m/add_action': self.add_message_action,
+		      '/m/delete_action': self.delete_message_action
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.

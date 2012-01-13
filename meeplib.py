@@ -90,7 +90,8 @@ def get_message(id):
     return _messages.get(id)            # return None if no such message
 
 def delete_message(msg):
-    del _messages[msg.id]
+    if msg is not None:
+	del _messages[msg.id]
 
 ###
 

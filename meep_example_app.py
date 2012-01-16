@@ -61,6 +61,12 @@ class MeepExampleApp(object):
             s.append('title: %s<p>' % (m.title))
             s.append('message: %s<p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
+            s.append("""
+                <form action='remove' method='POST'>
+                <input type='hidden' name='messageID' value='""" + str(m.id) + """'>
+                <input type='submit' value='Delete this message' 
+                    onclick="return confirm('Are you sure you want to delete this message?')">
+                </form>""")
             s.append('<hr>')
 
         s.append("<a href='../../'>index</a>")
@@ -75,7 +81,25 @@ class MeepExampleApp(object):
         
         start_response("200 OK", headers)
 
-        return """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
+        return """
+            <form action='add_action' method='POST'>
+            Title: <input type='text' name='title'><br>
+            Message:<input type='text' name='message'><br>
+            <input type='submit'>
+            </form>
+            """
+
+    def remove_message(self, environ, start_response):
+        print environ['wsgi.input']
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+        messageID = form['messageID'].value
+        message = meeplib.get_message(int(messageID))
+        meeplib.delete_message(message)
+        headers = [('Content-type', 'text/html')]
+        headers.append(('Location', '/m/list'))
+        start_response("302 Found", headers)
+        return ["message removed"]
+        
 
     def add_message_action(self, environ, start_response):
         print environ['wsgi.input']
@@ -101,6 +125,7 @@ class MeepExampleApp(object):
                       '/logout': self.logout,
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,
+                      '/m/remove': self.remove_message,
                       '/m/add_action': self.add_message_action
                       }
 

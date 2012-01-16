@@ -7,7 +7,7 @@ def initialize():
     u = meeplib.User('test', 'foo')
 
     # create a single message
-    meeplib.Message('my title', 'This is my message!', u)
+    meeplib.Message('my title', 'This is my message NOW!', u)
 
     # done.
 
@@ -57,14 +57,19 @@ class MeepExampleApp(object):
 
         s = []
         for m in messages:
+            print m.id
             s.append('id: %d<p>' % (m.id,))
             s.append('title: %s<p>' % (m.title))
             s.append('message: %s<p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
+          #  s.append('<button onclick="meeplib.delete_message(m.id)">Delete</button>')
+          
+        #    s.append("<a href=delete_action>Delete this message</a>")    #need to pass the message to the function?
             s.append('<hr>')
+           
 
-        s.append("<a href='../../'>index</a>")
-            
+
+        s.append("<form action='delete_action' method='POST'>Delete a Message?<br> Message ID: <input type='text' name='id'><input type='submit'>Delete</form>")    
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
         
@@ -77,6 +82,31 @@ class MeepExampleApp(object):
 
         return """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
 
+    
+    ############################
+    def delete_message(self, environ, start_response):
+        headers = [('Content-type', 'text/html')]
+        start_response("200 OK", headers)
+
+        return """<form action='delete_action' method='POST'>Message:<input type='text' name='message'><br><input type='submit'></form>"""
+    
+    def delete_message_action(self, environ, start_response):
+        print "deleteaction"
+        print environ['wsgi.input']
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+        message=int(form['id'].value)
+        messages = meeplib.get_all_messages()
+      #  meeplib.delete_message(messages[0])
+        meeplib.delete_message(messages[message])
+        headers = [('Content-type', 'text/html')]
+        headers.append(('Location', '/m/list'))
+        start_response("302 Found", headers)
+
+        return ["message deleted"]
+    ###############################
+
+
+        
     def add_message_action(self, environ, start_response):
         print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
@@ -88,7 +118,8 @@ class MeepExampleApp(object):
         user = meeplib.get_user(username)
         
         new_message = meeplib.Message(title, message, user)
-
+        #meeplib.delete_message(new_message)
+        
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list'))
         start_response("302 Found", headers)
@@ -101,7 +132,9 @@ class MeepExampleApp(object):
                       '/logout': self.logout,
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,
-                      '/m/add_action': self.add_message_action
+                      '/m/add_action': self.add_message_action,
+                      '/m/delete': self.delete_message,
+                      '/m/delete_action': self.delete_message_action,
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.

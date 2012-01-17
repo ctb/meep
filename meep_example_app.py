@@ -54,14 +54,15 @@ class MeepExampleApp(object):
 
     def list_messages(self, environ, start_response):
         messages = meeplib.get_all_messages()
-
         s = []
         for m in messages:
             s.append('id: %d<p>' % (m.id,))
             s.append('title: %s<p>' % (m.title))
             s.append('message: %s<p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
+            s.append("<a href='/m/delete_message?id="+str(m.id)+"'>Delete Message</a>")
             s.append('<hr>')
+
 
         s.append("<a href='../../'>index</a>")
             
@@ -93,6 +94,21 @@ class MeepExampleApp(object):
         headers.append(('Location', '/m/list'))
         start_response("302 Found", headers)
         return ["message added"]
+
+    def delete_message(self, environ, start_response):
+        #form = cgi.FieldStorage()
+        #mID = form.getvalue('id')
+        qString = cgi.parse_qs(environ['QUERY_STRING'])
+        mId = qString.get('id', [''])[0]
+        messageID = meeplib.get_message(int(mId))
+        meeplib.delete_message(messageID)
+   
+     
+        headers = [('Content-type', 'text/html')]
+        headers.append(('Location', '/m/list'))
+        start_response("302 Found", headers)
+        
+        return ["message deleted"]
     
     def __call__(self, environ, start_response):
         # store url/function matches in call_dict
@@ -101,7 +117,8 @@ class MeepExampleApp(object):
                       '/logout': self.logout,
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,
-                      '/m/add_action': self.add_message_action
+                      '/m/add_action': self.add_message_action,
+                      '/m/delete_message': self.delete_message,
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.

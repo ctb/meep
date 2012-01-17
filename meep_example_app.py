@@ -61,7 +61,7 @@ class MeepExampleApp(object):
             s.append('title: %s<p>' % (m.title))
             s.append('message: %s<p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
-            s.append("<br/><form action='delete_message_action' method='POST'><input type='submit' value='Delete'/><input type='hidden' name='id' value='%d'/></form>" % (m.id))
+            s.append("<form action='delete_message_action' method='POST'><input type='submit' value='Delete'/><input type='hidden' name='id' value='%d'/></form>" % (m.id))
             s.append('<hr>')
 
         s.append("<a href='../../'>index</a>")
@@ -100,13 +100,10 @@ class MeepExampleApp(object):
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
         
         id = form['id'].value
-        print "Stuff:"
-        print id
-        print meeplib._messages
+
         username = 'test'
         user = meeplib.get_user(username)
         message = meeplib.get_message(int(id))
-        print message
         meeplib.delete_message(message)
 
         headers = [('Content-type', 'text/html')]

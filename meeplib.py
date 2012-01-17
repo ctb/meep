@@ -87,8 +87,7 @@ def get_all_messages(sort_by='id'):
     return _messages.values()
 
 def get_message(id):
-    print "Dumb"
-    print type(id)
+
     return _messages.get(id)            # return None if no such message
 
 def delete_message(msg):

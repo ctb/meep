@@ -61,6 +61,7 @@ class MeepExampleApp(object):
             s.append('title: %s<p>' % (m.title))
             s.append('message: %s<p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
+            s.append('<a href="removeMessage?id=%d" onclick="return confirm(\'Are you sure you want to remove message %d?\');">Delete Message</a>' % (m.id,m.id))
             s.append('<hr>')
 
         s.append("<a href='../../'>index</a>")
@@ -69,6 +70,35 @@ class MeepExampleApp(object):
         start_response("200 OK", headers)
         
         return ["".join(s)]
+
+    def remove_message(self, environ, start_response):
+        try:
+            params = dict([part.split('=') for part in environ['QUERY_STRING'].split('&')])
+            msgId = int(params['id'])
+        except:
+            headers = [('Content-type', 'text/html')]
+            start_response("200 OK", headers)
+            return ["Error Processing provided ID"]
+        
+        
+        messages = meeplib.get_all_messages()
+        found = False
+        for m in messages:
+            if m.id == msgId:
+                meeplib.delete_message(m)
+                found = True
+                break
+    
+        if found:
+            headers = [('Content-type', 'text/html')]
+            headers.append(('Location', '/m/list'))
+            start_response("302 Found", headers)
+            return ["message removed"]
+        else:
+            headers = [('Content-type', 'text/html')]
+            start_response("200 OK", headers)
+            return ["""Message id %d could not be found.""" % (msgId,)]
+
 
     def add_message(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
@@ -101,7 +131,8 @@ class MeepExampleApp(object):
                       '/logout': self.logout,
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,
-                      '/m/add_action': self.add_message_action
+                      '/m/add_action': self.add_message_action,
+                      '/m/removeMessage': self.remove_message
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.

@@ -61,6 +61,7 @@ class MeepExampleApp(object):
             s.append('title: %s<p>' % (m.title))
             s.append('message: %s<p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
+            s.append('<a href="delete_message_action?id='+str(m.id)+'">delete message '+str(m.id)+'</a>')
             s.append('<hr>')
 
         s.append("<a href='../../'>index</a>")
@@ -93,6 +94,17 @@ class MeepExampleApp(object):
         headers.append(('Location', '/m/list'))
         start_response("302 Found", headers)
         return ["message added"]
+
+    def delete_message_action(self, environ, start_response):
+         queryParams = cgi.parse_qs(environ['QUERY_STRING'])
+         ID = queryParams['id'][0]
+         ID = int(ID)
+         meeplib.delete_message(meeplib.get_message(ID))
+         
+         headers = [('Content-type', 'text/html')]
+         headers.append(('Location', '/m/list'))
+         start_response("302 Found", headers)
+         return ["message deleted"]
     
     def __call__(self, environ, start_response):
         # store url/function matches in call_dict
@@ -101,7 +113,8 @@ class MeepExampleApp(object):
                       '/logout': self.logout,
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,
-                      '/m/add_action': self.add_message_action
+                      '/m/add_action': self.add_message_action,
+                      '/m/delete_message_action': self.delete_message_action
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.
@@ -121,3 +134,6 @@ class MeepExampleApp(object):
             status = '500 Internal Server Error'
             start_response(status, [('Content-type', 'text/html')])
             return [x]
+
+
+#added delete functionality

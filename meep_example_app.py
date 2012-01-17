@@ -2,6 +2,8 @@ import meeplib
 import traceback
 import cgi
 
+#Updated for HW1  8:15 Jan16
+
 def initialize():
     # create a default user
     u = meeplib.User('test', 'foo')
@@ -62,7 +64,6 @@ class MeepExampleApp(object):
             s.append('message: %s<p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
             s.append('<form action="delete_action" method="POST"><input type="hidden" name="messageID" value="%d"><input type="submit" value="Delete Message"></form>' % (m.id))
-            #s.append('<form action='delete_action' method='POST'><input type='hidden' name='messageID' value="%d"><input type='submit' value='Delete this message"></form> % (m.id))
             s.append('<hr>')
         s.append("<a href='../../'>index</a>")
             

@@ -61,6 +61,7 @@ class MeepExampleApp(object):
             s.append('title: %s<p>' % (m.title))
             s.append('message: %s<p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
+            s.append("<form action='del' method='POST'><input type='hidden' name='mid' value='%i'><input type='submit' value='delete'></form>" % (m.id))
             s.append('<hr>')
 
         s.append("<a href='../../'>index</a>")
@@ -69,6 +70,18 @@ class MeepExampleApp(object):
         start_response("200 OK", headers)
         
         return ["".join(s)]
+
+    def del_message(self, environ, start_response):
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+        mid = int(form['mid'].value)
+        print "Deleted message", (mid,) 
+        mtd = meeplib.get_message(mid)
+        meeplib.delete_message(mtd)
+
+        headers = [('Content-type', 'text/html')]
+        headers.append(('Location', '/m/list'))
+        start_response("302 Found", headers)
+        return ["deleted message"]
 
     def add_message(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
@@ -101,6 +114,7 @@ class MeepExampleApp(object):
                       '/logout': self.logout,
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,
+                      '/m/del': self.del_message,
                       '/m/add_action': self.add_message_action
                       }
 

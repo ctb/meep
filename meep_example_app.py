@@ -31,13 +31,13 @@ class MeepExampleApp(object):
 
         # set content-type
         headers = [('Content-type', 'text/html')]
-        
+
         # send back a redirect to '/'
         k = 'Location'
         v = '/'
         headers.append((k, v))
         start_response('302 Found', headers)
-        
+
         return "no such content"
 
     def logout(self, environ, start_response):
@@ -49,7 +49,6 @@ class MeepExampleApp(object):
         v = '/'
         headers.append((k, v))
         start_response('302 Found', headers)
-        
         return "no such content"
 
     def list_messages(self, environ, start_response):
@@ -61,18 +60,19 @@ class MeepExampleApp(object):
             s.append('title: %s<p>' % (m.title))
             s.append('message: %s<p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
+            s.append("<form action='del' method='post'> <input type='hidden' name='msg_id' value='%d'> <input type='submit' name='del button' value='Delete Message'></form>" %(m.id))
             s.append('<hr>')
 
+
         s.append("<a href='../../'>index</a>")
-            
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
-        
+
         return ["".join(s)]
 
     def add_message(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
-        
+
         start_response("200 OK", headers)
 
         return """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
@@ -83,17 +83,45 @@ class MeepExampleApp(object):
 
         title = form['title'].value
         message = form['message'].value
-        
+
         username = 'test'
         user = meeplib.get_user(username)
-        
+
         new_message = meeplib.Message(title, message, user)
 
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list'))
         start_response("302 Found", headers)
         return ["message added"]
-    
+
+    def delete_message(self, environ, start_response):
+
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+
+        msg = meeplib.get_message(int(form['msg_id'].value))
+        headers = [('Content-type', 'text/html')]
+        start_response("200 OK Found", headers)
+        return '''You are about to delete the following message: <p>
+
+        id: %d<p>
+        title: %s<p>
+        message: %s<p>
+        author: %s<p>
+
+        Are you sure you wish to delete this message?
+        <form action='del_action' method='post'> <input type='hidden' name='msg_id' value='%d'> <input type='submit' name='del button' value='Yes'></form>  <form action='list' method='post'> <input type='submit' name='cancel_del' value='No'></form>''' %(msg.id, msg.title, msg.post, msg.author.username, msg.id)
+
+    def delete_message_action(self, environ, start_response):
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+
+        msg = meeplib.get_message(int(form['msg_id'].value))
+        meeplib.delete_message(msg)
+
+        headers = [('Content-type', 'text/html')]
+        headers.append(('Location', '/m/list'))
+        start_response("302 Found", headers)
+        return ["message deleted"]
+
     def __call__(self, environ, start_response):
         # store url/function matches in call_dict
         call_dict = { '/': self.index,
@@ -101,7 +129,9 @@ class MeepExampleApp(object):
                       '/logout': self.logout,
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,
-                      '/m/add_action': self.add_message_action
+                      '/m/add_action': self.add_message_action,
+                      '/m/del': self.delete_message,
+                      '/m/del_action' : self.delete_message_action
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.

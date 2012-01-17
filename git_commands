@@ -1,2 +1,10 @@
 ssh git@github.com
 enter password
+git add <file> #any new files#
+git commit -m "message"
+git push origin #changes meep in repository??#
+
+
+git log - shows the history of the repository
+git status - shows the difference in status between my code committed and the master
+git diff - shows the differences in text between my code and the master

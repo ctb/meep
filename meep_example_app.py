@@ -1,6 +1,8 @@
 import meeplib
 import traceback
 import cgi
+from wsgiref import util
+import os
 
 def initialize():
     # create a default user
@@ -20,7 +22,7 @@ class MeepExampleApp(object):
 
         username = 'test'
 
-        return ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/m/delete_all'>Delete all messages</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (username,)]
+        return ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='m/delete_one'>Delete a message</a><p><a href='/m/delete_all'>Delete all messages</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (username,)]
 
     def login(self, environ, start_response):
         # hard code the username for now; this should come from Web input!
@@ -92,9 +94,35 @@ class MeepExampleApp(object):
             meeplib.delete_message(msg)
 
         headers = [('Content-type', 'text/html')]
-        headers.append(('Location', '/m/delete_all'))
+        headers.append(('Location', '/m/list'))
         start_response("302 Found", headers)
         return ["all messages deleted"]
+
+    #call the method to delete one message
+    def delete_one_message(self, environ, start_response):
+        headers = [('Content-type', 'text/html')]
+        
+        start_response("200 OK", headers)
+
+        return """<form action='delete_one_action' method='POST'>Message ID: <input type='text' name='msgID'><br><input type='submit' value='Delete'></form>"""
+
+    #delete one message action
+    def delete_one_message_action(self, environ, start_response):
+        print environ['wsgi.input']
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+
+        ID = form['msgID'].value
+
+        username = 'test'
+        user = meeplib.get_user(username)
+
+        msg = meeplib.get_message(int(ID))
+        meeplib.delete_message(msg)
+
+        headers = [('Content-type', 'text/html')]
+        headers.append(('Location', '/m/list'))
+        start_response("302 Found", headers)
+        return ["message deleted"]
 
     #call the method to add a single message
     def add_message(self, environ, start_response):
@@ -130,8 +158,10 @@ class MeepExampleApp(object):
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,
                       '/m/add_action': self.add_message_action,
-                      '/m/delete_all': self.delete_all_messages,
-                      '/m/delete_all_action': self.delete_all_messages_action
+                      '/m/delete_all': self.delete_all_messages_action,
+                      '/m/delete_all_action': self.delete_all_messages_action,
+                      '/m/delete_one': self.delete_one_message,
+                      '/m/delete_one_action': self.delete_one_message_action
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.
@@ -151,3 +181,4 @@ class MeepExampleApp(object):
             status = '500 Internal Server Error'
             start_response(status, [('Content-type', 'text/html')])
             return [x]
+

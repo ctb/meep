@@ -61,6 +61,7 @@ class MeepExampleApp(object):
             s.append('title: %s<p>' % (m.title))
             s.append('message: %s<p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
+            s.append("<br/><form action='delete_message_action' method='POST'><input type='submit' value='Delete'/><input type='hidden' name='id' value='%d'/></form>" % (m.id))
             s.append('<hr>')
 
         s.append("<a href='../../'>index</a>")
@@ -94,6 +95,25 @@ class MeepExampleApp(object):
         start_response("302 Found", headers)
         return ["message added"]
     
+    def delete_message_action(self, environ, start_response):
+        print environ['wsgi.input']
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+        
+        id = form['id'].value
+        print "Stuff:"
+        print id
+        print meeplib._messages
+        username = 'test'
+        user = meeplib.get_user(username)
+        message = meeplib.get_message(int(id))
+        print message
+        meeplib.delete_message(message)
+
+        headers = [('Content-type', 'text/html')]
+        headers.append(('Location', '/m/list'))
+        start_response("302 Found", headers)
+        return ["message added"]
+
     def __call__(self, environ, start_response):
         # store url/function matches in call_dict
         call_dict = { '/': self.index,
@@ -101,7 +121,8 @@ class MeepExampleApp(object):
                       '/logout': self.logout,
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,
-                      '/m/add_action': self.add_message_action
+                      '/m/add_action': self.add_message_action,
+                      '/m/delete_message_action': self.delete_message_action
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.
@@ -110,7 +131,7 @@ class MeepExampleApp(object):
 
         if fn is None:
             start_response("404 Not Found", [('Content-type', 'text/html')])
-            return ["Page not found."]
+            return ["This page has been obliterated by an old god."]
 
         try:
             return fn(environ, start_response)

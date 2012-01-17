@@ -1,0 +1,315 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<!--
+enigma theme
+made by amy
+do not remove credits
+-->
+
+<meta name="color:text" content="#222">
+<meta name="color:links" content="#222">
+<meta name="color:nav links" content="#222">
+<meta name="color:hover" content="#ccc">
+<meta name="color:background" content="#fff">
+<meta name="color:nav links background" content="#eee">
+
+<meta name="if:small posts" content="1" />
+<meta name="if:bigger posts" content="0" />
+<meta name="if:biggest posts" content="0" />
+<meta name="if:small space between posts" content="0"/>
+<meta name="if:medium space between posts" content="0"/>
+
+<meta name="if:large space between posts" content="0"/>
+<meta name="if:endless scroll" content="0"/>
+<meta name="if:show archive" content="1"/>
+<meta name="if:show ask" content="1" />
+<meta name="if:show captions" content="1" />
+
+<meta name="font:title" content="georgia" />
+<meta name="font:body" content="Georgia" />
+
+<meta name="text:title font size" content="9px" />
+<meta name="text:font size" content="9px" />
+
+<link rel="shortcut icon" href="http://assets.tumblr.com/images/default_avatar_16.gif">
+<link rel="alternate" type="application/rss+xml" href="http://demo.tumblr.com/rss">
+<link rel="shortcut icon" href="http://assets.tumblr.com/images/default_avatar_16.gif">
+<title>Untitled</title>
+
+<link rel="shortcut icon" href="http://assets.tumblr.com/images/default_avatar_16.gif">
+<link rel="alternate" type="application/rss+xml" href="http://demo.tumblr.com/rss">
+
+
+<meta name="description" content="Description" />
+
+
+
+<style type="text/css">
+body {margin-left: 205px; height:100%; text-align:justify; font-family: Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman', serif; font-size: 9px; line-height:9px; color:#222; background-color:#fff;}
+
+.tumblrAutoPager_page_info, .tumblrAutoPager_page_separator {display:none;}
+
+.allposts {margin-top:60px; margin-left:500px; width:5px; padding-top:px; overflow:shown;}
+
+a {text-decoration:none; color:#222; -webkit-transition: 0.5s ease-in;}
+a:hover {-webkit-transition: 0.5s ease-in; color:#ccc;}
+
+#entry {margin-bottom:20px;   width:350px;}
+#entry img {width:350px;}
+a img {border:0px;}
+#entry:hover .permalink {opacity: 1;}
+
+#portrait { width: 64px; height: 64px; background-image:url(http://assets.tumblr.com/images/default_avatar_64.gif);}
+
+.info {left:70px; bottom:15px; padding:10px 10px 10px 10px; position:fixed; width:100px; background-color:transparent;}
+
+.blogtitle {font-family: Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman', serif; padding-bottom:px; text-align:right; font-size:9px; letter-spacing:px;}
+
+.description {max-width:200px; font-style:italic}
+
+div.navlinks a { background-color:#eee; margin-bottom:4px; text-align:right; display:block; position:relative; color:#222;}
+div.navlinks a:hover {display:block; margin-bottom:4px; color:#ccc;}
+
+.header {margin-left:-200px; position:fixed; width:200px;}
+
+.h2, .title {font-size:9px; font-family: Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman', serif; letter-spacing: 1px; text-transform:lowercase; border-bottom:1px dotted #000000;}
+.h3 {text-transform:uppercase;}
+.h4 {font-family: georgia; font-size:20px; line-height:25px; font-weight:; font-style:italic; letter-spacing: 2px; text-transform:lowercase; display:block;}
+.h5 {color:; font-family: arial ; font-size:40px; line-height:41px; font-weight:; font-style:; text-transform:lowercase; text-align:right;}
+
+#pag {width:3px; position:fixed; padding:5px; font-size:10px; bottom:2px;}
+
+.audio {background-color:#000000; margin-bottom : -10px; width:350px;}
+
+.answer {color:#222; font-style:italic; margin-bottom:-15px; border-bottom:1px dotted #000000;}
+
+div.video embed,
+div.post div.video object {width:350px; height:300px;}
+
+ol.notes {padding: 0px; margin-top:20px; margin-bottom: 10px; list-style-type: none; font-size:9px; text-align: center;}
+ol.notes li.note {text-align:left; border-top: solid 0px #ccc; padding: 0 0 3px 0;}
+ol.notes li.note img.avatar {vertical-align: -4px;margin-right: 10px;width: 16px; height: 16px;}
+ol.notes li.note span.action {font-weight: normal; font-size: 9px; text-align:left;}
+ol.notes li.note span.action a {font-size: 9px;font-weight: normal;text-align:left;}
+ol.notes li.note .answer_content {font-size: 9px;font-weight: normal;line-height: 10px;}
+ol.notes li.note blockquote {font-size: 9px;border-color: none;padding: 1px 3px;margin: 3px 0 3px 7px;}
+ol.notes li.note blockquote a {font-size: 9px;text-decoration: none;}
+
+blockquote {padding-left: 7px; border-left: 1px solid #222; margin: 3px 10px 3px 7px;}
+
+.permalink {font-style: italic; float: right; margin-left:356px; margin-top:0px; padding-top:0px; position: absolute; text-align: left; width: 50px; height:10px; font-size: 9px; -webkit-transition: 0.5s ease-in; opacity:0;}
+.permalink a{color:;}
+.permalink a:hover {color:;}
+.entry:hover .permalink {opacity: 1;}
+</style>
+
+
+
+<meta http-equiv="x-dns-prefetch-control" content="off"/></head>
+
+
+<body>
+
+<div class="allposts">
+<div class="info">
+<div class="blogtitle"><a href="#" title="/"><div align="right">Untitled</div></center></a></div>
+<div class="navlinks">
+
+<br>
+<center><a href="#" title="/archive">archive</a>
+<a href="#" title="/ask">message</a>
+
+<a href="#" title="http://arreter.tumblr.com">credit</a> 
+<br></div>
+<div class="description">Description<br></div></center>
+
+<br>
+<div id="pag">
+ <a href="#" title="/page/2" title="older">»</a>
+</div></div></div>
+
+</div></div>
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="entry">
+<span class="permalink"><a href="#" title="http://demo.tumblr.com/post/236/it-does-not-matter-how-slow-you-go-so-long-as-you"></a></span> "It does not matter how slow you go so long as you do not stop."<br>
+— <b>Wisdom of <a href="#" title="http://en.wikipedia.org/wiki/Confucius">Confucius</a></b>
+<br><i><br>5 years ago</i>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="entry">
+<span class="permalink"><a href="#" title="http://demo.tumblr.com/post/459265350/passing-through-times-square-by-mareen-fischinger"><p>Passing through Times Square by <a href="#" title="http://www.mareenfischinger.com/">Mareen Fischinger</a></p></a></span>
+<a href="#" title="http://demo.tumblr.com/post/459265350/passing-through-times-square-by-mareen-fischinger">
+
+<img src="http://www.tumblr.com/photo/1280/demo/459265350/1/tumblr_kzjlfiTnfe1qz4rgh" alt="Passing through Times Square by&nbsp;Mareen Fischinger" width="550"/><div style="margin-top:-4px; margin-bottom:-4px;"></div>
+</a>
+
+<i><br>5 years ago with 6,117 notes</i></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="entry">
+<span class="permalink"><a href="#" title="http://demo.tumblr.com/post/234/my-favorite-web-site"></a></span>
+<div class="h2"><a href="#" title="http://">My favorite web site</a></div><p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+<i><br>5 years ago</i>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="entry">
+<span class="permalink"><a href="#" title="http://demo.tumblr.com/post/233/jack-hey-you-know-what-sucks-lindsey"></a></span>
+<br>
+<b>Jack:</b> Hey, you know what sucks?
+
+<br><b>Lindsey:</b> vaccuums
+<br><b>Jack:</b> Hey, you know what sucks in a metaphorical sense?
+<br><b>Lindsey:</b> black holes
+<br><b>Jack:</b> Hey, you know what just isn&#039;t cool?
+<br><b>Lindsey:</b> lava?<br>
+
+<i><br>5 years ago</i>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="entry">
+<span class="permalink"><a href="#" title="http://demo.tumblr.com/post/459260683/allison-weiss-fingers-crossed"><p><strong><a href="#" title="http://allisonweiss.tumblr.com/">Allison Weiss</a> —</strong> Fingers Crossed</p></a></span>
+
+<div class="audio">
+<script type="text/javascript" language="javascript" src="http://assets.tumblr.com/javascript/tumblelog.js?714"></script><span id="audio_player_459260683">[<a href="#" title="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash" target="_blank">Flash 9</a> is required to listen to audio.]</span><script type="text/javascript">replaceIfFlash(9,"audio_player_459260683",'\x3cdiv class=\x22audio_player\x22\x3e<embed type="application/x-shockwave-flash" src="http://assets.tumblr.com/swf/audio_player_black.swf?audio_file=http://www.tumblr.com/audio_file/459260683/tumblr_ksc4i2SkVU1qz8ouq&color=FFFFFF" height="27" width="207" quality="best" wmode="opaque"></embed>\x3c/div\x3e')</script></div><br>
+<div style="padding:2px; font-size:10px; text-align:left;font-style:italic;">Fingers Crossed by Allison Weiss</div>
+
+<i><br>5 years ago</i>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="entry">
+<span class="permalink"><a href="#" title="http://demo.tumblr.com/post/232/an-example-post"></a></span>
+<div class="title">An example post</div>
+<div style="margin-top:-5px;"><p>Lorem ipsum dolor sit amet, consectetuer <a href="#" title="/">adipiscing elit</a>. Aliquam nisi lorem, pulvinar id, commodo feugiat, vehicula et, mauris. Aliquam mattis porta urna. Maecenas dui neque, rhoncus sed, vehicula vitae, auctor at, nisi. Aenean id massa ut lacus molestie porta. Curabitur sit amet quam id libero suscipit venenatis.</p>
+
+<ul><li>Lorem ipsum dolor sit amet.</li>
+<li>Consectetuer adipiscing elit. </li>
+<li>Nam at tortor quis ipsum tempor aliquet.</li>
+</ul><p>Cum sociis <a href="#" title="/">natoque penatibus</a> et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse sed ligula. Sed volutpat odio non turpis gravida luctus. Praesent elit pede, iaculis facilisis, vehicula mattis, tempus non, arcu.</p>
+<blockquote>Donec placerat mauris commodo dolor. Nulla tincidunt. Nulla vitae augue.</blockquote>
+<p>Suspendisse ac pede. Cras <a href="#" title="/">tincidunt pretium</a> felis. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque porttitor mi id felis. Maecenas nec augue. Praesent a quam pretium leo congue accumsan.</p></div>
+
+</div>
+
+</div>
+</body>
+</html>

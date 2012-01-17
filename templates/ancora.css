@@ -1,0 +1,417 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<!--
+ancora theme
+made by amy (arreter)
+don't remove credits
+-->
+
+<meta name="color:text" content="#222">
+<meta name="color:links" content="#222">
+<meta name="color:nav links" content="#222">
+<meta name="color:hover" content="#ccc">
+<meta name="color:background" content="#fff">
+<meta name="color:description background" content="#eee">
+<meta name="color:background quote" content="#f8f8f8">
+
+<meta name="if:endless scroll" content="1"/>
+<meta name="if:show archive" content="1"/>
+<meta name="if:show ask" content="1" />
+<meta name="if:show shadows" content="1" />
+
+<meta name="if:align left" content="0" />
+<meta name="text:Twitter name" content="" />
+<meta name="text:Disqus Shortname" content="" />
+
+<meta name="font:title" content="Baskerville" />
+<meta name="font:body" content="Baskerville" />
+<meta name="font:nav" content="Baskerville" />
+
+<meta name="text:title font size" content="24px" />
+<meta name="text:font size" content="9px" />
+
+
+<link rel="shortcut icon" href="http://assets.tumblr.com/images/default_avatar_16.gif">
+<link rel="alternate" type="application/rss+xml" href="http://demo.tumblr.com/rss">
+<link rel="shortcut icon" href="http://assets.tumblr.com/images/default_avatar_16.gif">
+<title>Untitled</title>
+
+<link rel="shortcut icon" href="http://assets.tumblr.com/images/default_avatar_16.gif">
+<link rel="alternate" type="application/rss+xml" href="http://demo.tumblr.com/rss">
+
+
+<meta name="description" content="Description" />
+
+
+
+<style type="text/css">
+body {margin:auto;  height:100%; text-align:justify; font-family: Baskerville, 'Times New Roman', Times, serif; font-size: 9px; color:#222; background-color:#fff; width:630px;}
+
+.tumblrAutoPager_page_info, .tumblrAutoPager_page_separator {display:none;}
+
+.allposts {margin:auto; width:640px; padding-top:px; overflow:shown;}
+
+a {text-decoration:none; color:#222; -webkit-transition: 0.5s ease-in;}
+a:hover {-webkit-transition: 0.5s ease-in; color:#ccc;}
+
+#entry {-moz-box-shadow: 2px 2px 2px #eee; -webkit-box-shadow: 2px 2px 2px #eee; box-shadow: 2px 2px 2px #eee text-align:; background-color:; margin-left: 5px; margin-bottom:15px; overflow:hidden; float:left; width:300px;  height:202px;  padding-left:4px; padding-right:4px; padding-top:4px; padding-bottom:4px;}
+#entry img {width:300px;  overflow:hidden;}
+a img {border:none;}
+#entry:hover .permalink {opacity: 1;}
+
+.blogtitle {margin-top: 100px; margin-bottom: -4px; font-family: Baskerville, 'Times New Roman', Times, serif; padding-bottom:px; text-align:left; font-size:24px; letter-spacing:px; text-transform:uppercase;
+ font-family: times new roman; font-weight: lighter;font-variant: normal;text-transform: uppercase; text-align: center;letter-spacing: 0.3em;}
+
+.description {margin-bottom: -3px; background-color:#eee;}
+
+div.navlinks a {border-bottom:solid #eee 1px; font-family: Baskerville, 'Times New Roman', Times, serif; padding-left:2px; position:relative; color:#222; width:640px; }
+div.navlinks a:hover {padding-left:2px; color:#ccc;}
+
+.header {margin-left:-200px; position:fixed; width:200px;}
+
+.h2, .title {font-size:9px; font-family: Baskerville, 'Times New Roman', Times, serif; letter-spacing: 0px; text-transform:uppercase;}
+.h3 {text-transform:uppercase;}
+.h4 {font-family: georgia; font-size:20px; line-height:25px; font-weight:; font-style:italic; letter-spacing: 2px; text-transform:lowercase; display:block;}
+.h5 {color:; font-family: arial; font-size:40px; line-height:41px; font-weight:; font-style:; text-transform:lowercase; text-align:right;}
+
+#pag {font-family: Baskerville, 'Times New Roman', Times, serif; text-transform:uppercase; width:px; text align:center; position:relative; margin:auto; padding:5px; font-size:9px; bottom:-5px; left: 420px;}
+
+.navbar {text-align: right; width:300px; line-height: 8px; position:; padding-top:2px; bottom:-25px;bottom:-15px; background:#fff; margin-left:-px; }
+
+.bottombar {background-color:#eee; width:630px; position:fixed;  bottom:-2px; margin:auto; padding-bottom:10px; padding-top:2px; z-index:1000;}
+
+
+.audio {background-color:#000000; margin-bottom : -10px; width:300px;}
+
+.answer {color:#222; margin-bottom: -14px; font-family: Baskerville, 'Times New Roman', Times, serif; }
+
+.quote {background-color:#f8f8f8;}
+
+div.video embed,
+div.post div.video object {width:300px; height:300px;}
+
+ol.notes {padding: 0px; margin-top:20px; margin-bottom: 10px; list-style-type: none; font-size:9px; text-align: center;}
+ol.notes li.note {text-align:center; border-top: solid 0px #ccc; padding: 0 0 3px 0;}
+ol.notes li.note img.avatar {vertical-align: -4px;margin-right: 10px;width: 16px; height: 16px;}
+ol.notes li.note span.action {font-weight: normal; font-size: 9px; text-align:center;}
+ol.notes li.note span.action a {font-size: 9px;font-weight: normal;text-align:center;}
+ol.notes li.note .answer_content {font-size: 9px;font-weight: normal;line-height: 10px;}
+ol.notes li.note blockquote {font-size: 9px;border-color: none;padding: 1px 3px;margin: 3px 0 3px 7px;}
+ol.notes li.note blockquote a {font-size: 9px;text-decoration: none;}
+
+blockquote {padding-left: 7px; border-left: 1px solid #222; margin: 3px 10px 3px 7px;}
+
+.permalink {float: left; margin-top:184px;  padding-top:2px; padding-bottom:2px; text-align:center; position: absolute; text-align: center; width: 300px; height:10px; font-size: 9px; courier new; -webkit-transition: 0.5s ease-in; opacity:0;}
+.permalink a {color:; opacity: 0.6; z-index:1; background-color:#eee; width:300px;}
+.permalink a:hover {color:; opacity: 0.6; z-index:1; background-color:#eee; width:300px;}
+.entry:hover .permalink {opacity: 0.6; z-index:1; background-color:#eee; width:300px;}
+
+
+</style>
+
+<script>
+$(document).ready(function(){
+$(".navlinks").hide();
+$(".blogtitle").mouseenter(function () {
+$(".navlinks", this).slideDown("fast, 0.3");
+});
+$(".blogtitle").mouseleave(function () {
+$(".navlinks", this).slideUp("fast, 0.3");
+});
+});
+</script>
+
+<script type="text/javascript" src="http://static.tumblr.com/twte3d7/BH7lio0yf/jquery.js"></script> 
+<script type="text/javascript" src="http://static.tumblr.com/twte3d7/RhUlio0y7/lazyload.js"></script>
+
+<script type="text/javascript" charset="utf-8"> 
+var $j = jQuery.noConflict();
+$j(function() { 
+if (navigator.platform == "iPad" || navigator.platform == "iPhone") return; 
+$j("img").lazyload({
+placeholder : "http://static.tumblr.com/twte3d7/RSvlio0k5/grey.gif",
+effect: "fadeIn",
+});
+});
+</script> 
+
+
+<script type="text/javascript">
+$(window).load(function(){
+$("p").remove(":contains('Source:')");
+$("p").remove(":contains('(via')");
+});
+</script>
+
+
+
+
+<script type="text/javascript" src="http://static.tumblr.com/q0etgkr/J5bl3lkz1/tumblrautopagernopage.js"></script>
+
+
+<meta http-equiv="x-dns-prefetch-control" content="off"/></head>
+
+
+<body>
+
+<div class="allposts">
+
+<div class="blogtitle"><a href="#" title="/">Untitled</a></div>
+<div class="allposts">
+<div class="navlinks"><div align="center"><a href="#" title="/archive">archive</a> ○
+<a href="#" title="/ask">message</a> ○
+
+<a href="#" title="http://arreter.tumblr.com">credit</a> ○ 
+</div>
+
+<div class="bottombar"><div class="description"><i><center>Description</center></i></div></div>
+
+
+</div></div></div></div><br><br>
+
+
+<div class="autopagerize_page_element">
+
+
+
+
+
+
+
+
+
+
+
+<div id="entry">
+<div class="quote"><span class="permalink"><a href="#" title="http://demo.tumblr.com/post/236/it-does-not-matter-how-slow-you-go-so-long-as-you"><i>Permalink</i> | 10,541 notes</a></span> "<i>It does not matter how slow you go so long as you do not stop.</i>"
+— <b>Wisdom of <a href="#" title="http://en.wikipedia.org/wiki/Confucius">Confucius</a></b>
+</div></div>
+
+
+
+
+
+
+
+
+
+
+
+<center></center>
+ 
+ 
+                    
+            
+          
+          
+          
+
+
+
+
+
+
+<div id="entry">
+<span class="permalink"><a href="#" title="http://demo.tumblr.com/post/459265350/passing-through-times-square-by-mareen-fischinger"><i>Permalink</i> | 6,118 notes</a></span>
+<a href="#" title="http://demo.tumblr.com/post/459265350/passing-through-times-square-by-mareen-fischinger">
+
+<img src="http://www.tumblr.com/photo/1280/demo/459265350/1/tumblr_kzjlfiTnfe1qz4rgh" alt="Passing through Times Square by&nbsp;Mareen Fischinger" width="420"/><div style="margin-top:-4px; margin-bottom:-4px;"></div>
+
+</a>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<center></center>
+ 
+ 
+                    
+            
+          
+          
+          
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="entry">
+<span class="permalink"><a href="#" title="http://demo.tumblr.com/post/234/my-favorite-web-site"><i>Permalink</i> | 2,834 notes</a></span>
+<div class="h2"><a href="#" title="http://">My favorite web site</a></div><p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+</div>
+
+
+
+
+
+
+
+
+
+<center></center>
+ 
+ 
+                    
+            
+          
+          
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="entry">
+<span class="permalink"><a href="#" title="http://demo.tumblr.com/post/233/jack-hey-you-know-what-sucks-lindsey"><i>Permalink</i> | 5,548 notes</a></span>
+<br>
+<b>Jack:</b> Hey, you know what sucks?
+
+<br><b>Lindsey:</b> vaccuums
+<br><b>Jack:</b> Hey, you know what sucks in a metaphorical sense?
+<br><b>Lindsey:</b> black holes
+<br><b>Jack:</b> Hey, you know what just isn&#039;t cool?
+<br><b>Lindsey:</b> lava?<br>
+
+</div>
+
+
+
+
+
+
+
+
+<center></center>
+ 
+ 
+                    
+            
+          
+          
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="entry">
+<span class="permalink"><a href="#" title="http://demo.tumblr.com/post/459260683/allison-weiss-fingers-crossed"><i>Permalink</i> | 1,796 notes</a></span>
+<div class="audio">
+
+<script type="text/javascript" language="javascript" src="http://assets.tumblr.com/javascript/tumblelog.js?714"></script><span id="audio_player_459260683">[<a href="#" title="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash" target="_blank">Flash 9</a> is required to listen to audio.]</span><script type="text/javascript">replaceIfFlash(9,"audio_player_459260683",'\x3cdiv class=\x22audio_player\x22\x3e<embed type="application/x-shockwave-flash" src="http://assets.tumblr.com/swf/audio_player_black.swf?audio_file=http://www.tumblr.com/audio_file/459260683/tumblr_ksc4i2SkVU1qz8ouq&color=FFFFFF" height="27" width="207" quality="best" wmode="opaque"></embed>\x3c/div\x3e')</script></div><br>
+<div style="padding:2px; font-size:10px; text-align:left;font-style:italic;">Fingers Crossed by Allison Weiss</div>
+
+</div>
+
+
+
+
+
+
+<center></center>
+ 
+ 
+                    
+            
+          
+          
+          
+
+
+
+
+<div id="entry">
+<span class="permalink"><a href="#" title="http://demo.tumblr.com/post/232/an-example-post"><i>Permalink</i> | 3,982 notes</a></span>
+<div class="title">An example post</div>
+<div style="margin-top:-5px;"><p>Lorem ipsum dolor sit amet, consectetuer <a href="#" title="/">adipiscing elit</a>. Aliquam nisi lorem, pulvinar id, commodo feugiat, vehicula et, mauris. Aliquam mattis porta urna. Maecenas dui neque, rhoncus sed, vehicula vitae, auctor at, nisi. Aenean id massa ut lacus molestie porta. Curabitur sit amet quam id libero suscipit venenatis.</p>
+<ul><li>Lorem ipsum dolor sit amet.</li>
+<li>Consectetuer adipiscing elit. </li>
+
+<li>Nam at tortor quis ipsum tempor aliquet.</li>
+</ul><p>Cum sociis <a href="#" title="/">natoque penatibus</a> et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse sed ligula. Sed volutpat odio non turpis gravida luctus. Praesent elit pede, iaculis facilisis, vehicula mattis, tempus non, arcu.</p>
+<blockquote>Donec placerat mauris commodo dolor. Nulla tincidunt. Nulla vitae augue.</blockquote>
+<p>Suspendisse ac pede. Cras <a href="#" title="/">tincidunt pretium</a> felis. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque porttitor mi id felis. Maecenas nec augue. Praesent a quam pretium leo congue accumsan.</p></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<center></center>
+
+ 
+ 
+                    
+            
+          
+          
+          
+
+
+
+</div>
+
+
+
+<div class="navbar">
+<div id="pag">
+</div></div>
+
+
+</div>
+</body>
+</html>
+

@@ -61,6 +61,7 @@ class MeepExampleApp(object):
             s.append('title: %s<p>' % (m.title))
             s.append('message: %s<p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
+            s.append("<form action='del' method='post'> <input type='hidden' name='msg_id' value='%d'> <input type='submit' name='del button' value='Delete Message'></form>" %(m.id))
             s.append('<hr>')
 
         s.append("<a href='../../'>index</a>")
@@ -94,6 +95,18 @@ class MeepExampleApp(object):
         start_response("302 Found", headers)
         return ["message added"]
     
+    def delete_message(self, environ, start_response):
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+
+        msg = meeplib.get_message(int(form['msg_id'].value))
+        meeplib.delete_message(msg)
+
+        headers = [('Content-type', 'text/html')]
+        headers.append(('Location', '/m/list'))
+        start_response("302 Found", headers)
+        return ["message deleted"]
+
+    
     def __call__(self, environ, start_response):
         # store url/function matches in call_dict
         call_dict = { '/': self.index,
@@ -101,7 +114,8 @@ class MeepExampleApp(object):
                       '/logout': self.logout,
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,
-                      '/m/add_action': self.add_message_action
+                      '/m/add_action': self.add_message_action,
+                      '/m/del': self.delete_message
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.

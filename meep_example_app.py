@@ -2,6 +2,7 @@ import meeplib
 import traceback
 import cgi
 
+
 def initialize():
     # create a default user
     u = meeplib.User('test', 'foo')
@@ -61,6 +62,7 @@ class MeepExampleApp(object):
             s.append('title: %s<p>' % (m.title))
             s.append('message: %s<p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
+            s.append("<div style='text-align:right'><form action='delete' method='POST'><input type='hidden' name='id' value='%i'><input type='submit' value='delete message'></form></div>"%m.id)
             s.append('<hr>')
 
         s.append("<a href='../../'>index</a>")
@@ -91,9 +93,24 @@ class MeepExampleApp(object):
 
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list'))
-        start_response("302 Found", headers)
+        start_response("302 Found", headers)  
         return ["message added"]
     
+    def delete_message(self,environ,start_response):
+    
+    	form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+        id= form['id'].value   
+        mes = meeplib.get_all_messages()
+     	for m in mes:
+				if(m.id == int(id)):
+					meeplib.delete_message(m)
+
+        headers = [('Content-type', 'text/html')]
+        headers.append(('Location', '/m/list'))
+        start_response("302 OK", headers)
+        #print id
+        return ["message deleted"]
+        
     def __call__(self, environ, start_response):
         # store url/function matches in call_dict
         call_dict = { '/': self.index,
@@ -101,7 +118,8 @@ class MeepExampleApp(object):
                       '/logout': self.logout,
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,
-                      '/m/add_action': self.add_message_action
+                      '/m/add_action': self.add_message_action,
+                      '/m/delete':self.delete_message
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.

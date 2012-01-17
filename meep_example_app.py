@@ -1,6 +1,7 @@
 import meeplib
 import traceback
 import cgi
+from cgi import parse_qs, escape #why is this line nescessary!?
 
 def initialize():
     # create a default user
@@ -20,7 +21,29 @@ class MeepExampleApp(object):
 
         username = 'test'
 
-        return ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (username,)]
+	indexhtml= """
+<html>
+  <body>
+    <p>
+	You are logged in as user: %s.
+    </p>
+    <p>
+	<a href='/m/add'>Add a message</a>
+    </p>
+    <p>
+	<a href='/login'>Log in</a>
+    </p>
+    <p>
+	<a href='/logout'>Log out</a>
+    </p>
+    <p>
+	<a href='/m/list'>Show messages</a>
+    </p>
+  </body>
+</html>
+	""" % (username,)
+
+        return [indexhtml]
 
     def login(self, environ, start_response):
         # hard code the username for now; this should come from Web input!
@@ -57,13 +80,16 @@ class MeepExampleApp(object):
 
         s = []
         for m in messages:
-            s.append('id: %d<p>' % (m.id,))
-            s.append('title: %s<p>' % (m.title))
-            s.append('message: %s<p>' % (m.post))
-            s.append('author: %s<p>' % (m.author.username))
-            s.append('<hr>')
+	    deletebutton = '''<form action="delete_action" method="get">\n\t<button name="deleteID" type="submit"value="%s">Delete</button>\n</form>\n''' %(str(m.id,))
+	    s.append("<html>\n<body>\n")
+            s.append('<p>\n\tid: %d\n</p>\n' % (m.id,))
+            s.append('<p>\n\ttitle: %s\n</p>\n' % (m.title))
+            s.append('<p>\n\tmessage: %s\n</p>\n' % (m.post))
+            s.append('<p>\n\tauthor: %s\n</p>\n' % (m.author.username))
+	    s.append(deletebutton)
+            s.append('\n<hr>')
 
-        s.append("<a href='../../'>index</a>")
+        s.append("\n\n<a href='../../'>index</a> \n</body>\n</html>")
             
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
@@ -72,10 +98,35 @@ class MeepExampleApp(object):
 
     def add_message(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
-        
         start_response("200 OK", headers)
 
-        return """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
+        return """
+<html>
+  <body>
+    <form action='add_action' method='POST'>
+    	Title: <input type='text' name='title'><br>
+    	Message: <input type='text' name='message'><br>
+    	<input type='submit'>
+    </form>
+  </body>
+</html>
+	"""
+
+    def delete_message_action(self, environ, start_response):
+	qDict = parse_qs(environ['QUERY_STRING'])
+	delID = qDict.get('deleteID', [''])[0] #get first item (the only item we need, id of message to be deleted)
+	escape(delID) #escape user input, recommended to stop script injection by webpython.codepoint.net
+	print delID
+	messages = meeplib.get_all_messages()
+	for m in messages:
+		if int(m.id) is int(delID):
+			meeplib.delete_message(m)
+
+	headers = [('Content-type', 'text/html')]
+	headers.append(('Location', '/m/list'))
+	start_response("302 Found", headers)
+	
+	return 'message deleted'
 
     def add_message_action(self, environ, start_response):
         print environ['wsgi.input']
@@ -86,7 +137,7 @@ class MeepExampleApp(object):
         
         username = 'test'
         user = meeplib.get_user(username)
-        
+ 
         new_message = meeplib.Message(title, message, user)
 
         headers = [('Content-type', 'text/html')]
@@ -101,7 +152,8 @@ class MeepExampleApp(object):
                       '/logout': self.logout,
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,
-                      '/m/add_action': self.add_message_action
+                      '/m/add_action': self.add_message_action,
+		      '/m/delete_action': self.delete_message_action
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.

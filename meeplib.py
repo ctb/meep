@@ -90,7 +90,7 @@ def get_message(id):
     return _messages.get(id)            # return None if no such message
 
 def delete_message(msg):
-    del _messages[msg.id]
+    del _messages[msg]
 
 ###
 
@@ -117,3 +117,5 @@ def get_all_users():
 def delete_user(user):
     del _users[user.username]
     del _user_ids[user.id]
+
+#updated 11/18/2011

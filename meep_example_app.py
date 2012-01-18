@@ -62,11 +62,12 @@ class MeepExampleApp(object):
             s.append('message: %s<p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
             s.append(
-                     """<form action=delete_action' method='GET'>
+                     """<form action='delete_action' method='GET'>
                         <input type='hidden' value='%d' name='id_num'>
                         <input type='submit' value="Delete Message">
                         </form>
                      """ % (m.id))
+            print m.id
             s.append('<hr>')
 
         s.append("<a href='../../'>index</a>")
@@ -104,10 +105,12 @@ class MeepExampleApp(object):
         print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
 
-        id = int(form['id_num'].value)
-        print id
+        id_number = form['id_num'].value
+        print "form"
+        print (id,)
+        id_number = int(id_number)
         
-        delete_message = meeplib.delete_message(id)
+        meeplib.delete_message(id_number)
 
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list'))

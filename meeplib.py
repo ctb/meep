@@ -90,6 +90,7 @@ def get_message(id):
     return _messages[id]
 
 def delete_message(msg):
+    assert isinstance(msg, Message)
     del _messages[msg.id]
 
 ###

@@ -33,6 +33,7 @@ __all__ = ['Message', 'get_all_messages', 'get_message', 'delete_message',
 
 # a dictionary, storing all messages by a (unique, int) ID -> Message object.
 _messages = {}
+_replies = {}
 
 def _get_next_message_id():
     if _messages:
@@ -90,13 +91,20 @@ def get_message(id):
     return _messages[id]
 
 def delete_message(msg):
-<<<<<<< HEAD
-    if msg is not None:
-	del _messages[msg.id]
-=======
     assert isinstance(msg, Message)
     del _messages[msg.id]
->>>>>>> 7544acf1d69543c449446f06498d54394a350d20
+
+def add_reply(message_id, reply):
+    if _replies.has_key(message_id):
+        _replies[message_id].append(reply)        
+    else:
+        _replies[message_id] = [reply]
+
+def has_replies(message_id):
+    return _replies.has_key(message_id)
+
+def get_replies(message_id):
+    return _replies[message_id]
 
 ###
 

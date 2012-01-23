@@ -6,7 +6,7 @@ Functions and classes:
  * u = User(username, password) - creates & saves a User object.  u.id
      is a guaranteed unique integer reference.
 
- * m = Message(title, post, author) - creates & saves a Message object.
+ * m = Message(title, post, author, reply) - creates & saves a Message object.
      'author' must be a User object.  'm.id' guaranteed unique integer.
 
  * get_all_messages() - returns a list of all Message objects.
@@ -59,7 +59,18 @@ def _reset():
     _users = {}
     _user_ids = {}
 
-###
+
+
+# Class: Message
+# Usage: Message(title, post, author, reply)
+#   title - The title of the Message
+#   post - The content of the Message
+#   author - The username of the creator of the Message
+#   reply - The ID of the Message that this Message is replying to.  ID 0 is 
+#           the id of the root message.  Use -1 for a Message that is not in
+#           reply to another Message.
+#
+# Example: Message("Hi", "what's up, friends?", billyEveryTeen, -1)
 
 class Message(object):
     """
@@ -68,17 +79,19 @@ class Message(object):
     'author' must be an object of type 'User'.
     
     """
-    def __init__(self, title, post, author):
+    def __init__(self, title, post, author, reply=-1):
         self.title = title
         self.post = post
+        self.reply_to = reply
+        self.id = _get_next_message_id()
 
         assert isinstance(author, User)
         self.author = author
 
         self._save_message()
+        print "+M:", self.id, self.reply_to, self.title, self.post
 
     def _save_message(self):
-        self.id = _get_next_message_id()
         
         # register this new message with the messages list:
         _messages[self.id] = self
@@ -87,11 +100,14 @@ def get_all_messages(sort_by='id'):
     return _messages.values()
 
 def get_message(id):
-    return _messages[id]
+    return _messages[int(id)]
+
 
 def delete_message(msg):
     assert isinstance(msg, Message)
+    print "-M:", msg.id, msg.reply_to, msg.title, msg.post
     del _messages[msg.id]
+
 
 ###
 

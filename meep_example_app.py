@@ -52,18 +52,34 @@ class MeepExampleApp(object):
         
         return "no such content"
 
-    def list_messages(self, environ, start_response):
+    def gen_list(self, r, s, d):
         messages = meeplib.get_all_messages()
-
-        s = []
         for m in messages:
-            s.append('id: %d<p>' % (m.id,))
-            s.append('title: %s<p>' % (m.title))
-            s.append('message: %s<p>' % (m.post))
-            s.append('author: %s<p>' % (m.author.username))
-            s.append("<form action='del' method='POST'><input type='hidden' name='mid' value='%i'><input type='submit' value='delete'></form>" % (m.id))
-            s.append('<hr>')
+            if (int(m.reply_to) == int(r)):
+                s.append('<tr><td>\n')
+                s.append("<table border='0'>\n")
+                s.append("<tr><td width=%i>\n" % (d*33))
+                s.append("\n</td><td width=311 style='background-color: #5eb85e;'>\n")
+                s.append('id: %d<br />\n' % (m.id,))
+                s.append('title: %s<br />\n' % (m.title))
+                s.append('message: %s<br />\n' % (m.post))
+                s.append('author: %s<br />\n' % (m.author.username))
+                s.append("</td><td style='background-color: #5eb85e;'><table border='0'>\n")
+                s.append("<tr><td>\n<form action='del' method='POST'><input type='hidden' name='id' value='%i'><input type='submit' value='delete'></form>\n</td></tr><tr>" % (m.id))
+                s.append("<td>\n<form action='add' method='POST'><input type='hidden' name='reply' value='%i'><input type='submit' value='reply'></form>\n</td>" % (m.id))
+                s.append('</tr>\n</table>\n</td></tr>\n</table>\n')
+                s.append('</td></tr>\n')
+                t = self.gen_list(m.id, [], d+1)
+                s.append("".join(t))
+        return ["".join(s)]
 
+
+
+
+    def list_messages(self, environ, start_response):
+
+        s = ["".join(self.gen_list(-1, ["<table border='0'>\n"], 1))]
+        s.append('</table><hr>')
         s.append("<a href='../../'>index</a>")
             
         headers = [('Content-type', 'text/html')]
@@ -72,9 +88,9 @@ class MeepExampleApp(object):
         return ["".join(s)]
 
     def del_message(self, environ, start_response):
+        # TODO delete all replies to deleted message
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
-        mid = int(form['mid'].value)
-        print "Deleted message", (mid,) 
+        mid = int(form['id'].value)
         mtd = meeplib.get_message(mid)
         meeplib.delete_message(mtd)
 
@@ -84,23 +100,39 @@ class MeepExampleApp(object):
         return ["deleted message"]
 
     def add_message(self, environ, start_response):
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+        if ('reply' in form):
+            reply_id = int(form['reply'].value)
+        else:
+            reply_id = -1
         headers = [('Content-type', 'text/html')]
         
         start_response("200 OK", headers)
-
-        return """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
+        form_code = """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'><input type='hidden' name='reply' value='%i'></form>""" % reply_id
+        return form_code
 
     def add_message_action(self, environ, start_response):
         print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+        if ('title' in form):
+            title = form['title'].value
+        else:
+            title = ""
 
-        title = form['title'].value
-        message = form['message'].value
-        
+        if ('message' in form):
+            message = form['message'].value
+        else:
+            message = ""
+
+        if ('reply' in form):
+            reply = form['reply'].value
+        else:
+            reply = -1
+
         username = 'test'
         user = meeplib.get_user(username)
         
-        new_message = meeplib.Message(title, message, user)
+        new_message = meeplib.Message(title, message, user, reply)
 
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list'))

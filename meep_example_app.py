@@ -58,17 +58,16 @@ class MeepExampleApp(object):
         s = []
         if messages:
             for m in messages:
-                s.append('id: %d<p>' % (m.id,))
-                s.append('title: %s<p>' % (m.title))
-                s.append('message: %s<p>' % (m.post))
-                s.append('author: %s<p>' % (m.author.username))
+                s.append('<hr')
+                s.append('<h2>%s</h2>' % (m.title))
+                s.append('<p>%s</p>' % (m.post))
+                s.append('<p>Posted by: %s</p>' % (m.author.username))
                 # append the delete message link
                 s.append("<form action='delete_action?id=%d' method='POST'><input type='submit' value='Delete Message' /></form>" % (m.id))
-                s.append('<hr>')
         else:
             s.append("There are no messages to display.<p>")
-            s.append('<hr>')
 
+        s.append('<hr>')
         s.append("<a href='../../'>index</a>")
             
         headers = [('Content-type', 'text/html')]

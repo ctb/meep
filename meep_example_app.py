@@ -63,7 +63,9 @@ class MeepExampleApp(object):
                 s.append('<p>%s</p>' % (m.post))
                 s.append('<p>Posted by: %s</p>' % (m.author.username))
                 # append the delete message link
-                s.append("<form action='delete_action?id=%d' method='POST'><input type='submit' value='Delete Message' /></form>" % (m.id))
+                s.append("""
+                <form action='delete_action' method='POST'><input name='id' type='hidden' value='%d' /><input type='submit' value='Delete Message' /></form>
+                """  % (m.id))
         else:
             s.append("There are no messages to display.<p>")
 

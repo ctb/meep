@@ -33,6 +33,10 @@ __all__ = ['Message', 'get_all_messages', 'get_message', 'delete_message',
 
 # a dictionary, storing all messages by a (unique, int) ID -> Message object.
 _messages = {}
+_words={}
+_search=True
+_searchIDs={}
+### WHY DO DICTIONARYS STAY BUT BOOLEANS AND LISTS DO NOT??????????????????????????????????
 
 def _get_next_message_id():
     if _messages:
@@ -76,6 +80,7 @@ class Message(object):
         self.author = author
 
         self._save_message()
+        add_message_to_dict(self)
 
     def _save_message(self):
         self.id = _get_next_message_id()
@@ -91,7 +96,88 @@ def get_message(id):
 
 def delete_message(msg):
     assert isinstance(msg, Message)
+    remove_message_from_dict(msg)
     del _messages[msg.id]
+
+
+    
+def add_message_to_dict(msg):
+    print "My message id"+ str(msg.id)
+    print type(msg.id)
+    message=_messages[msg.id]
+    wordset=set()
+    thePost=message.post.split()
+    for word in thePost:
+        wordset.add(word)
+    theTitle=message.title.split()
+    for word in theTitle:
+        wordset.add(word)
+    
+    print "THE WORDSET"
+    print wordset
+    for word in wordset:
+        if word not in _words:
+            temp=list()
+            temp.append(msg.id)
+            _words[word]=temp
+        else:
+            currentValue=_words[word]
+            currentValue.append(msg.id)
+            print "CURRENT VALUE"
+            
+            _words[word]=currentValue
+            print  _words[word]
+
+    return True
+
+def remove_message_from_dict(msg):
+    message=_messages[msg.id]
+    wordset=set()
+    thePost=message.post.split()
+    for word in thePost:
+        wordset.add(word)
+    theTitle=message.title.split()
+    for word in theTitle:
+        wordset.add(word)
+    for word in wordset:
+        currentValue=_words[word]
+        currentValue.remove(msg.id)
+        _words[word]=currentValue
+    return True
+
+def search_message_dict(text):
+    text=text.split()
+    searchSet=set()
+    resultIDSet=set()
+    for word in text:
+        searchSet.add(word)
+    for word in searchSet:
+        if word in _words:
+            for msgID in _words[word]:
+                resultIDSet.add(msgID)
+
+    print "THE SEARCH RESULTS"
+    for msgID in resultIDSet:
+        print msgID
+    _searchIDs["test"]=resultIDSet
+    print _searchIDs
+    return resultIDSet
+##
+##
+##
+##def checkSearch():
+##    print "SEARCH check"
+##    print _search
+##    return _search
+##def setSearch(boolean):
+##    _search=boolean
+##    print "SEARCH STATE"
+##    print _search
+
+def get_search_results():
+    print _searchIDs
+    return _searchIDs["test"]
+    
 
 ###
 
@@ -118,3 +204,5 @@ def get_all_users():
 def delete_user(user):
     del _users[user.username]
     del _user_ids[user.id]
+
+### need a dictionary string to list, append to the list for each word when its added, remvoe from list when its removed

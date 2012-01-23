@@ -68,20 +68,31 @@ class Message(object):
     'author' must be an object of type 'User'.
     
     """
-    def __init__(self, title, post, author):
+    def __init__(self, title, post, author, is_reply = False):
+        self.replies = {}
         self.title = title
         self.post = post
 
         assert isinstance(author, User)
         self.author = author
 
-        self._save_message()
+        if is_reply == False:
+            self._save_message()
 
     def _save_message(self):
         self.id = _get_next_message_id()
         
         # register this new message with the messages list:
         _messages[self.id] = self
+
+    def add_reply(self, newMessage):
+    	newId = 0
+    	if self.replies:
+            newId = max(self.replies.keys()) + 1
+        self.replies[newId] = newMessage
+
+    def get_replies(self):
+        return self.replies.values()
 
 def get_all_messages(sort_by='id'):
     return _messages.values()

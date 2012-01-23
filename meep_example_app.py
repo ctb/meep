@@ -55,49 +55,99 @@ class MeepExampleApp(object):
     def list_messages(self, environ, start_response):
         messages = meeplib.get_all_messages()
 
+        template = """
+		<form action='alterMessage' method='POST'>
+			<div class="messageCont">
+				<div class="messageTitle">
+					<p>%s</p>
+					<input type='submit' id='bttnSubmit' name='bttnSubmit' value='Delete' onclick="return confirm('Are you sure you want to delete this message?');" />
+				</div>
+				<div class="message">%s</div>
+				<div class="messageReply">
+					By: %s
+				</div>
+				<div class="replies">
+					{replies}
+				</div>
+				<div class="messageReply">
+					&nbsp;<a href="#">Reply</a>
+				</div>
+				<div class="replyCont">
+					Reply: <textarea type='text' name='replyText' class="replyInput" rows="2" ></textarea>
+					<input type='submit' id='bttnSubmit' name='bttnSubmit' value='Reply' />
+				</div>
+			</div>
+			<input type='hidden' name='id' value='%d' />
+		</form>
+		"""
+		
+        replyTemp = """
+<div class="reply">
+	<p>%s</p>
+	<div class="messageReply">
+		By: %s
+	</div>
+</div>
+"""  
         s = []
         for m in messages:
-            s.append('id: %d<p>' % (m.id,))
-            s.append('title: %s<p>' % (m.title))
-            s.append('message: %s<p>' % (m.post))
-            s.append('author: %s<p>' % (m.author.username))
-            s.append('<a href="removeMessage?id=%d" onclick="return confirm(\'Are you sure you want to remove message %d?\');">Delete Message</a>' % (m.id,m.id))
-            s.append('<hr>')
-
-        s.append("<a href='../../'>index</a>")
-            
+             msg = template % (m.title, m.post, m.author.username, m.id)
+             replies = m.get_replies()
+             rs = []
+             for r in replies:
+                 print r.post
+                 rs.append(replyTemp% (r.post, r.author.username))
+             msg = msg.replace('{replies}',"".join(rs))
+             s.append(msg)
+        
+        html = open('messageList.html', 'r').read().replace('{messageList}',"".join(s))
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
         
-        return ["".join(s)]
+        return html
 
-    def remove_message(self, environ, start_response):
+    def alter_message_action(self, environ, start_response):
         try:
-            params = dict([part.split('=') for part in environ['QUERY_STRING'].split('&')])
-            msgId = int(params['id'])
+        	form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+            #params = dict([part.split('=') for part in environ['QUERY_STRING'].split('&')])
+            #msgId = int(params['id'])
         except:
             headers = [('Content-type', 'text/html')]
             start_response("200 OK", headers)
             return ["Error Processing provided ID"]
+
+        id = int(form['id'].value)
         
+        action = form['bttnSubmit'].value
+        print action
+        print id
         
-        messages = meeplib.get_all_messages()
-        found = False
-        for m in messages:
-            if m.id == msgId:
-                meeplib.delete_message(m)
-                found = True
-                break
-    
-        if found:
+        msg = meeplib.get_message(id)
+        
+        if msg == None:
+            headers = [('Content-type', 'text/html')]
+            start_response("200 OK", headers)
+            return ["""Message id %d could not be found.""" % (msgId,)]
+        elif action == "Delete":
+            print('deleting')
+            meeplib.delete_message(msg)
             headers = [('Content-type', 'text/html')]
             headers.append(('Location', '/m/list'))
             start_response("302 Found", headers)
             return ["message removed"]
-        else:
+        elif action == "Reply":
+            print('replying')
+            title = ""
+            print form['replyText'].value
+            message = form['replyText'].value
+            username = 'test'
+            user = meeplib.get_user(username)
+            new_message = meeplib.Message(title, message, user, True)
+            msg.add_reply(new_message)
             headers = [('Content-type', 'text/html')]
-            start_response("200 OK", headers)
-            return ["""Message id %d could not be found.""" % (msgId,)]
+            headers.append(('Location', '/m/list'))
+            start_response("302 Found", headers)
+            return ["message removed"]
 
 
     def add_message(self, environ, start_response):
@@ -132,7 +182,7 @@ class MeepExampleApp(object):
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,
                       '/m/add_action': self.add_message_action,
-                      '/m/removeMessage': self.remove_message
+                      '/m/alterMessage': self.alter_message_action
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.

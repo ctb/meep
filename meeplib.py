@@ -139,11 +139,7 @@ def check_user(username, password):
     except NameError:
         aUser = None
 
-    print """db pass: %s""" %(aUser.password,)
-    print """pass: %s""" %(password,)
-
-    if aUser is not None:
-            if aUser.password is password:
-                return True
+    if aUser.password == password:
+        return True
     else:
         return False

@@ -3,8 +3,8 @@ import traceback
 import cgi
 
 def initialize():
-    # create a default user
-    u = meeplib.User('test', 'foo')
+    # create a default user with username: test, password: test
+    u = meeplib.User('test', 'test')
 
     # create a single message
     meeplib.Message('my title', 'This is my message!', u)
@@ -88,9 +88,9 @@ Password:<input type='password' name='password'><br>
                      k = 'Location'
                      v = '/main_page'
              else:      
-                 returnStatement = """<p>password none"""
+                 returnStatement = """password none"""
         else:
-            returnStatement = """<p>username none"""
+            returnStatement = """username none"""
 
         # set content-type
         headers = [('Content-type', 'text/html')]
@@ -98,7 +98,7 @@ Password:<input type='password' name='password'><br>
         headers.append((k, v))
         start_response('302 Found', headers)
         
-        return "no such content"     
+        return """Invalid Password. Please try again."""     
 
     def logout(self, environ, start_response):
         # does nothing

@@ -110,13 +110,16 @@ class Thread(object):
         post.id = self.get_next_post_id()
         self.posts[post.id] = post
         
-    def delete_post(self, id):
-        assert isinstance(id, int)
-        del self.posts[id]
-        # if there are no more posts in self.posts, delete the self Thread object
+    def delete_post(self, post):
+        assert isinstance(post, Message)
+        del self.posts[post.id]
+        # if there are no more posts in self.posts, delete the self Thread object and the reference to the thread in _threads
         if not self.posts:
             del _threads[self.id]
             del self
+            
+    def get_post(self, id):
+        return self.posts[id]
 
     def get_next_post_id(self):
         if self.posts:

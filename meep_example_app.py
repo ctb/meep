@@ -130,7 +130,8 @@ class MeepExampleApp(object):
         post_id = int(form['post_id'].value)
 
         t = meeplib.get_thread(thread_id)
-        t.delete_post(post_id)
+        post = t.get_post(post_id)
+        t.delete_post(post)
 
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list'))

@@ -58,11 +58,18 @@ class MeepExampleApp(object):
         for m in messages:
             s.append('id: %d<p>' % (m.id,))
             s.append('title: %s<p>' % (m.title))
-            s.append('message: %s<p>' % (m.post))
+            s.append('message:<b> %s</b><p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
+            s.append("<a href='/m/add_reply?id="+str(m.id)+"'>Reply</a><br />")
             s.append("<a href='/m/delete_message?id="+str(m.id)+"'>Delete Message</a>")
-            s.append('<hr>')
+            replies = meeplib.get_replies(m.id)
+            if (replies!=-1):
+                s.append('<div style="padding-left: 50px;">Replies:</div><br />')
+                for r in replies:
+                    
+                    s.append(""" <div style="padding-left: 70px;">&nbsp;%s</div><p>""" % r)
 
+            s.append('<hr>')
 
         s.append("<a href='../../'>index</a>")
             
@@ -96,8 +103,6 @@ class MeepExampleApp(object):
         return ["message added"]
 
     def delete_message(self, environ, start_response):
-        #form = cgi.FieldStorage()
-        #mID = form.getvalue('id')
         qString = cgi.parse_qs(environ['QUERY_STRING'])
         mId = qString.get('id', [''])[0]
         messageID = meeplib.get_message(int(mId))
@@ -109,6 +114,30 @@ class MeepExampleApp(object):
         start_response("302 Found", headers)
         
         return ["message deleted"]
+
+
+
+    def add_reply(self, environ, start_response):
+        qString = cgi.parse_qs(environ['QUERY_STRING'])
+        mId = qString.get('id', [''])[0]
+        headers = [('Content-type', 'text/html')]
+        
+        start_response("200 OK", headers)
+        return """<form action='add_reply_action' method='POST'><input type='hidden' name='id' value='%s'><br>Message:<input type='text' name='message'><br><input type='submit'></form>""" %mId
+
+
+    def add_reply_action(self, environ, start_response):
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+        message = form['message'].value
+        mId = int(form['id'].value)
+        
+        meeplib.add_reply(mId, message)
+     
+        headers = [('Content-type', 'text/html')]
+        headers.append(('Location', '/m/list'))
+        start_response("302 Found", headers)
+        
+        return ["Replied"]
     
     def __call__(self, environ, start_response):
         # store url/function matches in call_dict
@@ -119,6 +148,8 @@ class MeepExampleApp(object):
                       '/m/add': self.add_message,
                       '/m/add_action': self.add_message_action,
                       '/m/delete_message': self.delete_message,
+                      '/m/add_reply': self.add_reply,
+                      '/m/add_reply_action':self.add_reply_action
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.

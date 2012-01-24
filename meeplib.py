@@ -33,6 +33,8 @@ __all__ = ['Message', 'get_all_messages', 'get_message', 'delete_message',
 
 # a dictionary, storing all messages by a (unique, int) ID -> Message object.
 _messages = {}
+_replies = {}
+
 
 def _get_next_message_id():
     if _messages:
@@ -54,10 +56,12 @@ def _reset():
     """
     Clean out all persistent data structures, for testing purposes.
     """
-    global _messages, _users, _user_ids
+    global _messages, _users, _user_ids, _replies
     _messages = {}
     _users = {}
     _user_ids = {}
+    _replies = {}
+    
 
 ###
 
@@ -71,6 +75,7 @@ class Message(object):
     def __init__(self, title, post, author):
         self.title = title
         self.post = post
+        #self.parent = parent
 
         assert isinstance(author, User)
         self.author = author
@@ -92,6 +97,18 @@ def get_message(id):
 def delete_message(msg):
     assert isinstance(msg, Message)
     del _messages[msg.id]
+    
+def add_reply(message_id, reply):
+    if _replies.has_key(message_id):
+        _replies[message_id].append(reply)        
+    else:
+        _replies[message_id] = [reply]
+
+def get_replies(message_id):
+    if _replies.has_key(message_id):
+        return _replies[message_id]
+    else:
+        return -1
 
 ###
 

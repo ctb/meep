@@ -60,7 +60,6 @@ def _reset():
     _user_ids = {}
 
 
-
 # Class: Message
 # Usage: Message(title, post, author, reply)
 #   title - The title of the Message

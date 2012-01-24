@@ -63,7 +63,7 @@ class MeepExampleApp(object):
                     The Username you provided does not exist<p>''')
 
             else:
-                ## they messed up the password or user does not exist
+                ## they messed up the password
                 s.append('''Login Failed! <br>
                     The Username or Password you provided was incorrect<p>''')
 
@@ -120,13 +120,40 @@ class MeepExampleApp(object):
             print 'no password input'
 
         try:
-            password = form['password_confirm'].value
+            password2 = form['password_confirm'].value
             print "we gots a password", password
         except KeyError:
-            password = ''
+            password2 = ''
             print 'no password confirmation'
 
         s=[]
+
+        ##if we have username and password and confirmation password
+        if username != '':
+            user = meeplib.get_user(username)
+            ## user already exists
+            if user is not None:
+                s.append('''Creation Failed! <br>
+                    User already exists, please use a different Username<p>''')
+            ## user doesn't exist but they messed up the passwords
+            elif password == '':
+                s.append('''Creation Failed! <br>
+                    Please fill in the Password field<p>''')
+            elif password != password2:
+                s.append('''Creation Failed! <br>
+                    The Password and Confirmation Password you provided did not match<p>''')
+            else:
+                u = meeplib.User(username, password)
+                ## send back a redirect to '/'
+                k = 'Location'
+                v = '/'
+                headers.append((k, v))
+                self.username = username
+        elif password != '' or password2 != '':
+            s.append('''Creation Failed! <br>
+            Please provide a Username<p>''')
+
+
         start_response('302 Found', headers)
 
         ##if we have a valid username and password this is not executed

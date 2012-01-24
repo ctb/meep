@@ -30,13 +30,20 @@ class MeepExampleApp(object):
         
         start_response("200 OK", headers)
 
-        return """<form action='login_action' method='POST'>Username: <input type='text' name='username'><br>Password: <input type='password' name='password'><br><input type='submit'></form>"""
+        return """<form action='login_action' method='POST'>Username: <input type='text' name='username' value=''><br>Password: <input type='password' name='password' value=''><br><input type='submit'></form>"""
 
     def login_action(self, environ, start_response):
 	print environ['wsgi.input']
-        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)	
-	
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+
 	global username
+	if "username" not in form or "password" not in form:
+	    #If either field is left blank on login, redirect to error page.
+	    headers = [('Content-type', 'text/html')] 
+            headers.append(('Location', '/invalid_login'))
+            start_response('302 Found', headers)
+            return "no such content"
+
 	tryuser = form['username'].value
 	trypass = form['password'].value
 	login_success = False
@@ -106,15 +113,19 @@ class MeepExampleApp(object):
 
     def add_message(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
-        
-        start_response("200 OK", headers)
-
-        return """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
+	global username
+	if username == '':
+	    #Send to error page if no user is logged in
+	    headers.append(('Location', '/m/no_user'))
+            start_response("302 found", headers)
+	    return "no such content"
+	else:
+	    start_response("200 OK", headers)
+            return """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
 
     def add_message_action(self, environ, start_response):
         print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
-	global username
 
         title = form['title'].value
         message = form['message'].value
@@ -127,6 +138,13 @@ class MeepExampleApp(object):
         headers.append(('Location', '/m/list'))
         start_response("302 Found", headers)
         return ["message added"]
+
+    def no_user(self, environ, start_response):
+        headers = [('Content-type', 'text/html')]
+        start_response("200 OK", headers)
+	return """You can't submit a message if you aren't logged in!<p>
+		<a href='/login'>Log in</a><p>
+		<a href='../../'>Back to Home</a>"""
 
     def delete_message(self, environ, start_response):
 	print environ['wsgi.input']
@@ -154,7 +172,8 @@ class MeepExampleApp(object):
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,
                       '/m/add_action': self.add_message_action,
-		      '/m/delete_message': self.delete_message
+		      '/m/delete_message': self.delete_message,
+		      '/m/no_user': self.no_user
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.

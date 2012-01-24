@@ -24,19 +24,19 @@ Functions and classes:
 """
 
 __all__ = ['Message', 'get_all_messages', 'get_message', 'delete_message',
-           'User', 'get_user', 'get_all_users', 'delete_user']
+           'User', 'get_user', 'get_all_users', 'delete_user', 'Thread']
 
 ###
 # internal data structures & functions; please don't access these
 # directly from outside the module.  Note, I'm not responsible for
 # what happens to you if you do access them directly.  CTB
 
-# a dictionary, storing all messages by a (unique, int) ID -> Message object.
-_messages = {}
+# a dictionary, storing all threads by a (unique, int) ID -> Thread object.
+_threads = {}
 
-def _get_next_message_id():
-    if _messages:
-        return max(_messages.keys()) + 1
+def _get_next_thread_id():
+    if _threads:
+        return max(_threads.keys()) + 1
     return 0
 
 # a dictionary, storing all users by a (unique, int) ID -> User object.
@@ -68,23 +68,17 @@ class Message(object):
     'author' must be an object of type 'User'.
     
     """
-    def __init__(self, title, post, author):
+    def __init__(self, post, author, title=''):
         self.title = title
         self.post = post
+        # is later reassigned by Thread
+        self.id = 0
 
         assert isinstance(author, User)
         self.author = author
 
-        self._save_message()
-
-    def _save_message(self):
-        self.id = _get_next_message_id()
-        
-        # register this new message with the messages list:
-        _messages[self.id] = self
-
-def get_all_messages(sort_by='id'):
-    return _messages.values()
+def get_all_threads(sort_by='id'):
+    return _threads.values()
 
 def get_message(id):
     return _messages[id]
@@ -94,6 +88,39 @@ def delete_message(msg):
     del _messages[msg.id]
 
 ###
+
+class Thread(object):
+    """
+    Thread object, consisting of a simple dictionary of Message objects.
+    Allows users to add posts to the dictionary.
+    New messages must be of an object of type "Message".
+
+    Only the first message in a thread should have a title.
+    """
+
+    def __init__(self):
+        # a dictionary, storing all messages by a (unique, int) ID -> Message object.
+        self.posts = {}
+        self.save_thread()
+
+    def save_thread(self):
+        self.id = _get_next_thread_id()
+        _threads[self.id] = self
+
+    def add_post(self, post):
+        assert isinstance(post, Message)
+        post.id = self.get_next_post_id()
+        self.posts[post.id] = post
+
+    def get_next_post_id(self):
+        if self.posts:
+            return max(self.posts.keys()) + 1
+        return 0
+
+    def get_all_posts(self, sort_by = 'id'):
+        return self.posts.values()
+
+        
 
 class User(object):
     def __init__(self, username, password):

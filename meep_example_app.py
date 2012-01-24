@@ -6,8 +6,12 @@ def initialize():
     # create a default user
     u = meeplib.User('test', 'foo')
 
+    # create a thread
+    t = meeplib.Thread()
     # create a single message
-    meeplib.Message('my title', 'This is my message!', u)
+    m = meeplib.Message('This is my message!', u,'Test Thread')
+    # save the message in the thread
+    t.add_post(m)
 
     # done.
 
@@ -53,19 +57,20 @@ class MeepExampleApp(object):
         return "no such content"
 
     def list_messages(self, environ, start_response):
-        messages = meeplib.get_all_messages()
+        threads = meeplib.get_all_threads()
 
         s = []
-        if messages:
-            for m in messages:
-                s.append('<hr')
-                s.append('<h2>%s</h2>' % (m.title))
-                s.append('<p>%s</p>' % (m.post))
-                s.append('<p>Posted by: %s</p>' % (m.author.username))
-                # append the delete message link
-                s.append("""
-                <form action='delete_action' method='POST'><input name='id' type='hidden' value='%d' /><input type='submit' value='Delete Message' /></form>
-                """  % (m.id))
+        if threads:
+            for t in threads:
+                for m in t.get_all_posts():
+                    s.append('<hr')
+                    s.append('<h2>%s</h2>' % (m.title))
+                    s.append('<p>%s</p>' % (m.post))
+                    s.append('<p>Posted by: %s</p>' % (m.author.username))
+                    # append the delete message link
+                    s.append("""
+                    <form action='delete_action' method='POST'><input name='id' type='hidden' value='%d' /><input type='submit' value='Delete Message' /></form>
+                    """  % (m.id))
         else:
             s.append("There are no messages to display.<p>")
 

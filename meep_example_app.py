@@ -20,7 +20,7 @@ class MeepExampleApp(object):
 
     def index(self, environ, start_response):
         start_response("200 OK", [('Content-type', 'text/html')])
-        s=["""Please login to create and delete messages<p><a href='/login'>Log in</a><p><a href='/m/list'>Show messages</a>"""]
+        s=["""Please login to create and delete messages<p><a href='/login'>Log in</a><p><a href='/create_user'>Create a New User</a><p><a href='/m/list'>Show messages</a>"""]
         if self.username is not None:
             s = ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (self.username,)]
         return s
@@ -31,7 +31,6 @@ class MeepExampleApp(object):
         print "do i have input?", environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
         print "form", form
-        # hard code the username for now; this should come from Web input!
 
         try:
             username = form['username'].value
@@ -80,7 +79,9 @@ class MeepExampleApp(object):
                     <form action='login' method='post'>
                         <label>username:</label> <input type='text' name='username'> <br>
                         <label>password:</label> <input type='password' name='password'> <br>
-                        <input type='submit' name='login button' value='Login'></form>''')
+                        <input type='submit' name='login button' value='Login'></form>
+
+                        <p><a href='/create_user'>Or Create a New User</a>''')
         return [''.join(s)]
 
     def logout(self, environ, start_response):
@@ -95,6 +96,47 @@ class MeepExampleApp(object):
         headers.append((k, v))
         start_response('302 Found', headers)
         return "no such content"
+
+    def create_user(self, environ, start_response):
+        headers = [('Content-type', 'text/html')]
+
+        print "do i have input?", environ['wsgi.input']
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+        print "form", form
+
+        try:
+            username = form['username'].value
+            # retrieve user
+            print "we gots a username", username
+        except KeyError:
+            username = ''
+            print "no user input"
+
+        try:
+            password = form['password'].value
+            print "we gots a password", password
+        except KeyError:
+            password = ''
+            print 'no password input'
+
+        try:
+            password = form['password_confirm'].value
+            print "we gots a password", password
+        except KeyError:
+            password = ''
+            print 'no password confirmation'
+
+        s=[]
+        start_response('302 Found', headers)
+
+        ##if we have a valid username and password this is not executed
+        s.append('''
+                    <form action='create_user' method='post'>
+                        <label>username:</label> <input type='text' name='username'> <br>
+                        <label>password:</label> <input type='password' name='password'> <br>
+                        <label>confirm password:</label> <input type='password' name='password_confirm'> <br>
+                        <input type='submit' name='create user button' value='Create'></form>''')
+        return [''.join(s)]
 
     def list_messages(self, environ, start_response):
         messages = meeplib.get_all_messages()
@@ -162,6 +204,7 @@ class MeepExampleApp(object):
         msg = meeplib.get_message(int(form['msg_id'].value))
         headers = [('Content-type', 'text/html')]
         start_response("200 OK Found", headers)
+
         return '''You are about to delete the following message: <p>
 
         id: %d<p>
@@ -194,6 +237,7 @@ class MeepExampleApp(object):
         call_dict = { '/': self.index,
                       '/login': self.login,
                       '/logout': self.logout,
+                      '/create_user': self.create_user,
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,
                       '/m/add_action': self.add_message_action,

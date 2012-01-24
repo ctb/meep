@@ -49,15 +49,24 @@ def _get_next_user_id():
     if _users:
         return max(_users.keys()) + 1
     return 0
+    
+# a dictionary, storing all topics by a (unique, int) ID -> Topic object.
+_topics = {}
+
+def _get_next_topic_id():
+    if _topics:
+        return max(_topics.keys()) + 1
+    return 0
 
 def _reset():
     """
     Clean out all persistent data structures, for testing purposes.
     """
-    global _messages, _users, _user_ids
+    global _messages, _users, _user_ids, _topics
     _messages = {}
     _users = {}
     _user_ids = {}
+    _topics = {}
 
 ###
 
@@ -93,6 +102,59 @@ def delete_message(msg):
     assert isinstance(msg, Message)
     del _messages[msg.id]
 
+###
+
+class Topic(object):
+    """
+    Simple "Topic" object, containing a title, author, and messages.
+    
+    author must be an object of type 'User', and messages contains objects of type 'Message'
+    """
+    def __init__(self, title, message, author):
+        self.title = title
+        
+        assert isinstance(message, Message)
+        #self.messages = {self._get_next_msg_id() : message}
+        self.messages = {0 : message}
+        
+        assert isinstance(author, User)
+        self.author = author
+        
+        self._save_topic()
+        
+    def _save_topic(self):
+        self.id = _get_next_topic_id()
+        
+        _topics[self.id] = self
+    
+    def _add_message(self, message):
+        print self._get_next_msg_id()
+        self.messages[self._get_next_msg_id()] = message
+        
+    def _get_next_msg_id(self):
+        if self.messages:
+            return max(self.messages.keys()) + 1
+        return 0
+        
+    def get_messages(self):
+        return self.messages.values()
+        
+    def add_message(self, message):
+        assert isinstance(message, Message)
+        self.messages[self._get_next_msg_id()] = message
+        
+    def delete_message_from_topic(self, msg):
+        assert isinstance(msg, Message)
+        del self.messages[msg.id]
+        
+def get_all_topics():
+    return _topics.values()
+
+def get_topic(id):
+    return _topics[id]
+        
+def delete_topic(topic):
+    del _topics[topic.id]
 ###
 
 class User(object):

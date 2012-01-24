@@ -1,0 +1,135 @@
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<style type="text/css">
+		*
+		{
+			margin:0;
+		}
+		body
+		{
+			background-color: #bcc9d7;
+			text-align: center;
+		}
+		#header
+		{
+			width: 99%;
+			background-color: #7792ad;
+			color: #fff;
+			padding: 15px;
+		}
+		#title
+		{
+			text-align: left;
+			width:875px;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		#title a
+		{
+			color: #fff;
+		}
+		#listWrapper
+		{
+			background-color: #333333;
+			width:875px;
+			margin-left:auto;
+			margin-right:auto;
+			padding: 15px;
+			min-height:88%;
+			box-shadow: 0px 3px 8px 0px #333;
+		}
+		.messageCont
+		{
+			width:800px;
+			background-color: #fff;
+			border-radius: 5px;
+			margin-left:auto;
+			margin-right:auto;
+			text-align:left;	
+		}
+		.messageTitle
+		{
+			height:30px;
+			width:800px;
+			background-color: #bcc9d7 !important;
+			font-size: 1.2em;
+			border-top-left-radius: 5px;
+			border-top-right-radius: 5px;
+		}
+		.messageTitle p
+		{
+			float: left;
+			padding: 5px;
+		}
+		.messageTitle input
+		{
+			margin: 5px;
+			float:right;
+		}
+		.message
+		{
+			clear: both;
+			padding:10px;
+		}
+		
+		.messageReply
+		{
+			font-size:.9em;
+			color: #777;
+			margin: 10px;
+		}
+		.messageReply a
+		{
+			float:right;
+			font-size:.9em;
+			color: #000;
+		}
+		.replyCont
+		{
+			display:none;
+			padding: 10px;
+			border-top:1px solid #000;
+		}
+		.replyInput
+		{
+			width: 400px;
+			height:50px;
+		}
+		.replies
+		{
+			margin-left:40px;
+		}
+		.reply
+		{
+			border: 1px solid #777;
+		}
+		.reply p
+		{
+			margin: 5px;
+		}
+	</style>
+	<script>
+	    $(document).ready(function () {
+			$('.messageReply a').click( function () {
+					var reply = $(this).parent().siblings('.replyCont');
+					if (reply.is(':visible'))
+						reply.slideUp('fast').show(); 
+					else
+						reply.slideDown('fast').show(); 
+				});
+			});
+	</script>
+</head>
+<body>
+	<div id="header">
+		<div id="title">
+			<h1>Hayden Boroski's Message Board</h1>
+			<a href="/">Index</a>
+		</div>
+	</div>
+	<div id="listWrapper">
+{messageList}
+	</div>
+</body>
+</html>

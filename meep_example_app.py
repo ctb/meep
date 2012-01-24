@@ -35,10 +35,29 @@ class MeepExampleApp(object):
         # send back a redirect to '/'
         k = 'Location'
         v = '/'
-        headers.append((k, v))
+        #headers.append((k, v))
         start_response('302 Found', headers)
 
-        return "no such content"
+        s = ['''
+                    <form action='login_check' method='post'>
+                        <label>username:</label> <input type='text' name='username'> <br>
+                        <label>password:</label> <input type='password' name='password'> <br>
+                        <input type='submit' name='login button' value='Login'></form>''']
+        return s
+
+    def login_check(self, environ, start_response):
+        print environ['wsgi.input']
+
+        headers = [('Content-type', 'text/html')]
+
+        # send back a redirect to '/'
+        k = 'Location'
+        v = '/'
+        #headers.append((k, v))
+        start_response('302 Found', headers)
+        return ['was i suppose to do something?']
+
+
 
     def logout(self, environ, start_response):
         # does nothing
@@ -126,6 +145,7 @@ class MeepExampleApp(object):
         # store url/function matches in call_dict
         call_dict = { '/': self.index,
                       '/login': self.login,
+                      '/login_check': self.login_check,
                       '/logout': self.logout,
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,

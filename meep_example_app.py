@@ -77,11 +77,11 @@ class MeepExampleApp(object):
         ##if we have a valid username and password this is not executed
         s.append('''
                     <form action='login' method='post'>
-                        <label>username:</label> <input type='text' name='username'> <br>
+                        <label>username:</label> <input type='text' name='username' value='%s'> <br>
                         <label>password:</label> <input type='password' name='password'> <br>
                         <input type='submit' name='login button' value='Login'></form>
 
-                        <p><a href='/create_user'>Or Create a New User</a>''')
+                        <p><a href='/create_user'>Or Create a New User</a>''' %(username))
         return [''.join(s)]
 
     def logout(self, environ, start_response):
@@ -159,10 +159,10 @@ class MeepExampleApp(object):
         ##if we have a valid username and password this is not executed
         s.append('''
                     <form action='create_user' method='post'>
-                        <label>username:</label> <input type='text' name='username'> <br>
-                        <label>password:</label> <input type='password' name='password'> <br>
-                        <label>confirm password:</label> <input type='password' name='password_confirm'> <br>
-                        <input type='submit' name='create user button' value='Create'></form>''')
+                        <label>username:</label> <input type='text' name='username' value='%s'> <br>
+                        <label>password:</label> <input type='password' name='password' value='%s'> <br>
+                        <label>confirm password:</label> <input type='password' name='password_confirm' value='%s'> <br>
+                        <input type='submit' name='create user button' value='Create'></form>''' %(username, password, password2))
         return [''.join(s)]
 
     def list_messages(self, environ, start_response):

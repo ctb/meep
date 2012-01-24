@@ -24,7 +24,7 @@ class MeepExampleApp(object):
 
         username = 'test'
 
-        return ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (username,)]
+        return ["""you are logged in as user: %s.<p><a href='/m/add_thread'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (username,)]
 
     def login(self, environ, start_response):
         # hard code the username for now; this should come from Web input!
@@ -76,7 +76,7 @@ class MeepExampleApp(object):
                 <form action='reply' method='POST'><input name='thread_id' type='hidden' value='%d' /><input type='submit' value='Reply to' /></form>
                 """ % (t.id))
         else:
-            s.append("There are no messages to display.<p>")
+            s.append("There are no threads to display.<p>")
 
         s.append('<hr>')
         s.append("<a href='../../'>index</a>")
@@ -86,15 +86,15 @@ class MeepExampleApp(object):
         
         return ["".join(s)]
 
-    def add_message(self, environ, start_response):
+    def add_thread(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
         
 
         start_response("200 OK", headers)
 
-        return """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
+        return """<form action='add_thread_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
 
-    def add_message_action(self, environ, start_response):
+    def add_thread_action(self, environ, start_response):
         print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
 
@@ -104,12 +104,14 @@ class MeepExampleApp(object):
         username = 'test'
         user = meeplib.get_user(username)
         
-        new_message = meeplib.Message(title, message, user)
+        new_message = meeplib.Message(message, user, title)
+        t = meeplib.Thread()
+        t.add_post(new_message)
 
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list'))
         start_response("302 Found", headers)
-        return ["message added"]
+        return ["thread added"]
 
     def delete_message_action(self, environ, start_response):
         print environ['wsgi.input']
@@ -124,7 +126,7 @@ class MeepExampleApp(object):
         headers.append(('Location', '/m/list'))
         start_response("302 Found", headers)
 
-        return["message deleted"]
+        return["post deleted"]
         
     def reply(self, environ, start_response):
         print environ['wsgi.input']
@@ -181,8 +183,8 @@ class MeepExampleApp(object):
                       '/login': self.login,
                       '/logout': self.logout,
                       '/m/list': self.list_messages,
-                      '/m/add': self.add_message,
-                      '/m/add_action': self.add_message_action,
+                      '/m/add_thread': self.add_thread,
+                      '/m/add_thread_action': self.add_thread_action,
                       '/m/delete_action': self.delete_message_action,
                       '/m/reply': self.reply,
                       '/m/reply_action': self.reply_action

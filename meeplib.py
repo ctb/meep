@@ -80,8 +80,8 @@ class Message(object):
 def get_all_threads(sort_by='id'):
     return _threads.values()
 
-def get_message(id):
-    return _messages[id]
+def get_thread(id):
+    return _threads[id]
 
 def delete_message(msg):
     assert isinstance(msg, Message)

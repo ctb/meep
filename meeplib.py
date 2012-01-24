@@ -31,6 +31,9 @@ __all__ = ['Message', 'get_all_messages', 'get_message', 'delete_message',
 # directly from outside the module.  Note, I'm not responsible for
 # what happens to you if you do access them directly.  CTB
 
+# a string, stores the current user that is logged on
+_curr_user = []
+
 # a dictionary, storing all messages by a (unique, int) ID -> Message object.
 _messages = {}
 
@@ -47,17 +50,18 @@ _users = {}
 
 def _get_next_user_id():
     if _users:
-        return max(_users.keys()) + 1
+        return int(max(_user_ids.keys())) + 1
     return 0
 
 def _reset():
     """
     Clean out all persistent data structures, for testing purposes.
     """
-    global _messages, _users, _user_ids
+    global _messages, _users, _user_ids, _curr_user
     _messages = {}
     _users = {}
     _user_ids = {}
+    _curr_user = []
 
 ###
 
@@ -95,6 +99,7 @@ def delete_message(msg):
 
 ###
 
+
 class User(object):
     def __init__(self, username, password):
         self.username = username
@@ -109,6 +114,15 @@ class User(object):
         _user_ids[self.id] = self
         _users[self.username] = self
 
+def set_curr_user(username):
+    _curr_user.insert(0, username)
+
+def get_curr_user():
+    return _curr_user[0]
+
+def delete_curr_user(username):
+    _curr_user.remove(_curr_user.index(0))
+
 def get_user(username):
     return _users.get(username)         # return None if no such user
 
@@ -118,3 +132,18 @@ def get_all_users():
 def delete_user(user):
     del _users[user.username]
     del _user_ids[user.id]
+
+def check_user(username, password):
+    try:
+        aUser = get_user(username)
+    except NameError:
+        aUser = None
+
+    print """db pass: %s""" %(aUser.password,)
+    print """pass: %s""" %(password,)
+
+    if aUser is not None:
+            if aUser.password is password:
+                return True
+    else:
+        return False

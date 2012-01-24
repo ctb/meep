@@ -18,27 +18,87 @@ class MeepExampleApp(object):
     def index(self, environ, start_response):
         start_response("200 OK", [('Content-type', 'text/html')])
 
-        username = 'test'
+        username = 'Not Logged in'
 
-        return ["""You are logged in as: %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (username,)]
+        return ["""Login or <a href='/create_user'>Create an Account</a>
+
+</br><p><form action='login' method='POST'>
+Username: <input type='text' name='username'><br>
+Password:<input type='password' name='password'><br>
+<input type='submit' value='Login'></p></form>
+
+"""]
+
+    def main_page(self, environ, start_response):
+        try:
+            meeplib.get_curr_user()
+        except NameError:
+            meeplib.delete_curr_user()
+        headers = [('Content-type', 'text/html')]
+        
+        start_response("200 OK", headers)
+        username = meeplib.get_curr_user()
+
+        return ["""You have successfully logged in as: %s <p><a href='/m/add'>Add a message</a><p><p><a href='/m/messages'>Show messages</a><p><a href='/logout'>Log out</a>""" % (username,)]
+
+    def create_user(self, environ, start_response):
+        headers = [('Content-type', 'text/html')]
+        
+        start_response("302 Found", headers)
+        return """Enter your username and password: <p><form action='create_user_action' method='POST'>
+Username: <input type='text' name='username'><br>
+Password:<input type='password' name='password'><br>
+<input type='submit' value='Create User'></form</p>"""
+
+    def create_user_action(self, environ, start_response):
+        print environ['wsgi.input']
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+
+        #TODO Error Checking on Creating a User
+        returnStatement = "user added"
+       
+        username = form['username'].value
+        password = form['password'].value
+  
+        new_user = meeplib.User(username, password)
+
+        headers = [('Content-type', 'text/html')]
+        headers.append(('Location', '/'))
+        start_response("302 Found", headers)
+
+        return [returnStatement]
 
     def login(self, environ, start_response):
-        # hard code the username for now; this should come from Web input!
-        username = 'test'
+        print environ['wsgi.input']
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
 
-        # retrieve user
-        user = meeplib.get_user(username)
+        username = form['username'].value
+        password = form['password'].value
+
+        # Test whether variable is defined to be None
+        if username is not None:
+             if password is not None:
+                 if meeplib.check_user(username, password) is False:
+                     k = 'Location'
+                     v = '/'
+                     returnStatement = """<p>Invalid login.  Please try again.</p>"""
+           
+                 else:
+                     meeplib.set_curr_user(username)
+                     k = 'Location'
+                     v = '/main_page'
+             else:      
+                 returnStatement = """<p>password none"""
+        else:
+            returnStatement = """<p>username none"""
 
         # set content-type
         headers = [('Content-type', 'text/html')]
-        
-        # send back a redirect to '/'
-        k = 'Location'
-        v = '/'
+       
         headers.append((k, v))
         start_response('302 Found', headers)
         
-        return "no such content"
+        return "no such content"     
 
     def logout(self, environ, start_response):
         # does nothing
@@ -64,7 +124,7 @@ class MeepExampleApp(object):
             s.append("<form action='delete_action' method='POST'><input type='number' hidden='true' name='mid' value=%d><input type='submit' value='Delete'></form>" % (m.id))
             s.append('<hr>')
 
-        s.append("<a href='../../'>index</a>")
+        s.append("<a href='../main_page'>Back</a>")
             
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
@@ -84,17 +144,17 @@ class MeepExampleApp(object):
 
         title = form['title'].value
         message = form['message'].value
-        
-        username = 'test'
-        user = meeplib.get_user(username)
+    
+        username = meeplib.get_curr_user()
+        user =  meeplib.get_user(username)
         
         new_message = meeplib.Message(title, message, user)
 
         headers = [('Content-type', 'text/html')]
-        headers.append(('Location', '/m/list'))
+        headers.append(('Location', '/m/messages'))
         start_response("302 Found", headers)
         return ["message added"]
-    
+
     def delete_message(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
         
@@ -112,19 +172,23 @@ class MeepExampleApp(object):
         meeplib.delete_message(message)
         
         headers = [('Content-type', 'text/html')]
-        headers.append(('Location', '/m/list'))
+        headers.append(('Location', '/m/messages'))
         start_response("302 Found", headers)
         return ["message deleted"]
-
+    
     def __call__(self, environ, start_response):
         # store url/function matches in call_dict
         call_dict = { '/': self.index,
+                      '/main_page': self.main_page,
+                      '/create_user': self.create_user,
+                      '/create_user_action':self.create_user_action,
                       '/login': self.login,
                       '/logout': self.logout,
-                      '/m/list': self.list_messages,
+                      '/m/messages': self.list_messages,
                       '/m/add': self.add_message,
                       '/m/add_action': self.add_message_action,
-					  '/m/delete_action': self.delete_message_action
+                      '/m/delete': self.delete_message,
+                      '/m/delete_action': self.delete_message_action
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.

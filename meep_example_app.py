@@ -62,7 +62,13 @@ class MeepExampleApp(object):
             s.append('message: %s<p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
             s.append('<a href="delete_message_action?id='+str(m.id)+'">delete message '+str(m.id)+'</a>')
+            s.append('<br/><br/><form action="reply_message_action" method="post">' \
+            'Reply:<input type="text" name="replymsg">' \
+            '<input type="hidden" value="'+str(m.id)+'" name="parent_id"><input type="submit" value="Reply"/></form>')
             s.append('<hr>')
+            for r in m.replies:
+                s.append('<p style="text-indent: 10px;font-style:italic">' + r + '</p>')
+                s.append('<hr>')
 
         s.append("<a href='../../'>index</a>")
             
@@ -84,7 +90,6 @@ class MeepExampleApp(object):
 
         title = form['title'].value
         message = form['message'].value
-        
         username = 'test'
         user = meeplib.get_user(username)
         
@@ -94,6 +99,24 @@ class MeepExampleApp(object):
         headers.append(('Location', '/m/list'))
         start_response("302 Found", headers)
         return ["message added"]
+
+    def reply_message_action(self, environ, start_response):
+        #Reply Function!!!
+        print environ['wsgi.input']
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+
+        parent_id = form['parent_id'].value
+        reply = form['replymsg'].value
+        parent_id = int(parent_id)
+        #adds reply to designated message
+        message = meeplib.get_message(parent_id)
+        message.add_reply(reply)
+        
+
+        headers = [('Content-type', 'text/html')]
+        headers.append(('Location', '/m/list'))
+        start_response("302 Found", headers)
+        return ["reply added"]
 
     def delete_message_action(self, environ, start_response):
          queryParams = cgi.parse_qs(environ['QUERY_STRING'])
@@ -114,7 +137,8 @@ class MeepExampleApp(object):
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,
                       '/m/add_action': self.add_message_action,
-                      '/m/delete_message_action': self.delete_message_action
+                      '/m/delete_message_action': self.delete_message_action,
+                      '/m/reply_message_action': self.reply_message_action
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.
@@ -137,3 +161,5 @@ class MeepExampleApp(object):
 
 
 #added delete functionality
+
+#added reply functionality 11/23/12

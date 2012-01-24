@@ -74,7 +74,8 @@ class Message(object):
 
         assert isinstance(author, User)
         self.author = author
-
+        #adding another property to the Message object for replies
+        self.replies = []
         self._save_message()
 
     def _save_message(self):
@@ -82,6 +83,10 @@ class Message(object):
         
         # register this new message with the messages list:
         _messages[self.id] = self
+        
+    #addReply will add the reply paramter to the self.replies string array
+    def add_reply(self, reply):
+        self.replies.append(str(reply))
 
 def get_all_messages(sort_by='id'):
     return _messages.values()
@@ -118,3 +123,6 @@ def get_all_users():
 def delete_user(user):
     del _users[user.username]
     del _user_ids[user.id]
+
+
+#edited meeplib for reply functionality 11/23/12

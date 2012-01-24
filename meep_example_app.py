@@ -8,6 +8,7 @@ def initialize():
 
     # create a single message
     meeplib.Message('my title', 'This is my message!', u)
+    meeplib.User('new', 'test')
 
     # done.
 
@@ -15,33 +16,65 @@ class MeepExampleApp(object):
     """
     WSGI app object.
     """
+    global username
+    username = ''
     def index(self, environ, start_response):
         start_response("200 OK", [('Content-type', 'text/html')])
+	
+	global username
 
-        username = 'test'
-
-        return ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (username,)]
+        return ["""you are logged in as user: %s<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (username,)]
 
     def login(self, environ, start_response):
-        # hard code the username for now; this should come from Web input!
-        username = 'test'
+        headers = [('Content-type', 'text/html')]
+        
+        start_response("200 OK", headers)
 
-        # retrieve user
-        user = meeplib.get_user(username)
+        return """<form action='login_action' method='POST'>Username: <input type='text' name='username'><br>Password: <input type='password' name='password'><br><input type='submit'></form>"""
 
+    def login_action(self, environ, start_response):
+	print environ['wsgi.input']
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)	
+	
+	global username
+	tryuser = form['username'].value
+	trypass = form['password'].value
+	login_success = False
+
+	users = meeplib.get_all_users()
+	for u in users:
+	    if u.username == tryuser:
+		if u.password == trypass:
+		    username = tryuser
+		    login_success = True
+	if login_success:
+	    #login successful, redirect to index
+	    k = 'Location'
+	    v = '/'
+	else:
+            #login failed, redirect to error page
+	    k = 'Location'
+	    v = '/invalid_login'
+	    
         # set content-type
         headers = [('Content-type', 'text/html')]
         
-        # send back a redirect to '/'
-        k = 'Location'
-        v = '/'
         headers.append((k, v))
         start_response('302 Found', headers)
         
         return "no such content"
 
+    def invalid_login(self, environ, start_response):
+        headers = [('Content-type', 'text/html')]
+        start_response("200 OK", headers)
+	return """Invalid username or password<p>
+		<a href='/login'>Retry Login?</a><p>
+		<a href='../../'>Back to Home</a>"""
+
     def logout(self, environ, start_response):
-        # does nothing
+        #Resets username back to '' instead of current user
+	global username
+	username = ''
         headers = [('Content-type', 'text/html')]
 
         # send back a redirect to '/'
@@ -81,11 +114,11 @@ class MeepExampleApp(object):
     def add_message_action(self, environ, start_response):
         print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+	global username
 
         title = form['title'].value
         message = form['message'].value
         
-        username = 'test'
         user = meeplib.get_user(username)
         
         new_message = meeplib.Message(title, message, user)
@@ -100,11 +133,10 @@ class MeepExampleApp(object):
 	form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
 
 	# Get the message id from form, convert to int
-	id = form['id'].value
-	message_id = int(id)
+	id = int(form['id'].value)
 	
 	# Get message using built in function, delete the message
-	message = meeplib.get_message(message_id)
+	message = meeplib.get_message(id)
 	meeplib.delete_message(message)
 
 	headers = [('Content-type', 'text/html')]
@@ -116,6 +148,8 @@ class MeepExampleApp(object):
         # store url/function matches in call_dict
         call_dict = { '/': self.index,
                       '/login': self.login,
+		      '/login_action': self.login_action,
+		      '/invalid_login': self.invalid_login,
                       '/logout': self.logout,
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,

@@ -47,7 +47,7 @@ _users = {}
 
 def _get_next_user_id():
     if _users:
-        return max(_users.keys()) + 1
+        return max(_user_ids.keys()) + 1
     return 0
 
 def _reset():

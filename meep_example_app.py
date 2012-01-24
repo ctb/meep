@@ -15,52 +15,78 @@ class MeepExampleApp(object):
     """
     WSGI app object.
     """
+    def __init__(self):
+        self.username = None
+
     def index(self, environ, start_response):
         start_response("200 OK", [('Content-type', 'text/html')])
-
-        username = 'test'
-
-        return ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (username,)]
-
-    def login(self, environ, start_response):
-        # hard code the username for now; this should come from Web input!
-        username = 'test'
-
-        # retrieve user
-        user = meeplib.get_user(username)
-
-        # set content-type
-        headers = [('Content-type', 'text/html')]
-
-        # send back a redirect to '/'
-        k = 'Location'
-        v = '/'
-        #headers.append((k, v))
-        start_response('302 Found', headers)
-
-        s = ['''
-                    <form action='login_check' method='post'>
-                        <label>username:</label> <input type='text' name='username'> <br>
-                        <label>password:</label> <input type='password' name='password'> <br>
-                        <input type='submit' name='login button' value='Login'></form>''']
+        s=["""Please login to create and delete messages<p><a href='/login'>Log in</a><p><a href='/m/list'>Show messages</a>"""]
+        if self.username is not None:
+            s = ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (self.username,)]
         return s
 
-    def login_check(self, environ, start_response):
-        print environ['wsgi.input']
-
+    def login(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
 
-        # send back a redirect to '/'
-        k = 'Location'
-        v = '/'
-        #headers.append((k, v))
+        print "do i have input?", environ['wsgi.input']
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+        print "form", form
+        # hard code the username for now; this should come from Web input!
+
+        try:
+            username = form['username'].value
+            # retrieve user
+            print "we gots a username", username
+        except KeyError:
+            username = ''
+            print "no user input"
+
+        try:
+            password = form['password'].value
+            print "we gots a password", password
+        except KeyError:
+            password = ''
+            print 'no password input'
+
+        s=[]
+
+        ##if we have username and password
+        if username != '' and password != '':
+            user = meeplib.get_user(username)
+            if user is not None and user.password == password:
+                ## send back a redirect to '/'
+                k = 'Location'
+                v = '/'
+                headers.append((k, v))
+                self.username = username
+            elif user is None:
+                s.append('''Login Failed! <br>
+                    The Username you provided does not exist<p>''')
+
+            else:
+                ## they messed up the password or user does not exist
+                s.append('''Login Failed! <br>
+                    The Username or Password you provided was incorrect<p>''')
+
+        ##if we have username or password but not both
+        elif username != '' or password != '':
+            s.append('''Login Failed! <br>
+                    The Username or Password you provided was incorrect<p>''')
+
         start_response('302 Found', headers)
-        return ['was i suppose to do something?']
 
-
+        ##if we have a valid username and password this is not executed
+        s.append('''
+                    <form action='login' method='post'>
+                        <label>username:</label> <input type='text' name='username'> <br>
+                        <label>password:</label> <input type='password' name='password'> <br>
+                        <input type='submit' name='login button' value='Login'></form>''')
+        return [''.join(s)]
 
     def logout(self, environ, start_response):
-        # does nothing
+
+        self.username =  None
+
         headers = [('Content-type', 'text/html')]
 
         # send back a redirect to '/'
@@ -90,21 +116,31 @@ class MeepExampleApp(object):
         return ["".join(s)]
 
     def add_message(self, environ, start_response):
+        if self.username is None:
+            headers = [('Content-type', 'text/html')]
+            start_response("302 Found", headers)
+            return ["You must be logged in to user this feature <p><a href='/login'>Log in</a><p><a href='/m/list'>Show messages</a>"]
+
         headers = [('Content-type', 'text/html')]
 
         start_response("200 OK", headers)
 
-        return """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
+        return '''<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>'''
 
     def add_message_action(self, environ, start_response):
+        if self.username is None:
+            headers = [('Content-type', 'text/html')]
+            start_response("302 Found", headers)
+            return ["You must be logged in to user this feature <p><a href='/login'>Log in</a><p><a href='/m/list'>Show messages</a>"]
+
+
         print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
 
         title = form['title'].value
         message = form['message'].value
 
-        username = 'test'
-        user = meeplib.get_user(username)
+        user = meeplib.get_user(self.username)
 
         new_message = meeplib.Message(title, message, user)
 
@@ -114,6 +150,12 @@ class MeepExampleApp(object):
         return ["message added"]
 
     def delete_message(self, environ, start_response):
+        if self.username is None:
+            headers = [('Content-type', 'text/html')]
+            start_response("302 Found", headers)
+            return ["You must be logged in to user this feature <p><a href='/login'>Log in</a><p><a href='/m/list'>Show messages</a>"]
+
+
 
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
 
@@ -131,6 +173,12 @@ class MeepExampleApp(object):
         <form action='del_action' method='post'> <input type='hidden' name='msg_id' value='%d'> <input type='submit' name='del button' value='Yes'></form>  <form action='list' method='post'> <input type='submit' name='cancel_del' value='No'></form>''' %(msg.id, msg.title, msg.post, msg.author.username, msg.id)
 
     def delete_message_action(self, environ, start_response):
+        if self.username is None:
+            headers = [('Content-type', 'text/html')]
+            start_response("302 Found", headers)
+            return ["You must be logged in to user this feature <p><a href='/login'>Log in</a><p><a href='/m/list'>Show messages</a>"]
+
+
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
 
         msg = meeplib.get_message(int(form['msg_id'].value))
@@ -145,7 +193,6 @@ class MeepExampleApp(object):
         # store url/function matches in call_dict
         call_dict = { '/': self.index,
                       '/login': self.login,
-                      '/login_check': self.login_check,
                       '/logout': self.logout,
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,

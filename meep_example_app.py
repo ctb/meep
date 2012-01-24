@@ -253,8 +253,7 @@ class MeepExampleApp(object):
             title = ""
             print form['replyText'].value
             message = form['replyText'].value
-            username = 'test'
-            user = meeplib.get_user(username)
+            user = meeplib.get_user(self.username)
             new_message = meeplib.Message(title, message, user, True)
             msg.add_reply(new_message)
             headers = [('Content-type', 'text/html')]
@@ -295,48 +294,7 @@ class MeepExampleApp(object):
         headers.append(('Location', '/m/list'))
         start_response("302 Found", headers)
         return ["message added"]
-
-    def delete_message(self, environ, start_response):
-        if self.username is None:
-            headers = [('Content-type', 'text/html')]
-            start_response("302 Found", headers)
-            return ["You must be logged in to user this feature <p><a href='/login'>Log in</a><p><a href='/m/list'>Show messages</a>"]
-
-
-
-        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
-
-        msg = meeplib.get_message(int(form['msg_id'].value))
-        headers = [('Content-type', 'text/html')]
-        start_response("200 OK Found", headers)
-
-        return '''You are about to delete the following message: <p>
-
-        id: %d<p>
-        title: %s<p>
-        message: %s<p>
-        author: %s<p>
-
-        Are you sure you wish to delete this message?
-        <form action='del_action' method='post'> <input type='hidden' name='msg_id' value='%d'> <input type='submit' name='del button' value='Yes'></form>  <form action='list' method='post'> <input type='submit' name='cancel_del' value='No'></form>''' %(msg.id, msg.title, msg.post, msg.author.username, msg.id)
-
-    def delete_message_action(self, environ, start_response):
-        if self.username is None:
-            headers = [('Content-type', 'text/html')]
-            start_response("302 Found", headers)
-            return ["You must be logged in to user this feature <p><a href='/login'>Log in</a><p><a href='/m/list'>Show messages</a>"]
-
-
-        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
-
-        msg = meeplib.get_message(int(form['msg_id'].value))
-        meeplib.delete_message(msg)
-
-        headers = [('Content-type', 'text/html')]
-        headers.append(('Location', '/m/list'))
-        start_response("302 Found", headers)
-        return ["message deleted"]
-
+        
     def __call__(self, environ, start_response):
         # store url/function matches in call_dict
         call_dict = { '/': self.index,

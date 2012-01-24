@@ -68,8 +68,7 @@ class Message(object):
     'author' must be an object of type 'User'.
     
     """
-    def __init__(self, post, author, title=''):
-        self.title = title
+    def __init__(self, post, author):
         self.post = post
         # is later reassigned by Thread
         self.id = 0
@@ -94,14 +93,13 @@ class Thread(object):
     Thread object, consisting of a simple dictionary of Message objects.
     Allows users to add posts to the dictionary.
     New messages must be of an object of type "Message".
-
-    Only the first message in a thread should have a title.
     """
 
-    def __init__(self):
+    def __init__(self, title):
         # a dictionary, storing all messages by a (unique, int) ID -> Message object.
         self.posts = {}
         self.save_thread()
+        self.title = title
 
     def save_thread(self):
         self.id = _get_next_thread_id()
@@ -111,6 +109,14 @@ class Thread(object):
         assert isinstance(post, Message)
         post.id = self.get_next_post_id()
         self.posts[post.id] = post
+        
+    def delete_post(self, id):
+        assert isinstance(id, int)
+        del self.posts[id]
+        # if there are no more posts in self.posts, delete the self Thread object
+        if not self.posts:
+            del _threads[self.id]
+            del self
 
     def get_next_post_id(self):
         if self.posts:

@@ -7,9 +7,9 @@ def initialize():
     u = meeplib.User('test', 'foo')
 
     # create a thread
-    t = meeplib.Thread()
+    t = meeplib.Thread('Test Thread')
     # create a single message
-    m = meeplib.Message('This is my message!', u,'Test Thread')
+    m = meeplib.Message('This is my message!', u)
     # save the message in the thread
     t.add_post(m)
 
@@ -24,7 +24,7 @@ class MeepExampleApp(object):
 
         username = 'test'
 
-        return ["""you are logged in as user: %s.<p><a href='/m/add_thread'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (username,)]
+        return ["""you are logged in as user: %s.<p><a href='/m/add_thread'>New Thread</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (username,)]
 
     def login(self, environ, start_response):
         # hard code the username for now; this should come from Web input!
@@ -62,18 +62,27 @@ class MeepExampleApp(object):
         s = []
         if threads:
             for t in threads:
+                flag = 0
                 for m in t.get_all_posts():
                     s.append('<hr>')
-                    if m.title != "": 
-                        s.append('<h2>%s</h2>' % (m.title))
+                    if flag == 0: 
+                        s.append('<h2>%s</h2>' % (t.title))
+                        flag = 1
                     s.append('<p>%s</p>' % (m.post))
                     s.append('<p>Posted by: %s</p>' % (m.author.username))
                     # append the delete message link
                     s.append("""
-                    <form action='delete_action' method='POST'><input name='id' type='hidden' value='%d' /><input type='submit' value='Delete Message' /></form>
-                    """  % (m.id))
+                    <form action='delete_action' method='POST'>
+                    <input name='thread_id' type='hidden' value='%d' />
+                    <input name='post_id' type='hidden' value='%d' />
+                    <input type='submit' value='Delete Message' />
+                    </form>
+                    """  % (t.id, m.id))
                 s.append("""
-                <form action='reply' method='POST'><input name='thread_id' type='hidden' value='%d' /><input type='submit' value='Reply to' /></form>
+                <form action='reply' method='POST'>
+                <input name='thread_id' type='hidden' value='%d' />
+                <input type='submit' value='Reply to' />
+                </form>
                 """ % (t.id))
         else:
             s.append("There are no threads to display.<p>")
@@ -92,7 +101,7 @@ class MeepExampleApp(object):
 
         start_response("200 OK", headers)
 
-        return """<form action='add_thread_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
+        return """<form action='add_thread_action' method='POST'>Title: <input type='text' name='title'><br>Message: <input type='text' name='message'><br><input type='submit'></form>"""
 
     def add_thread_action(self, environ, start_response):
         print environ['wsgi.input']
@@ -104,8 +113,8 @@ class MeepExampleApp(object):
         username = 'test'
         user = meeplib.get_user(username)
         
-        new_message = meeplib.Message(message, user, title)
-        t = meeplib.Thread()
+        new_message = meeplib.Message(message, user)
+        t = meeplib.Thread(title)
         t.add_post(new_message)
 
         headers = [('Content-type', 'text/html')]
@@ -117,10 +126,11 @@ class MeepExampleApp(object):
         print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
 
-        id = int(form['id'].value)
+        thread_id = int(form['thread_id'].value)
+        post_id = int(form['post_id'].value)
 
-        msg = meeplib.get_message(id)
-        meeplib.delete_message(msg)
+        t = meeplib.get_thread(thread_id)
+        t.delete_post(post_id)
 
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list'))
@@ -136,17 +146,19 @@ class MeepExampleApp(object):
         t = meeplib.get_thread(thread_id)
         
         s = []
+        flag = 0
         for m in t.get_all_posts():
             s.append('<hr>')
-            if m.title != "": 
-                s.append('<h2>%s</h2>' % (m.title))
+            if flag == 0: 
+                s.append('<h2>%s</h2>' % (t.title))
+                flag = 1
             s.append('<p>%s</p>' % (m.post))
             s.append('<p>Posted by: %s</p>' % (m.author.username))
         s.append('<hr>')
         s.append("""
         <form action='reply_action' method='POST'>
         <input name='thread_id' type='hidden' value='%d' />
-        Message:<input type='text' name='post'><br>
+        Message: <input type='text' name='post'><br>
         <input type='submit'>
         </form>
         """ % (t.id))

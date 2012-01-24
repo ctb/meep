@@ -182,7 +182,7 @@ class MeepExampleApp(object):
 				<div class="replies">
 					{replies}
 				</div>
-				<div class="messageReply">
+				<div class="messageReply %s">
 					&nbsp;<a href="#">Reply</a>
 				</div>
 				<div class="replyCont">
@@ -204,7 +204,10 @@ class MeepExampleApp(object):
 """  
         s = []
         for m in messages:
-             msg = template % (m.title, m.post, m.author.username, m.id)
+             hide = ""
+             if self.username is None:
+                 hide = "hidden"
+             msg = template % (m.title, m.post, m.author.username, hide, m.id)
              replies = m.get_replies()
              rs = []
              for r in replies:

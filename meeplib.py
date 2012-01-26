@@ -37,6 +37,7 @@ _words={}
 _search=True
 _searchIDs={}
 ### WHY DO DICTIONARYS STAY BUT BOOLEANS AND LISTS DO NOT??????????????????????????????????
+_replies = {}
 
 def _get_next_message_id():
     if _messages:
@@ -58,10 +59,12 @@ def _reset():
     """
     Clean out all persistent data structures, for testing purposes.
     """
-    global _messages, _users, _user_ids
+    global _messages, _users, _user_ids, _replies
     _messages = {}
     _users = {}
     _user_ids = {}
+    _replies = {}
+    
 
 ###
 
@@ -75,6 +78,7 @@ class Message(object):
     def __init__(self, title, post, author):
         self.title = title
         self.post = post
+        #self.parent = parent
 
         assert isinstance(author, User)
         self.author = author
@@ -98,6 +102,18 @@ def delete_message(msg):
     assert isinstance(msg, Message)
     remove_message_from_dict(msg)
     del _messages[msg.id]
+    
+def add_reply(message_id, reply):
+    if _replies.has_key(message_id):
+        _replies[message_id].append(reply)        
+    else:
+        _replies[message_id] = [reply]
+
+def get_replies(message_id):
+    if _replies.has_key(message_id):
+        return _replies[message_id]
+    else:
+        return -1
 
 
     

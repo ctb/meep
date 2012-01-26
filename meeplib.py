@@ -37,6 +37,8 @@ _words={}
 _search=True
 _searchIDs={}
 ### WHY DO DICTIONARYS STAY BUT BOOLEANS AND LISTS DO NOT??????????????????????????????????
+_replies = {}
+
 
 def _get_next_message_id():
     if _messages:
@@ -100,13 +102,14 @@ def delete_message(msg):
     del _messages[msg.id]
 
 
+
     
 def add_message_to_dict(msg):
     print "My message id"+ str(msg.id)
     print type(msg.id)
     message=_messages[msg.id]
     wordset=set()
-    thePost=message.post.split()
+    thePost=message.post.split()         ###search the replies dict to find replies, add their words to the worset
     for word in thePost:
         wordset.add(word)
     theTitle=message.title.split()
@@ -178,6 +181,19 @@ def get_search_results():
     print _searchIDs
     return _searchIDs["test"]
     
+
+def add_reply(message_id, reply):
+    if _replies.has_key(message_id):
+        _replies[message_id].append(reply)        
+    else:
+        _replies[message_id] = [reply]
+
+def has_replies(message_id):
+    return _replies.has_key(message_id)
+
+def get_replies(message_id):
+    return _replies[message_id]
+
 
 ###
 

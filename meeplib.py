@@ -47,7 +47,7 @@ _users = {}
 
 def _get_next_user_id():
     if _users:
-        return max(_users.keys()) + 1
+        return max(_user_ids.keys()) + 1
     return 0
 
 def _reset():
@@ -66,7 +66,7 @@ class Message(object):
     Simple "Message" object, containing title/post/author.
 
     'author' must be an object of type 'User'.
-    
+
     """
     def __init__(self, post, author):
         self.post = post

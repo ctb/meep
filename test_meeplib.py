@@ -33,6 +33,10 @@ class TestMeepLib(unittest.TestCase):
 
         assert m.author == u
 
+    def test_get_next_user(self):
+        x = meeplib._get_next_user_id()
+        assert x != None
+
     def tearDown(self):
         t = meeplib.get_all_threads()[0]
         m = t.get_all_posts()[0]

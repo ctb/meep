@@ -53,7 +53,10 @@ _users = {}
 
 def _get_next_user_id():
     if _users:
-        return max(_users.keys()) + 1
+
+        x= max(_users.values())
+
+        return x.id + 1
     return 0
 
 def _reset():
@@ -142,10 +145,16 @@ def remove_message_from_dict(msg):
     theTitle=message.title.split()
     for word in theTitle:
         wordset.add(word)
+    for reply in _replies:
+        if reply==msg.id:
+            for word in _replies[reply]:
+                wordset.add(word)
     for word in wordset:
         currentValue=_words[word]
         currentValue.remove(msg.id)
         _words[word]=currentValue
+
+        #also removes words from its replies
     return True
 
 def search_message_dict(text):
@@ -165,17 +174,6 @@ def search_message_dict(text):
     _searchIDs["test"]=resultIDSet
     print _searchIDs
     return resultIDSet
-##
-##
-##
-##def checkSearch():
-##    print "SEARCH check"
-##    print _search
-##    return _search
-##def setSearch(boolean):
-##    _search=boolean
-##    print "SEARCH STATE"
-##    print _search
 
 def get_search_results():
     print _searchIDs
@@ -187,6 +185,25 @@ def add_reply(message_id, reply):
         _replies[message_id].append(reply)        
     else:
         _replies[message_id] = [reply]
+        
+    wordset=set()
+    thePost=reply.split()         ###search the replies dict to find replies, add their words to the worset
+    for word in thePost:
+        wordset.add(word)
+        
+        for word in wordset:
+            
+            if word not in _words:
+                temp=list()
+                temp.append(message_id)
+                _words[word]=temp
+            else:
+                currentValue=_words[word]
+                currentValue.append(message_id)
+                print "CURRENT VALUE"
+            
+                _words[word]=currentValue
+                print  _words[word]
 
 def has_replies(message_id):
     return _replies.has_key(message_id)

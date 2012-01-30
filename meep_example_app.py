@@ -23,7 +23,7 @@ class MeepExampleApp(object):
 
         username = 'test'
 
-        return ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a><p>""" % (username,)]
+        return ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a><p><p><a href='/m/IDTEST'>Get next User ID</a><p>""" % (username,)]
 
     def login(self, environ, start_response):
         # hard code the username for now; this should come from Web input!
@@ -243,6 +243,18 @@ class MeepExampleApp(object):
         start_response("302 Found", headers)
         return ["message deleted"]
     
+    def IDTEST (self, environ, start_response):
+        print environ['wsgi.input']
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+
+      #  id = int(form['id'].value)
+      #  print id, ' A';
+        meeplib._get_next_user_id()
+
+        headers = [('Content-type', 'text/html')]
+        headers.append(('Location', '/'))
+        start_response("302 Found", headers)
+        return ["message deleted"]
     def __call__(self, environ, start_response):
         # store url/function matches in call_dict
         call_dict = { '/': self.index,
@@ -260,6 +272,7 @@ class MeepExampleApp(object):
 		            
                       '/m/post_reply' : self.post_reply,
                       '/m/add_reply_action' : self.add_reply_action,
+                      '/m/IDTEST' : self.IDTEST,
 
                       }
 

@@ -214,7 +214,6 @@ class MeepExampleApp(object):
         topic.delete_message_from_topic(message)
         
         headers = [('Content-type', 'text/html')]
-        #headers.append(('Location', '/m/list'))
         headers.append(('Location', '/m/topics/view?id=%d' % (topic_id,)))
         start_response("302 Found", headers)
         return ["message deleted"]

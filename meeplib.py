@@ -105,7 +105,8 @@ def delete_message(msg):
     
 def add_reply(message_id, reply):
     if _replies.has_key(message_id):
-        _replies[message_id].append(reply)        
+        _replies[message_id].append(reply)
+        add_message_to_dict(_replies[message_id])
     else:
         _replies[message_id] = [reply]
 
@@ -118,8 +119,9 @@ def get_replies(message_id):
 
     
 def add_message_to_dict(msg):
-    print "My message id"+ str(msg.id)
-    print type(msg.id)
+    print "add_message_to_dict"
+    #print "My message id"+ str(msg.id)
+    #print type(msg.id)
     message=_messages[msg.id]
     wordset=set()
     thePost=message.post.split()
@@ -129,8 +131,8 @@ def add_message_to_dict(msg):
     for word in theTitle:
         wordset.add(word)
     
-    print "THE WORDSET"
-    print wordset
+    #print "THE WORDSET"
+    #print wordset
     for word in wordset:
         if word not in _words:
             temp=list()
@@ -139,10 +141,10 @@ def add_message_to_dict(msg):
         else:
             currentValue=_words[word]
             currentValue.append(msg.id)
-            print "CURRENT VALUE"
+            #print "CURRENT VALUE"
             
             _words[word]=currentValue
-            print  _words[word]
+            #print  _words[word]
 
     return True
 
@@ -163,32 +165,22 @@ def remove_message_from_dict(msg):
 
 def search_message_dict(text):
     text=text.split()
+    print text
     searchSet=set()
     resultIDSet=set()
     for word in text:
         searchSet.add(word)
     for word in searchSet:
         if word in _words:
+            #print _words[word]
             for msgID in _words[word]:
                 resultIDSet.add(msgID)
 
-    print "THE SEARCH RESULTS"
+    #print "THE SEARCH RESULTS"
     for msgID in resultIDSet:
-        print msgID
-    _searchIDs["test"]=resultIDSet
-    print _searchIDs
+        _searchIDs["test"]=resultIDSet
+    #print _searchIDs
     return resultIDSet
-##
-##
-##
-##def checkSearch():
-##    print "SEARCH check"
-##    print _search
-##    return _search
-##def setSearch(boolean):
-##    _search=boolean
-##    print "SEARCH STATE"
-##    print _search
 
 def get_search_results():
     print _searchIDs

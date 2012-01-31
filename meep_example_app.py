@@ -59,8 +59,8 @@ class MeepExampleApp(object):
         s = []
         s.append('Your Search Results')
         s.append('<hr>')
-        print "RESULTS"
-        print results 
+        #print "RESULTS"
+        #print results 
         for result in results:
             m=meeplib.get_message(result)
             s.append('id: %d<p>' % (m.id,))
@@ -71,10 +71,9 @@ class MeepExampleApp(object):
             s.append('<hr>')
        
        
-        s.append("<form action='delete_action' method='POST'>Delete a Message?<br> Message ID: <input type='text' name='id'><input type='submit'>Delete</form>")    
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
-        s.append("<form action='search_action' method='POST'>Search for Messages?<br> Message ID: <input type='text' name='text'><input type='submit'>Delete</form>")    
+        s.append("<form action='search_action' method='POST'>Search for Messages?<br> Message ID: <input type='text' name='text'><input type='submit'></form>")    
 
         return ["".join(s)]
 
@@ -87,7 +86,7 @@ class MeepExampleApp(object):
         messages = meeplib.get_all_messages()
         s = []
         for m in messages:
-            print m.id
+            #print m.id
             s.append('id: %d<p>' % (m.id,))
             s.append('title: %s<p>' % (m.title))
             s.append('message:<b> %s</b><p>' % (m.post))
@@ -118,16 +117,9 @@ class MeepExampleApp(object):
 
         return """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
 
-##    def search (self, environ, start_response):
-##     
-##        headers = [('Content-type', 'text/html')]
-##        start_response("200 OK", headers)
-##
-##        return """<form action='search_action' method='POST'>Message:<input type='text' name='id'><br><input type='submit'></form>"""
-##
     def search_message_action(self, environ, start_response):
-        print "searchaction"
-        print environ['wsgi.input']
+        #print "searchaction"
+        #print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
         text=form['text'].value
     
@@ -144,7 +136,7 @@ class MeepExampleApp(object):
 
         
     def add_message_action(self, environ, start_response):
-        print environ['wsgi.input']
+        #print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
 
         title = form['title'].value

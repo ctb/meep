@@ -39,7 +39,7 @@ Password:<input type='password' name='password'><br>
         start_response("200 OK", headers)
         username = meeplib.get_curr_user()
 
-        return ["""You have successfully logged in as: %s <p><a href='/m/add'>Add a message</a><p><p><a href='/m/messages'>Show messages</a><p><a href='/logout'>Log out</a>""" % (username,)]
+        return ["""You have successfully logged in as: %s <p><a href='/m/add'>Add a message</a><p><p><a href='/m/list'>Show messages</a><p><a href='/logout'>Log out</a>""" % (username,)]
 
     def create_user(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
@@ -121,7 +121,16 @@ Password:<input type='password' name='password'><br>
             s.append('title: %s<p>' % (m.title))
             s.append('message: %s<p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
-            s.append("<form action='delete_action' method='POST'><input type='number' hidden='true' name='mid' value=%d><input type='submit' value='Delete'></form>" % (m.id))
+            s.append("""
+            <form action='delete_message' method='POST'>
+                <input type='hidden' name='id' value='%d' />
+                <input type='submit' value='Delete' />
+            </form>""" % (m.id,))
+            s.append("""
+            <form action='reply' method='POST'>
+                <input type='hidden' name='id' value='%d' />
+                <input type='submit' value='Reply to Message' />
+            </form>""" % (m.id,))
             s.append('<hr>')
 
         s.append("<a href='../main_page'>Back</a>")
@@ -137,7 +146,7 @@ Password:<input type='password' name='password'><br>
         start_response("200 OK", headers)
 
         return """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
-
+    
     def add_message_action(self, environ, start_response):
         print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
@@ -151,30 +160,43 @@ Password:<input type='password' name='password'><br>
         new_message = meeplib.Message(title, message, user)
 
         headers = [('Content-type', 'text/html')]
-        headers.append(('Location', '/m/messages'))
+        headers.append(('Location', '/m/list'))
         start_response("302 Found", headers)
         return ["message added"]
 
     def delete_message(self, environ, start_response):
+        print environ['wsgi.input']
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+        
+        id = int(form['id'].value)
+        
+        message = meeplib.get_message(id)
+        
+        meeplib.delete_message(message)
+        
+        headers = [('Content-type', 'text/html')]
+        headers.append(('Location', '/m/list'))
+        start_response("302 Found", headers)
+        return ["message deleted"]
+        
+    def reply(self, environ, start_response):
+        print environ['wsgi.input']
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+        
+        id = int(form['id'].value)
+        
+        m = meeplib.get_message(id)
+        
         headers = [('Content-type', 'text/html')]
         
         start_response("200 OK", headers)
 
-        return """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
-
-
-    def delete_message_action(self, environ, start_response):
-        print environ['wsgi.input']
-        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
-
-        messageId = form['mid'].value
-        message = meeplib.get_message(int(messageId))
-        meeplib.delete_message(message)
-        
-        headers = [('Content-type', 'text/html')]
-        headers.append(('Location', '/m/messages'))
-        start_response("302 Found", headers)
-        return ["message deleted"]
+        return """
+        <form action='add_action' method='POST'>
+            Title: <input type='text' name='title' value='RE: %s'><br>
+            Message:<input type='text' name='message' value='<br>In post %d, %s said:<blockquote>%s</blockquote>'><br>
+            <input type='submit'>
+        </form>""" % (m.title, m.id, m.author.username, m.post)
     
     def __call__(self, environ, start_response):
         # store url/function matches in call_dict
@@ -184,11 +206,11 @@ Password:<input type='password' name='password'><br>
                       '/create_user_action':self.create_user_action,
                       '/login': self.login,
                       '/logout': self.logout,
-                      '/m/messages': self.list_messages,
+                      '/m/list': self.list_messages,
                       '/m/add': self.add_message,
                       '/m/add_action': self.add_message_action,
-                      '/m/delete': self.delete_message,
-                      '/m/delete_action': self.delete_message_action
+                      '/m/delete_message': self.delete_message,
+                      '/m/reply':self.reply
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.

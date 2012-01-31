@@ -10,13 +10,7 @@ import meeplib
 class TestMeepLib(unittest.TestCase):
     def setUp(self):
         u = meeplib.User('foo', 'bar')
-        m = meeplib.Message('the title', 'the content', u)
-
-    def test_for_message_existence(self):
-        x = meeplib.get_all_messages()
-        assert len(x) == 1
-        assert x[0].title == 'the title'
-        assert x[0].post == 'the content'
+        m = meeplib.Message('the title', 'the content', 0, u)
 
     def test_message_ownership(self):
         x = meeplib.get_all_users()
@@ -31,7 +25,7 @@ class TestMeepLib(unittest.TestCase):
 
     def test_get_next_user(self):
         x = meeplib._get_next_user_id()
-        assert x == 1 
+        assert x == 1
 
     def tearDown(self):
         m = meeplib.get_all_messages()[0]

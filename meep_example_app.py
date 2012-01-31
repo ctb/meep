@@ -240,36 +240,35 @@ class MeepExampleApp(object):
         
         msg = meeplib.get_message(id)
         
+        error = False
+        errorMsg = ""
+        response = "200 OK"
+        
+        headers = [('Content-type', 'text/html')]
+        
         if msg == None:
-            headers = [('Content-type', 'text/html')]
-            start_response("200 OK", headers)
-            return ["""Message id %d could not be found.""" % (msgId,)]
+            error = True
+            errorMsg = """Message id%d could not be found.""" % (msgId,)
         elif action == "Delete":
-            print('deleting')
-            print('Msg Author %s' % msg.author.username)
-            print('User %s' % self.username)
             if msg.author.username == self.username:
                 meeplib.delete_message(msg)
-                headers = [('Content-type', 'text/html')]
+                response = "302 Found"
                 headers.append(('Location', '/m/list'))
-                start_response("302 Found", headers)
-                return ["message removed"]
+                errorMsg = "message removed"
             else:
-                headers = [('Content-type', 'text/html')]
-                start_response("200 OK", headers)
-                return ["""You cannot delete another user's post."""]
+                errorMsg = "You cannot delete another user's post."
         elif action == "Reply":
-            print('replying')
             title = ""
-            print form['replyText'].value
             message = form['replyText'].value
             user = meeplib.get_user(self.username)
             new_message = meeplib.Message(title, message, user, True)
             msg.add_reply(new_message)
-            headers = [('Content-type', 'text/html')]
+            response = "302 Found"
             headers.append(('Location', '/m/list'))
-            start_response("302 Found", headers)
-            return ["message removed"]
+            errorMsg = "message replied"
+
+        start_response(response, headers)
+        return [errorMsg]
 
     def add_message(self, environ, start_response):
         if self.username is None:

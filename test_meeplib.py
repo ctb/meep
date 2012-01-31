@@ -30,7 +30,7 @@ class TestMeepLib(unittest.TestCase):
         assert m.author == u
 
     def test_get_next_user_id(self):
-        assert isinstance(max(meeplib._users.keys()), int)
+        assert isinstance(meeplib._get_max_user_id(), int)
 
     def tearDown(self):
         m = meeplib.get_all_messages()[0]

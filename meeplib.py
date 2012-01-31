@@ -45,9 +45,15 @@ _user_ids = {}
 # a dictionary, storing all users by username
 _users = {}
 
+def _get_max_user_id():
+    if _users:
+        return max(_users.keys())
+    return 0
+
 def _get_next_user_id():
     if _users:
-        return max(_users.keys()) + 1
+        max_user_id = _get_max_user_id()
+        return max_user_id + 1
     return 0
 
 def _reset():

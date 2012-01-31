@@ -29,6 +29,9 @@ class TestMeepLib(unittest.TestCase):
 
         assert m.author == u
 
+    def test_get_next_user_id(self):
+        assert isinstance(max(meeplib._users.keys()), int)
+
     def tearDown(self):
         m = meeplib.get_all_messages()[0]
         meeplib.delete_message(m)

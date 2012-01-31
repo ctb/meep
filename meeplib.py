@@ -127,7 +127,7 @@ class Topic(object):
         self._save_topic()
         
     def _save_topic(self):
-        self.id = _gect_next_topic_id()
+        self.id = _get_next_topic_id()
         
         _topics[self.id] = self
     

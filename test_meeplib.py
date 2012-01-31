@@ -11,6 +11,10 @@ class TestMeepLib(unittest.TestCase):
     def setUp(self):
         u = meeplib.User('foo', 'bar')
         m = meeplib.Message('the title', 'the content', u)
+        
+    def test_next_user_id(self):
+        v = meeplib._get_next_user_id()
+        print "\nNext message ID: %d\n" % v
 
     def test_for_message_existence(self):
         x = meeplib.get_all_messages()

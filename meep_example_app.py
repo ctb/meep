@@ -246,11 +246,18 @@ class MeepExampleApp(object):
             return ["""Message id %d could not be found.""" % (msgId,)]
         elif action == "Delete":
             print('deleting')
-            meeplib.delete_message(msg)
-            headers = [('Content-type', 'text/html')]
-            headers.append(('Location', '/m/list'))
-            start_response("302 Found", headers)
-            return ["message removed"]
+            print('Msg Author %s' % msg.author.username)
+            print('User %s' % self.username)
+            if msg.author.username == self.username:
+                meeplib.delete_message(msg)
+                headers = [('Content-type', 'text/html')]
+                headers.append(('Location', '/m/list'))
+                start_response("302 Found", headers)
+                return ["message removed"]
+            else:
+                headers = [('Content-type', 'text/html')]
+                start_response("200 OK", headers)
+                return ["""You cannot delete another user's post."""]
         elif action == "Reply":
             print('replying')
             title = ""

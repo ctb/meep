@@ -28,6 +28,10 @@ class TestMeepLib(unittest.TestCase):
         m = x[0]
 
         assert m.author == u
+        
+    def test_get_next_user_id(self):
+        x = meeplib._get_next_user_id()
+        assert type(x) == int
 
     def tearDown(self):
         m = meeplib.get_all_messages()[0]

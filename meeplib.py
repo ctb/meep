@@ -49,6 +49,11 @@ def _get_next_user_id():
     if _users:
         return max(_user_ids.keys()) + 1
     return 0
+    
+def _get_next_user_id_ORG():
+    if _users:
+        return max(_users.keys()) + 1
+    return 0
 
 def _reset():
     """

@@ -25,7 +25,7 @@ Functions and classes:
 import pickle
 
 __all__ = ['User', 'Message', 'Thread', '_get_next_threadid', '_get_next_user_id',
-            '_reset', 'get_user', 'get_all_users', 'delete_user']
+            '_reset', 'get_user', 'get_all_users', 'delete_user', 'save_state', 'load_state']
 
 ###
 # internal data structures & functions; please don't access these

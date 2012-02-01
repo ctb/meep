@@ -88,7 +88,11 @@ class MeepExampleApp(object):
         return [''.join(s)]
 
     def logout(self, environ, start_response):
-
+        if self.username is None:
+            headers = [('Content-type', 'text/html')]
+            headers.append(('Location', '/'))
+            start_response("302 Found", headers)
+            return ["You must be logged in to use that feature."]
         self.username =  None
 
         headers = [('Content-type', 'text/html')]
@@ -212,8 +216,9 @@ class MeepExampleApp(object):
         headers = [('Content-type', 'text/html')]
         if self.username is None:
             headers = [('Content-type', 'text/html')]
+            headers.append(('Location', '/'))
             start_response("302 Found", headers)
-            return ["You must be logged in to use that feature.<p><a href='/login'>Log in</a><p><a href='/create_user'>Create a New User</a>"]
+            return ["You must be logged in to use that feature."]
 
         start_response("200 OK", headers)
 
@@ -222,6 +227,11 @@ class MeepExampleApp(object):
     def add_thread_action(self, environ, start_response):
         print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+        if self.username is None:
+            headers = [('Content-type', 'text/html')]
+            headers.append(('Location', '/'))
+            start_response("302 Found", headers)
+            return ["You must be logged in to use that feature."]
 
         title = form['title'].value
         message = form['message'].value
@@ -238,12 +248,13 @@ class MeepExampleApp(object):
         return ["thread added"]
 
     def delete_message_action(self, environ, start_response):
-        if self.username is None:
-            headers = [('Content-type', 'text/html')]
-            start_response("302 Found", headers)
-            return ["You must be logged in to use that feature.<p><a href='/login'>Log in</a><p><a href='/create_user'>Create a New User</a>"]
         print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+        if self.username is None:
+            headers = [('Content-type', 'text/html')]
+            headers.append(('Location', '/'))
+            start_response("302 Found", headers)
+            return ["You must be logged in to use that feature."]
 
         thread_id = int(form['thread_id'].value)
         post_id = int(form['post_id'].value)
@@ -259,12 +270,13 @@ class MeepExampleApp(object):
         return["post deleted"]
         
     def reply(self, environ, start_response):
-        if self.username is None:
-            headers = [('Content-type', 'text/html')]
-            start_response("302 Found", headers)
-            return ["You must be logged in to use that feature.<p><a href='/login'>Log in</a><p><a href='/create_user'>Create a New User</a>"]
         print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+        if self.username is None:
+            headers = [('Content-type', 'text/html')]
+            headers.append(('Location', '/'))
+            start_response("302 Found", headers)
+            return ["You must be logged in to use that feature."]
 
         thread_id = int(form['thread_id'].value)
         t = meeplib.get_thread(thread_id)
@@ -294,6 +306,11 @@ class MeepExampleApp(object):
     def reply_action(self, environ, start_response):
         print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+        if self.username is None:
+            headers = [('Content-type', 'text/html')]
+            headers.append(('Location', '/'))
+            start_response("302 Found", headers)
+            return ["You must be logged in to use that feature."]
 
         post = form['post'].value
 

@@ -22,6 +22,7 @@ Functions and classes:
  * get_message(msg_id) - retrieves Message object for message with id msg_id.
 
 """
+import pickle
 
 __all__ = ['User', 'Message', 'Thread', '_get_next_threadid', '_get_next_user_id',
             '_reset', 'get_user', 'get_all_users', 'delete_user']
@@ -44,6 +45,26 @@ _user_ids = {}
 
 # a dictionary, storing all users by username
 _users = {}
+
+def save_state():
+    filename = "meep.save"
+    fp = open(filename, 'w')
+    objects = (_threads, _user_ids, _users)
+    pickle.dump(objects, fp)
+    fp.close()
+
+def load_state():
+    try:
+        filename = "meep.save"
+        fp = open(filename, 'r')
+        objects = pickle.load(fp)
+        (_threads, _user_ids, _users) = objects
+        #print "successfully loaded"
+        #print _threads, _user_ids, _users
+        return _threads, _user_ids, _users
+    except IOError:
+        print "meeplib.load_state() IOError"
+        pass
 
 def _get_next_user_id():
     if _users:

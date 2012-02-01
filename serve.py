@@ -1,7 +1,7 @@
 from meep_example_app import MeepExampleApp, initialize
 from wsgiref.simple_server import make_server
 
-initialize()
+#initialize()
 app = MeepExampleApp()
 
 httpd = make_server('', 8000, app)

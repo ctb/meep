@@ -21,6 +21,7 @@ class MeepExampleApp(object):
     """
     def __init__(self):
         self.username = None
+        meeplib._threads, meeplib._user_ids, meeplib._users = meeplib.load_state()
 
     def index(self, environ, start_response):
         start_response("200 OK", [('Content-type', 'text/html')])
@@ -38,17 +39,17 @@ class MeepExampleApp(object):
         try:
             username = form['username'].value
             # retrieve user
-            print "we gots a username", username
+            #print "we gots a username", username
         except KeyError:
             username = ''
-            print "no user input"
+            #print "no user input"
 
         try:
             password = form['password'].value
-            print "we gots a password", password
+            #print "we gots a password", password
         except KeyError:
             password = ''
-            print 'no password input'
+            #print 'no password input'
 
         s=[]
 
@@ -107,31 +108,31 @@ class MeepExampleApp(object):
     def create_user(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
 
-        print "do i have input?", environ['wsgi.input']
+        print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
-        print "form", form
+        #print "form", form
 
         try:
             username = form['username'].value
             # retrieve user
-            print "we gots a username", username
+            #print "we gots a username", username
         except KeyError:
             username = ''
-            print "no user input"
+            #print "no user input"
 
         try:
             password = form['password'].value
-            print "we gots a password", password
+            #print "we gots a password", password
         except KeyError:
             password = ''
-            print 'no password input'
+            #print 'no password input'
 
         try:
             password2 = form['password_confirm'].value
-            print "we gots a password", password
+            #print "we gots a password", password
         except KeyError:
             password2 = ''
-            print 'no password confirmation'
+            #print 'no password confirmation'
 
         s=[]
 
@@ -151,6 +152,7 @@ class MeepExampleApp(object):
                     The passwords you provided did not match.<p>''')
             else:
                 u = meeplib.User(username, password)
+                meeplib.save_state()
                 ## send back a redirect to '/'
                 k = 'Location'
                 v = '/'
@@ -247,6 +249,7 @@ class MeepExampleApp(object):
             new_message = meeplib.Message(message, user)
             t = meeplib.Thread(title)
             t.add_post(new_message)
+            meeplib.save_state()
             headers.append(('Location','/m/list'))
             
         start_response("302 Found", headers)
@@ -276,6 +279,7 @@ class MeepExampleApp(object):
         t = meeplib.get_thread(thread_id)
         post = t.get_post(post_id)
         t.delete_post(post)
+        meeplib.save_state()
 
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list'))
@@ -318,6 +322,7 @@ class MeepExampleApp(object):
             user = meeplib.get_user(self.username)
             new_message = meeplib.Message(post, user)
             t.add_post(new_message)
+            meeplib.save_state()
             headers.append(('Location','/m/list'))
 
         start_response("302 Found", headers)

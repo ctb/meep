@@ -23,8 +23,8 @@ Functions and classes:
 
 """
 
-__all__ = ['Message', 'get_all_messages', 'get_message', 'delete_message',
-           'User', 'get_user', 'get_all_users', 'delete_user', 'Thread']
+__all__ = ['User', 'Message', 'Thread', '_get_next_threadid', '_get_next_user_id',
+            '_reset', 'get_user', 'get_all_users', 'delete_user']
 
 ###
 # internal data structures & functions; please don't access these

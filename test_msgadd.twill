@@ -13,3 +13,5 @@ submit
 
 find 'foo'
 
+go http://localhost:8000/
+follow "Log out"

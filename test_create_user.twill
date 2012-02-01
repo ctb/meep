@@ -1,0 +1,11 @@
+go http://localhost:8000/
+follow "Create a New User"
+
+fv 1 username 'test'
+fv 1 password 'foo'
+fv 1 password_confirm 'foo'
+submit
+
+find 'test'
+
+follow "Log out"

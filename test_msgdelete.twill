@@ -1,0 +1,16 @@
+go http://localhost:8000/
+follow "Log in"
+
+fv 1 username 'test'
+fv 1 password 'foo'
+submit
+
+follow "Show threads"
+
+fv 1 delete '0'
+submit
+
+notfind 'foo'
+
+go http://localhost:8000/
+follow "Log out"

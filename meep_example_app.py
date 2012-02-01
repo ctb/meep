@@ -214,38 +214,52 @@ class MeepExampleApp(object):
 
     def add_thread(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
+
         if self.username is None:
             headers = [('Content-type', 'text/html')]
             headers.append(('Location', '/'))
             start_response("302 Found", headers)
             return ["You must be logged in to use that feature."]
 
-        start_response("200 OK", headers)
-
-        return """<form action='add_thread_action' method='POST'>Title: <input type='text' name='title'><br>Message: <input type='text' name='message'><br><input type='submit'></form>"""
-
-    def add_thread_action(self, environ, start_response):
         print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
-        if self.username is None:
-            headers = [('Content-type', 'text/html')]
-            headers.append(('Location', '/'))
-            start_response("302 Found", headers)
-            return ["You must be logged in to use that feature."]
 
-        title = form['title'].value
-        message = form['message'].value
+        try:
+            title = form['title'].value
+        except KeyError:
+            title = ''
+        try:
+            message = form ['message'].value
+        except KeyError:
+            message = ''
 
-        user = meeplib.get_user(self.username)
-        
-        new_message = meeplib.Message(message, user)
-        t = meeplib.Thread(title)
-        t.add_post(new_message)
+        s = []
 
-        headers = [('Content-type', 'text/html')]
-        headers.append(('Location', '/m/list'))
+        # title and message are non-empty
+        if title == '' and message == '':
+            pass
+        elif title == '' and message != '':
+            s.append("Title was empty.<p>")
+        elif title != '' and message == '':
+            s.append("Message was empty. <p>")
+        elif title != '' and message != '':
+            user = meeplib.get_user(self.username)
+            new_message = meeplib.Message(message, user)
+            t = meeplib.Thread(title)
+            t.add_post(new_message)
+            headers.append(('Location','/m/list'))
+            
         start_response("302 Found", headers)
-        return ["thread added"]
+
+        # doesn't get executed if we had valid input and created a thread
+        s.append("""
+        <form action='add_thread' method='POST'>
+        Title: <input type='text' name='title' value='%s'><br>
+        Message: <input type='text' name='message' value='%s'><br>
+        <input type='submit'></form>
+        """ % (title, message))
+
+        return ["".join(s)]
 
     def delete_message_action(self, environ, start_response):
         print environ['wsgi.input']
@@ -270,6 +284,8 @@ class MeepExampleApp(object):
         return["post deleted"]
         
     def reply(self, environ, start_response):
+        headers = [('Content-type', 'text/html')]
+
         print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
         if self.username is None:
@@ -291,42 +307,31 @@ class MeepExampleApp(object):
             s.append('<p>%s</p>' % (m.post))
             s.append('<p>Posted by: %s</p>' % (m.author.username))
         s.append('<hr>')
+
+        try:
+            post = form['post'].value
+        except KeyError:
+            post = ''
+
+        # post is non-empty
+        if post != '':
+            user = meeplib.get_user(self.username)
+            new_message = meeplib.Message(post, user)
+            t.add_post(new_message)
+            headers.append(('Location','/m/list'))
+
+        start_response("302 Found", headers)
+
+        # doesn't get executed unless we had valid input and replied to the thread
         s.append("""
-        <form action='reply_action' method='POST'>
+        <form action='reply' method='POST'>
         <input name='thread_id' type='hidden' value='%d' />
         Message: <input type='text' name='post'><br>
         <input type='submit'>
         </form>
         """ % (t.id))
-            
-        headers = [('Content-type', 'text/html')]
-        start_response("200 OK", headers)
+
         return ["".join(s)]
-
-    def reply_action(self, environ, start_response):
-        print environ['wsgi.input']
-        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
-        if self.username is None:
-            headers = [('Content-type', 'text/html')]
-            headers.append(('Location', '/'))
-            start_response("302 Found", headers)
-            return ["You must be logged in to use that feature."]
-
-        post = form['post'].value
-
-        user = meeplib.get_user(self.username)
-
-        new_message = meeplib.Message(post, user)
-        thread_id = int(form['thread_id'].value)
-        
-        t = meeplib.get_thread(thread_id)
-        t.add_post(new_message)
-
-        headers = [('Content-type', 'text/html')]
-        headers.append(('Location', '/m/list'))
-        start_response("302 Found", headers)
-        
-        return ["reply added"]
 
     def __call__(self, environ, start_response):
         # store url/function matches in call_dict
@@ -336,10 +341,8 @@ class MeepExampleApp(object):
                       '/create_user': self.create_user,
                       '/m/list': self.list_messages,
                       '/m/add_thread': self.add_thread,
-                      '/m/add_thread_action': self.add_thread_action,
                       '/m/delete_action': self.delete_message_action,
-                      '/m/reply': self.reply,
-                      '/m/reply_action': self.reply_action
+                      '/m/reply': self.reply
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.

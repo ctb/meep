@@ -63,7 +63,7 @@ def load_state():
         #print _threads, _user_ids, _users
         return _threads, _user_ids, _users
     except IOError:
-        print "meeplib.load_state() IOError"
+        #print "meeplib.load_state() IOError"
         return {}, {}, {}
 
 def _get_next_user_id():

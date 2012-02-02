@@ -17,7 +17,6 @@ class MeepExampleApp(object):
     WSGI app object.
     """
     def index(self, environ, start_response):
-        print environ
         start_response("200 OK", [('Content-type', 'text/html')])
 
         username = 'test'
@@ -85,7 +84,6 @@ class MeepExampleApp(object):
         return """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
 
     def add_message_action(self, environ, start_response):
-        print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
 
         title = form['title'].value

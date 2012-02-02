@@ -1,0 +1,23 @@
+go http://localhost:8000/
+follow "Log in"
+
+fv 1 username 'test'
+fv 1 password 'foo'
+submit
+
+follow "New thread"
+
+fv 1 title 'foo'
+fv 1 message 'A message!'
+submit
+
+fv 1 reply '0'
+submit
+
+fv 1 post 'test_response'
+submit
+
+find 'test_response
+
+go http://localhost:8000/
+follow "Log out"

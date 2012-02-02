@@ -11,13 +11,13 @@ fv 1 title 'foo'
 fv 1 message 'A message!'
 submit
 
-fv 1 reply '0'
+fv 2 reply '0'
 submit
 
 fv 1 post 'test_response'
 submit
 
-find 'test_response
+find 'test_response'
 
 go http://localhost:8000/
 follow "Log out"

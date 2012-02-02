@@ -1,6 +1,7 @@
 import meeplib
 import traceback
 import cgi
+import meepcookie
 
 def initialize():
     # create a default user
@@ -16,6 +17,7 @@ class MeepExampleApp(object):
     WSGI app object.
     """
     def index(self, environ, start_response):
+        print environ
         start_response("200 OK", [('Content-type', 'text/html')])
 
         username = 'test'
@@ -31,6 +33,11 @@ class MeepExampleApp(object):
 
         # set content-type
         headers = [('Content-type', 'text/html')]
+
+        cookie_name, cookie_val = \
+                     meepcookie.make_set_cookie_header('username',
+                                                       user.username)
+        headers.append((cookie_name, cookie_val))
         
         # send back a redirect to '/'
         k = 'Location'

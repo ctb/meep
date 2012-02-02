@@ -69,14 +69,18 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
         soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             if self._connect_to(netloc, soc):
+		print 'Connecting to:', netloc, soc
                 self.log_request()
                 soc.send("%s %s %s\r\n" % (
                     self.command,
                     urlparse.urlunparse(('', '', path, params, query, '')),
                     self.request_version))
+		print 'Sending:', self.command, path, params, query
                 self.headers['Connection'] = 'close'
                 del self.headers['Proxy-Connection']
+
                 for key_val in self.headers.items():
+		    print 'Sending header:', key_val
                     soc.send("%s: %s\r\n" % key_val)
                 soc.send("\r\n")
                 self._read_write(soc)
@@ -101,6 +105,7 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
                         out = soc
                     data = i.recv(8192)
                     if data:
+			print 'Sending:', (data,)
                         out.send(data)
                         count = 0
             else:

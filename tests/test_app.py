@@ -1,4 +1,6 @@
 import unittest
+import sys
+sys.path.append("..")
 import meep_example_app
 
 class TestApp(unittest.TestCase):

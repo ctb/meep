@@ -34,19 +34,31 @@ class TestApp(unittest.TestCase):
         assert 'New thread' in data[0]
         assert 'Show threads' in data[0]
 
-    '''def test_create_user(self):
+    def test_thread_list(self):
+        self.app.username = 'test' # force login
         environ = {}                    # make a fake dict
-        environ['PATH_INFO'] = '/create_user'
+        environ['PATH_INFO'] = '/m/list'
 
         def fake_start_response(status, headers):
-            print status
+            assert status == '200 OK'
+            assert ('Content-type', 'text/html') in headers
+
+        data = self.app(environ, fake_start_response)
+        assert 'index' in data[0]
+
+    def test_create_user(self):
+        environ = {}                    # make a fake dict
+        environ['PATH_INFO'] = '/create_user'
+        environ['wsgi.input'] = ''
+
+        def fake_start_response(status, headers):
             assert status == '302 Found'
             assert ('Content-type', 'text/html') in headers
 
         data = self.app(environ, fake_start_response)
-        print data
-        assert 'New thread' in data[0]
-        assert 'Show threads' in data[0]'''
+        assert 'username:' in data[0]
+        assert 'password:' in data[0]
+        assert 'confirm password:' in data[0]
 
     def tearDown(self):
         pass

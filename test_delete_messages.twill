@@ -1,0 +1,9 @@
+go http://localhost:8000/
+follow "Show messages"
+
+fv 1 id '0'
+submit
+follow "Show messages"
+
+notfind 'NOW!'
+

@@ -1,0 +1,10 @@
+go http://localhost:8000/
+follow "Show messages"
+follow "reply"
+fv 1 reply 'my reply'
+submit
+
+
+find 'my reply'
+
+

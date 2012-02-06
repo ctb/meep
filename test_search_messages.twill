@@ -1,0 +1,10 @@
+go http://localhost:8000/
+follow "Show messages"
+
+fv 2 text 'lol'
+submit
+
+
+find 'lol'
+notfind 'my'
+

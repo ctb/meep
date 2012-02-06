@@ -1,0 +1,6 @@
+go http://localhost:8000/
+follow "Show messages"
+
+url /m/list
+find 'my title'
+

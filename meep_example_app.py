@@ -2,16 +2,13 @@ import meeplib
 import traceback
 import cgi
 
-
 def initialize():
     # create a default user
     u = meeplib.User('test', 'foo')
 
     # create a single message
-    meeplib.Message('my title', 'This is my message NOW!', u)
-    meeplib.Message('title', 'lol', u)
-    meeplib.Message('my', 'test', u)
-    meeplib.Message('test', 'my', u)
+    meeplib.Message('my title', 'This is my message!', u)
+    meeplib.load()
     # done.
 
 class MeepExampleApp(object):
@@ -54,43 +51,52 @@ class MeepExampleApp(object):
         start_response('302 Found', headers)
         
         return "no such content"
+    
     def list_search(self, environ, start_response):
         results=meeplib.get_search_results()
         s = []
         s.append('Your Search Results')
         s.append('<hr>')
-        #print "RESULTS"
-        #print results 
+        print "RESULTS"
+        print results
         for result in results:
             m=meeplib.get_message(result)
             s.append('id: %d<p>' % (m.id,))
             s.append('title: %s<p>' % (m.title))
             s.append('message: %s<p>' % (m.post))
-            s.append('author: %s<p>' % (m.author.username))
-         
+            try:
+                s.append('author: %s<p>' % (m.author.username))
+            except:
+                s.append('author: %s<p>' % (m.author))
+            s.append("<a href='/m/add_reply?id="+str(m.id)+"'>Reply</a><br />")
+            s.append("<a href='/m/delete_message?id="+str(m.id)+"'>Delete Message</a>")
+            replies = meeplib.get_replies(m.id)
+
+            if (replies!=-1):
+                s.append('<div style="padding-left: 50px;">Replies:</div><br />')
+                for r in replies:
+                    
+                    s.append(""" <div style="padding-left: 70px;">&nbsp;%s</div><p>""" % r)
+
             s.append('<hr>')
-       
        
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
-        s.append("<form action='search_action' method='POST'>Search for Messages?<br> Message ID: <input type='text' name='text'><input type='submit'></form>")    
+        s.append("<form action='search_action' method='POST'>Search<input type='text' name='text'><input type='submit'></form>")
 
         return ["".join(s)]
-
-
-
-        
+    
     def list_messages(self, environ, start_response):
-
-
         messages = meeplib.get_all_messages()
         s = []
         for m in messages:
-            #print m.id
             s.append('id: %d<p>' % (m.id,))
             s.append('title: %s<p>' % (m.title))
             s.append('message:<b> %s</b><p>' % (m.post))
-            s.append('author: %s<p>' % (m.author.username))
+            try:
+                s.append('author: %s<p>' % (m.author.username))
+            except:
+                s.append('author: %s<p>' % (m.author))
             s.append("<a href='/m/add_reply?id="+str(m.id)+"'>Reply</a><br />")
             s.append("<a href='/m/delete_message?id="+str(m.id)+"'>Delete Message</a>")
             replies = meeplib.get_replies(m.id)
@@ -101,25 +107,19 @@ class MeepExampleApp(object):
                     s.append(""" <div style="padding-left: 70px;">&nbsp;%s</div><p>""" % r)
 
             s.append('<hr>')
-           
 
-
+        s.append("<a href='../../'>index</a>")
+            
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
-        s.append("<form action='search_action' method='POST'>Search for Messages?<br> Message ID: <input type='text' name='text'><input type='submit'>Delete</form>")    
+        s.append("<form action='search_action' method='POST'>Search<input type='text' name='text'><input type='submit'></form>")
 
         return ["".join(s)]
 
-    def add_message(self, environ, start_response):
-        headers = [('Content-type', 'text/html')]
-        
-        start_response("200 OK", headers)
-
-        return """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
 
     def search_message_action(self, environ, start_response):
-        #print "searchaction"
-        #print environ['wsgi.input']
+        print "searchaction"
+        print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
         text=form['text'].value
     
@@ -134,9 +134,15 @@ class MeepExampleApp(object):
 
         return ["message deleted"]
 
+    def add_message(self, environ, start_response):
+        headers = [('Content-type', 'text/html')]
         
+        start_response("200 OK", headers)
+
+        return """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
+
     def add_message_action(self, environ, start_response):
-        #print environ['wsgi.input']
+        print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
 
         title = form['title'].value
@@ -146,7 +152,7 @@ class MeepExampleApp(object):
         user = meeplib.get_user(username)
         
         new_message = meeplib.Message(title, message, user)
-        
+        meeplib.save_message()
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list'))
         start_response("302 Found", headers)
@@ -166,6 +172,7 @@ class MeepExampleApp(object):
         return ["message deleted"]
 
 
+
     def add_reply(self, environ, start_response):
         qString = cgi.parse_qs(environ['QUERY_STRING'])
         mId = qString.get('id', [''])[0]
@@ -181,7 +188,7 @@ class MeepExampleApp(object):
         mId = int(form['id'].value)
         
         meeplib.add_reply(mId, message)
-     
+        meeplib.save_reply()
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list'))
         start_response("302 Found", headers)
@@ -194,13 +201,13 @@ class MeepExampleApp(object):
                       '/login': self.login,
                       '/logout': self.logout,
                       '/m/list': self.list_messages,
-                      '/m/search': self.list_search,
                       '/m/add': self.add_message,
                       '/m/add_action': self.add_message_action,
-                      '/m/search_action': self.search_message_action,
                       '/m/delete_message': self.delete_message,
                       '/m/add_reply': self.add_reply,
-                      '/m/add_reply_action':self.add_reply_action
+                      '/m/add_reply_action':self.add_reply_action,
+                      '/m/search_action': self.search_message_action,
+                      '/m/search': self.list_search
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.

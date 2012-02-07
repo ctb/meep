@@ -1,21 +1,41 @@
 import meeplib
 import traceback
 import cgi
+import pickle
 
 
 def initialize():
-    # create a default user
-    u = meeplib.User('test', 'foo')
-
-    # create a single message
-    meeplib.Message('my title', 'This is my message!', u)
-
-    # done.
+    pass
 
 class MeepExampleApp(object):
     """
     WSGI app object.
     """
+    def __init__(self):
+        self.filename = 'save.pickle'
+        try:
+            fp = open(self.filename)
+            obj = pickle.load(fp)
+            meeplib._users = obj[0]
+            meeplib._messages = obj[1]
+            fp.close()
+        except:
+            # create a default user
+            u = meeplib.User('test', 'foo')
+        # create a single message
+            meeplib.Message('my title', 'This is my message!', u)
+        # done.    
+    def save(self):
+        obj = []
+        obj.append(meeplib._users)
+        obj.append(meeplib._messages)
+        try:
+            fp = open(self.filename, 'w')
+            pickle.dump(obj, fp)
+            fp.close()
+        except IOError:
+            pass
+    
     def index(self, environ, start_response):
 		username = 'test'
 	
@@ -103,7 +123,8 @@ class MeepExampleApp(object):
         user = meeplib.get_user(username)
         
         new_message = meeplib.Message(title, message, user)
-
+        self.save()
+        
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list'))
         start_response("302 Found", headers)  
@@ -120,7 +141,7 @@ class MeepExampleApp(object):
         #adds reply to designated message
         message = meeplib.get_message(parent_id)
         message.add_reply(reply)
-        
+        self.save()
 
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list'))
@@ -132,6 +153,7 @@ class MeepExampleApp(object):
          ID = queryParams['id'][0]
          ID = int(ID)
          meeplib.delete_message(meeplib.get_message(ID))
+         self.save()
          
          headers = [('Content-type', 'text/html')]
          headers.append(('Location', '/m/list'))

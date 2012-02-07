@@ -1,0 +1,16 @@
+go http://localhost:8000/
+follow "Show topics"
+
+follow "First Topic"
+
+fv 'reply_0' id '0'
+fv 'reply_0' topic_id '0'
+
+submit
+
+url /m/reply_topic
+
+submit
+
+url /m/topics/view
+find 'In post 0, test said:'

@@ -1,0 +1,11 @@
+go http://localhost:8000/
+follow "Show topics"
+
+follow "First Topic"
+
+fv 'add_message' title 'Test title twill'
+fv 'add_message' message 'Blah blah blah'
+
+submit
+
+url /m/topics/view

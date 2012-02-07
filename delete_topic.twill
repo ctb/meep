@@ -1,0 +1,10 @@
+go http://localhost:8000/
+follow "Show topics"
+
+follow "First Topic"
+
+fv 'delete_topic' tid 0
+
+submit
+
+url /m/list_topics

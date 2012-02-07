@@ -1,0 +1,11 @@
+go http://localhost:8000/
+follow "Show topics"
+
+follow "First Topic"
+
+fv 'delete_0' id '0'
+fv 'delete_0' topic_id '0'
+
+submit
+
+url /m/topics/view

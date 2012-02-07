@@ -1,0 +1,12 @@
+go http://localhost:8000/
+follow "Add a topic"
+
+fv 1 title 'test topic FOO'
+fv 1 msgtitle 'test title GLUB'
+fv 1 message 'Message message'
+submit
+
+url /m/list_topics
+follow "test topic FOO"
+
+find 'GLUB'

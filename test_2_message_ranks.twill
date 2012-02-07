@@ -1,0 +1,11 @@
+go http://localhost:8000
+follow "Show messages"
+
+go /m/increase_msg_rank?id_num=0
+go /m/increase_msg_rank?id_num=0
+
+find "RANK: 2"
+
+go /m/decrease_msg_rank?id_num=0
+
+find "RANK: 1"

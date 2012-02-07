@@ -1,0 +1,14 @@
+go http://localhost:8000
+follow "Log in"
+
+fv 1 username "new"
+fv 1 password "test"
+submit
+
+find "new"
+
+go /m/add_reply?id_num=0
+fv 1 reply "Twill reply test"
+submit
+
+find "Twill reply test"

@@ -1,0 +1,18 @@
+#Test for login and add message
+go http://localhost:8000
+follow "Log in"
+
+fv 1 username "test"
+fv 1 password "foo"
+submit
+
+find "test"
+
+follow "Add a message"
+
+fv 1 title "Twill"
+fv 1 message "testing twill"
+submit
+
+url /m/list
+find "Twill"

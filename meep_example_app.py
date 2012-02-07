@@ -7,7 +7,7 @@ def initialize():
    # try:
     #meeplib.saveUSER('test','foo',meeplib._get_next_user_id())
     u = meeplib.User('test', 'foo',-1)
-    meeplib.loadUSER()
+    #meeplib.loadUSER()
    
    # except:
        # print "NO FILE"

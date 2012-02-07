@@ -1,6 +1,7 @@
 import meeplib
 import traceback
 import cgi
+import meepcookie
 
 def initialize():
     # create a default user
@@ -34,6 +35,11 @@ class MeepExampleApp(object):
 
         # set content-type
         headers = [('Content-type', 'text/html')]
+
+        cookie_name, cookie_val = \
+                     meepcookie.make_set_cookie_header('username',
+                                                       user.username)
+        headers.append((cookie_name, cookie_val))
         
         # send back a redirect to '/'
         k = 'Location'
@@ -173,7 +179,6 @@ class MeepExampleApp(object):
         return """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
 
     def add_message_action(self, environ, start_response):
-        print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
 
         title = form['title'].value

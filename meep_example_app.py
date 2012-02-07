@@ -1,15 +1,10 @@
 import meeplib
 import traceback
 import cgi
+import pickle	
 
 def initialize():
-    # create a default user
-    u = meeplib.User('test', 'foo')
-
-    # create a single message
-    meeplib.Message('my title', 'This is my message!', u)
-
-    # done.
+    pass
 
 class MeepExampleApp(object):
     """
@@ -17,6 +12,30 @@ class MeepExampleApp(object):
     """
     def __init__(self):
         self.username = None
+        self.filename = 'save.pickle'
+        try:
+           fp = open(self.filename)
+           # load data
+           obj = pickle.load(fp)
+           fp.close()
+           meeplib._users = obj[0]
+           meeplib._messages = obj[1]
+        except:  # file does not exist/cannot be opened
+           # create a default user
+           u = meeplib.User('test', 'foo')
+           # create a single message
+           meeplib.Message('my title', 'This is my message!', u)
+
+    def save(self):
+        obj = []
+        obj.append(meeplib._users)
+        obj.append(meeplib._messages)
+        try:
+           fp = open(self.filename, 'w')
+           pickle.dump(obj, fp)
+           fp.close()
+        except IOError:
+           pass
 
     def index(self, environ, start_response):
         start_response("200 OK", [('Content-type', 'text/html')])
@@ -149,6 +168,7 @@ class MeepExampleApp(object):
                 v = '/'
                 headers.append((k, v))
                 self.username = username
+                self.save()
         elif password != '' or password2 != '':
             s.append('''Creation Failed! <br>
             Please provide a Username<p>''')
@@ -255,6 +275,7 @@ class MeepExampleApp(object):
                 response = "302 Found"
                 headers.append(('Location', '/m/list'))
                 errorMsg = "message removed"
+                self.save()
             else:
                 errorMsg = "You cannot delete another user's post."
         elif action == "Reply":
@@ -266,6 +287,7 @@ class MeepExampleApp(object):
             response = "302 Found"
             headers.append(('Location', '/m/list'))
             errorMsg = "message replied"
+            self.save()
 
         start_response(response, headers)
         return [errorMsg]
@@ -298,6 +320,7 @@ class MeepExampleApp(object):
         user = meeplib.get_user(self.username)
 
         new_message = meeplib.Message(title, message, user)
+        self.save()
 
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list'))

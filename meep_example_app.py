@@ -19,7 +19,8 @@ class MeepExampleApp(object):
            obj = pickle.load(fp)
            fp.close()
            meeplib._users = obj[0]
-           meeplib._messages = obj[1]
+           meeplib._user_ids = obj[1]
+           meeplib._messages = obj[2]
         except:  # file does not exist/cannot be opened
            # create a default user
            u = meeplib.User('test', 'foo')
@@ -29,6 +30,7 @@ class MeepExampleApp(object):
     def save(self):
         obj = []
         obj.append(meeplib._users)
+        obj.append(meeplib._user_ids)
         obj.append(meeplib._messages)
         try:
            fp = open(self.filename, 'w')

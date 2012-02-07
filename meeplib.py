@@ -22,7 +22,7 @@ Functions and classes:
  * get_message(msg_id) - retrieves Message object for message with id msg_id.
 
 """
-
+import pickle
 __all__ = ['Message', 'get_all_messages', 'get_message', 'delete_message',
            'User', 'get_user', 'get_all_users', 'delete_user']
 
@@ -39,7 +39,74 @@ _searchIDs={}
 ### WHY DO DICTIONARYS STAY BUT BOOLEANS AND LISTS DO NOT??????????????????????????????????
 _replies = {}
 
+def saveMSG():
+    filename = 'save.pickle'
 
+    fp = open(filename, 'w')
+    obj=[]
+    print "SAVING MESSAGES"
+    for n in _messages:
+        m=get_message(n)
+        try:
+            obj.append(("Message",m.title, m.post, m.author.username, m.id))
+            print "Message",m.title, m.post, m.author.username, m.id
+        except:
+            obj.append(("Message",m.title, m.post, m.author, m.id))
+            print "Message",m.title, m.post, m.author, m.id
+
+
+
+    pickle.dump(obj, fp)
+    fp.close()
+def saveUSER(username, password, uid):
+    filename = 'users.pickle'
+
+    fp = open(filename, 'w')
+    obj=(username,password,uid)
+    pickle.dump(obj, fp)
+    fp.close()
+def saveREPLY():
+    filename = "replies.pickle"
+    obj=[]
+    fp = open(filename, 'w')
+    for r in _replies:
+        obj.append((r,_replies[r]))
+        print "SAVING REPLY", r, _replies[r]
+    
+    pickle.dump(obj, fp)
+    fp.close()
+def loadMSG(save):
+    Message(save[1], save[2], save[3],save[4])
+    
+def loadUSER():
+    filename = 'users.pickle'
+    fp = open(filename)
+    obj = pickle.load(fp)
+    User(obj[0],obj[1],obj[2])
+    print "LOADED USER",obj[0],obj[1],obj[2]
+    
+def load():
+    filename = 'save.pickle'
+    fp = open(filename)
+    obj = pickle.load(fp)
+    for save in obj:
+        if save[0]=="Message":
+            loadMSG(save)
+    fp2=open("replies.pickle")
+    obj=pickle.load(fp2)
+    print "REPLY OBJ", obj
+    h=0
+    for reply in obj:
+        print "REPLY", reply
+        i=0
+        for msg in reply[1]:
+            
+            print "LOADING REPLY",reply[0],reply[1][i]
+            add_reply(reply[0],reply[1][i])
+            i+=1
+        h+=1
+   
+    
 def _get_next_message_id():
     if _messages:
         return max(_messages.keys()) + 1
@@ -77,15 +144,18 @@ class Message(object):
     'author' must be an object of type 'User'.
     
     """
-    def __init__(self, title, post, author):
+    def __init__(self, title, post, author, msgid):
         self.title = title
         self.post = post
-
-        assert isinstance(author, User)
+        self.id=msgid
+   ###COMMENTED BAD     assert isinstance(author, User)
         self.author = author
-
-        self._save_message()
+        if self.id == -1:
+            self._save_message()
+        else:
+           _messages[self.id] = self
         add_message_to_dict(self)
+        
 
     def _save_message(self):
         self.id = _get_next_message_id()
@@ -210,23 +280,27 @@ def has_replies(message_id):
 
 def get_replies(message_id):
     return _replies[message_id]
+def delete_reply(message_id):
+    _replies.pop(message_id)
 
 
 ###
 
 class User(object):
-    def __init__(self, username, password):
+    def __init__(self, username, password,uid):
         self.username = username
         self.password = password
-
-        self._save_user()
-
+        if uid==-1:
+            self._save_user()
+        else:
+            _users[self.username] = self
     def _save_user(self):
         self.id = _get_next_user_id()
 
         # register new user ID with the users list:
         _user_ids[self.id] = self
         _users[self.username] = self
+        
 
 def get_user(username):
     return _users.get(username)         # return None if no such user

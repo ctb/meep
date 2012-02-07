@@ -4,20 +4,33 @@ import cgi
 
 
 def initialize():
+   # try:
+    #meeplib.saveUSER('test','foo',meeplib._get_next_user_id())
+    u = meeplib.User('test', 'foo',-1)
+    meeplib.loadUSER()
+   
+   # except:
+       # print "NO FILE"
     # create a default user
-    u = meeplib.User('test', 'foo')
+    
 
     # create a single message
-    meeplib.Message('my title', 'This is my message NOW!', u)
-    meeplib.Message('title', 'lol', u)
-    meeplib.Message('my', 'test', u)
-    meeplib.Message('test', 'my', u)
+  #  meeplib.Message('my title', 'This is my message NOW!', u,-1)
+   # meeplib.Message('title', 'lol', u,-1)
+    #meeplib.Message('my', 'test', u,-1)
+   # meeplib.Message('test', 'my', u,-1)
+   # try:
+    meeplib.load()
+    #except:
+    #    print "did not load"
     # done.
 
 class MeepExampleApp(object):
     """
     WSGI app object.
     """
+    
+      
     def index(self, environ, start_response):
         start_response("200 OK", [('Content-type', 'text/html')])
 
@@ -99,8 +112,11 @@ class MeepExampleApp(object):
             s.append('id: %d<p>' % (m.id,))
             s.append('title: %s<p>' % (m.title))
             s.append('message: %s<p>' % (m.post))
-            s.append('author: %s<p>' % (m.author.username))
-
+            print "M",m
+            try:
+                s.append('author: %s<p>' % (m.author.username))
+            except:
+                s.append('author: %s<p>' % (m.author))
          
  
            
@@ -197,29 +213,32 @@ class MeepExampleApp(object):
     def add_message_action(self, environ, start_response):
         print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
-
+       
         title = form['title'].value
         message = form['message'].value
         
         username = 'test'
         user = meeplib.get_user(username)
-        
-        new_message = meeplib.Message(title, message, user)
+        msgid=meeplib._get_next_message_id()
+       
+        new_message = meeplib.Message(title, message, user,-1)
+        meeplib.saveMSG()
         #meeplib.delete_message(new_message)
-        
+  
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list'))
         start_response("302 Found", headers)
         return ["message added"]
 
     def add_reply_action(self, environ, start_response):
+        print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
-
+        print form
         reply = form['reply'].value
         mId = form['message_id'].value
         
         meeplib.add_reply(int(mId), reply)
-
+        meeplib.saveREPLY()
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list'))
         start_response("302 Found", headers)
@@ -237,7 +256,9 @@ class MeepExampleApp(object):
         id = int(form['id'].value)
         print id, ' A';
         meeplib.delete_message(meeplib.get_message(id))
-
+        meeplib.delete_reply(id)
+        meeplib.saveMSG()
+        meeplib.saveREPLY()
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/'))
         start_response("302 Found", headers)
@@ -285,11 +306,13 @@ class MeepExampleApp(object):
             return ["Page not found."]
 
         try:
+            print "FN", fn
             return fn(environ, start_response)
         except:
             tb = traceback.format_exc()
             x = "<h1>Error!</h1><pre>%s</pre>" % (tb,)
-
+            print "FN", fn
+            print "X", x
             status = '500 Internal Server Error'
             start_response(status, [('Content-type', 'text/html')])
             return [x]

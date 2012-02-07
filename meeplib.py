@@ -80,23 +80,29 @@ def save_data():
     fp.close()
 
 def load_data():
-    fp = open('save.meep.pickle')
-    obj = pickle.load(fp)
-    (users, user_ids, topics, messages) = obj
+    try:
+        fp = open('save.meep.pickle')
+        obj = pickle.load(fp)
+        (users, user_ids, topics, messages) = obj
     
-    for u in users:
-        _users[u] = users[u]
+        for u in users:
+            _users[u] = users[u]
         
-    for i in user_ids:
-        _user_ids[i] = user_ids[i]
+        for i in user_ids:
+            _user_ids[i] = user_ids[i]
         
-    for t in topics:
-        _topics[t] = topics[t]
+        for t in topics:
+            _topics[t] = topics[t]
         
-    for m in messages:
-        _messages[m] = messages[m]
+        for m in messages:
+            _messages[m] = messages[m]
         
-    fp.close()
+        fp.close()
+        
+    except IOError:
+        print 'Pickle file not found, initializing default data.'
+        u = User('test', 'foo')
+        t = Topic('First Topic', Message('my title', 'This is my message!', u), u)
 
 ###
 

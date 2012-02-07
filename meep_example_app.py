@@ -4,12 +4,6 @@ import cgi
 import meepcookie
 
 def initialize():
-    # create a default user
-    u = meeplib.User('test', 'foo')
-
-    # create a single message and topic
-    meeplib.Topic('First Topic', meeplib.Message('my title', 'This is my message!', u), u)
-    
     meeplib.load_data()
 
     # done.

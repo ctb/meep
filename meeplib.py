@@ -1,3 +1,5 @@
+import pickle
+
 """
 meeplib - A simple message board back-end implementation.
 
@@ -67,6 +69,34 @@ def _reset():
     _users = {}
     _user_ids = {}
     _topics = {}
+    
+def save_data():
+
+    obj = (_users, _user_ids, _topics, _messages)
+    
+    filename = 'save.meep.pickle'
+    fp = open(filename, 'w')
+    pickle.dump(obj, fp)
+    fp.close()
+
+def load_data():
+    fp = open('save.meep.pickle')
+    obj = pickle.load(fp)
+    (users, user_ids, topics, messages) = obj
+    
+    for u in users:
+        _users[u] = users[u]
+        
+    for i in user_ids:
+        _user_ids[i] = user_ids[i]
+        
+    for t in topics:
+        _topics[t] = topics[t]
+        
+    for m in messages:
+        _messages[m] = messages[m]
+        
+    fp.close()
 
 ###
 

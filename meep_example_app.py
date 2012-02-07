@@ -8,6 +8,8 @@ def initialize():
 
     # create a single message and topic
     meeplib.Topic('First Topic', meeplib.Message('my title', 'This is my message!', u), u)
+    
+    meeplib.load_data()
 
     # done.
 
@@ -82,22 +84,22 @@ class MeepExampleApp(object):
             s.append('message: %s<p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
             s.append("""
-            <form action='../delete_message_topic' method='POST'>
+            <form name='delete_%d' action='../delete_message_topic' method='POST'>
                 <input type='hidden' name='id' value='%d' />
                 <input type='hidden' name='topic_id' value='%s' />
                 <input type='submit' value='Delete Message' />
-            </form>""" % (m.id,tId,))
+            </form>""" % (m.id,m.id,tId,))
             s.append("""
-            <form action='../reply_topic' method='POST'>
+            <form name='reply_%d' action='../reply_topic' method='POST'>
                 <input type='hidden' name='id' value='%d' />
                 <input type='hidden' name='topic_id' value='%s' />
                 <input type='submit' value='Reply to Message' />
-            </form>""" % (m.id,tId,))
+            </form>""" % (m.id,m.id,tId,))
             s.append('<hr>')
 
-        s.append("<form action='../add_message_topic_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='number' hidden='true' name='topicid' value=%d><input type='submit'></form>" % (topic.id))
+        s.append("<form action='../add_message_topic_action' name='add_message' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='number' hidden='true' name='topicid' value=%d><input type='submit'></form>" % (topic.id))
         
-        s.append("<br><form action='../delete_topic_action' method='POST'><input type='number' hidden='true' name='tid' value=%d><input type='submit' value='Delete topic'></form>" % (topic.id))
+        s.append("<br><form action='../delete_topic_action' name='delete_topic' method='POST'><input type='number' hidden='true' name='tid' value=%d><input type='submit' value='Delete topic'></form>" % (topic.id))
         
         s.append("<a href='../../'>index</a>")
             
@@ -156,6 +158,7 @@ class MeepExampleApp(object):
         new_message = meeplib.Message(msgtitle, message, user)
         new_topic = meeplib.Topic(title, new_message, user)
         
+        meeplib.save_data()
 
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list_topics'))
@@ -180,6 +183,8 @@ class MeepExampleApp(object):
         user = meeplib.get_user(username)
         
         new_message = meeplib.Message(title, message, user)
+        
+        meeplib.save_data()
 
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list'))
@@ -195,6 +200,8 @@ class MeepExampleApp(object):
         message = meeplib.get_message(id)
         
         meeplib.delete_message(message)
+        
+        meeplib.save_data()
         
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list'))
@@ -212,6 +219,8 @@ class MeepExampleApp(object):
         topic = meeplib.get_topic(topic_id)
         
         topic.delete_message_from_topic(message)
+        
+        meeplib.save_data()
         
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/topics/view?id=%d' % (topic_id,)))
@@ -274,6 +283,8 @@ class MeepExampleApp(object):
         
         topic.add_message(new_message)
         
+        meeplib.save_data()
+        
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/topics/view?id=%d' % (topic.id)))
         start_response("302 Found", headers)
@@ -286,6 +297,8 @@ class MeepExampleApp(object):
         topicId = form['tid'].value
         topic = meeplib.get_topic(int(topicId))
         meeplib.delete_topic(topic)
+        
+        meeplib.save_data()
         
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list_topics'))

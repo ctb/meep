@@ -31,16 +31,14 @@ __all__ = ['Message', 'get_all_messages', 'get_message', 'delete_message',
 # directly from outside the module.  Note, I'm not responsible for
 # what happens to you if you do access them directly.  CTB
 
+# Filename for pickle save file
+_pickle_filename = 'data.pickle'
+
 # a string, stores the current user that is logged on
 _curr_user = []
 
 # a dictionary, storing all messages by a (unique, int) ID -> Message object.
 _messages = {}
-
-def _get_next_message_id():
-    if _messages:
-        return max(_messages.keys()) + 1
-    return 0
 
 # a dictionary, storing all users by a (unique, int) ID -> User object.
 _user_ids = {}
@@ -48,14 +46,19 @@ _user_ids = {}
 # a dictionary, storing all users by username
 _users = {}
 
+# a dictionary, storing all topics by a (unique, int) ID -> Topic object.
+_topics = {}
+
+def _get_next_message_id():
+    if _messages:
+        return max(_messages.keys()) + 1
+    return 0
+
 def _get_next_user_id():
     if _users:
         return int(max(_user_ids.keys())) + 1
     return 0
     
-# a dictionary, storing all topics by a (unique, int) ID -> Topic object.
-_topics = {}
-
 def _get_next_topic_id():
     if _topics:
         return max(_topics.keys()) + 1
@@ -100,6 +103,8 @@ def get_all_messages(sort_by='id'):
     return _messages.values()
 
 def get_message(id):
+    for x in _messages.items():
+        print x
     return _messages[id]
 
 def delete_message(msg):
@@ -119,7 +124,7 @@ class Topic(object):
         
         assert isinstance(message, Message)
         #self.messages = {self._get_next_msg_id() : message}
-        self.messages = {0 : message}
+        self.messages = {message.id : message}
         
         assert isinstance(author, User)
         self.author = author
@@ -148,6 +153,10 @@ class Topic(object):
         self.messages[self._get_next_msg_id()] = message
         
     def delete_message_from_topic(self, msg):
+        print 'Delete msg from topic'
+        for x in self.messages.items():
+            print x
+
         assert isinstance(msg, Message)
         del self.messages[msg.id]
         
@@ -179,7 +188,10 @@ def set_curr_user(username):
     _curr_user.insert(0, username)
 
 def get_curr_user():
-    return _curr_user[0]
+    if(len(_curr_user) > 0):
+        return _curr_user[0]
+    else:
+        return null
 
 def delete_curr_user(username):
     _curr_user.remove(_curr_user.index(0))

@@ -1,0 +1,8 @@
+go http://localhost:8000/
+follow "Show messages"
+
+fv 1 replymsg 'BAR'
+submit
+
+url /m/list
+find 'BAR'

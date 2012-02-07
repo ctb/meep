@@ -3,13 +3,17 @@ import traceback
 import cgi
 
 def initialize():
-    # create a default user with username: test, password: test
-    u = meeplib.User('test', 'test')
 
-    # create a single message
-    meeplib.Message('my title', 'This is my message!', u)
+    try:
+        meeplib._load_data()
+    except IOError:
+        # create a default user with username: test, password: test
+        u = meeplib.User('test', 'test')
 
-    # done.
+        # create a single message
+        meeplib.Message('my title', 'This is my message!', u)
+
+        # done.
 
 class MeepExampleApp(object):
     """

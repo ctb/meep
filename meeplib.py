@@ -1,3 +1,5 @@
+import pickle
+
 """
 meeplib - A simple message board back-end implementation.
 
@@ -65,6 +67,48 @@ def _reset():
 
 ###
 
+###
+# Pickle implentation
+###
+
+# Filename for messages
+_messages_filename = 'messages.pickle'
+
+# Filename for users
+_users_filename = 'users.pickle'
+
+def _load_data():
+    global _messages, _users, _user_ids
+
+    #Load messages data
+    fp1 = open(_messages_filename, 'rw')
+    _messages = pickle.load(fp1)
+    #_print_messages()
+    fp1.close()
+    
+    #Load users data
+    fp2 = open(_users_filename, 'r')
+    _users = pickle.load(fp2)
+    #_print_users()
+    _user_ids = pickle.load(fp2)
+    fp2.close()
+
+
+def _save_message_data():
+    fp = open(_messages_filename, 'w')
+    pickle.dump(_messages, fp)
+    fp.close()
+
+def _save_user_data():
+    fp = open(_users_filename, 'w')
+    pickle.dump(_users, fp)
+    pickle.dump(_user_ids, fp)
+    fp.close()
+
+###
+
+
+
 class Message(object):
     """
     Simple "Message" object, containing title/post/author.
@@ -87,6 +131,8 @@ class Message(object):
         # register this new message with the messages list:
         _messages[self.id] = self
 
+        _save_message_data()
+
 def get_all_messages(sort_by='id'):
     return _messages.values()
 
@@ -96,6 +142,7 @@ def get_message(id):
 def delete_message(msg):
     assert isinstance(msg, Message)
     del _messages[msg.id]
+    _save_message_data()
 
 ###
 
@@ -113,6 +160,8 @@ class User(object):
         # register new user ID with the users list:
         _user_ids[self.id] = self
         _users[self.username] = self
+
+        _save_user_data()
 
 def set_curr_user(username):
     _curr_user.insert(0, username)
@@ -132,6 +181,7 @@ def get_all_users():
 def delete_user(user):
     del _users[user.username]
     del _user_ids[user.id]
+    _save_user_data()
 
 def check_user(username, password):
     try:
@@ -143,3 +193,18 @@ def check_user(username, password):
         return True
     else:
         return False
+
+###
+# Debugging functions
+###
+    
+def _print_messages():
+    for x in _messages.values():
+        print 'Message ID: ', x.id, 'Title: ', x.title, 'Message: ', x.post
+
+def _print_users():
+    for x in _users.values():
+        print 'Username: ', x.username, 'Password: ', x.password
+    
+def _print_user_ids():
+    pass

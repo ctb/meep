@@ -1,0 +1,5 @@
+go http://localhost:8000/
+follow "Show messages"
+follow "Delete Message"
+
+url /m/list

@@ -1,15 +1,24 @@
 import meeplib
 import traceback
 import cgi
+import meepcookie
 
 def initialize():
-    # create a default user with username: test, password: test
-    u = meeplib.User('test', 'test')
+    #TODO
+    # Load data using Pickler here
+    
+    try:    
+        meeplib._load_data()
+    except IOError:  # file does not exist/cannot be opened
+        # initialize data from scratch
+        
+        # create a default user with username: test, password: test
+        u = meeplib.User('test', 'test')
 
-    # create a single message and topic
-    meeplib.Topic('First Topic', meeplib.Message('my title', 'This is my message!', u), u)
+        # create a single message and topic
+        meeplib.Topic('First Topic', meeplib.Message('my title', 'This is my message!', u), u)
 
-    # done.
+        # done.
 
 class MeepExampleApp(object):
     """
@@ -31,12 +40,14 @@ class MeepExampleApp(object):
         """]
 
     def main_page(self, environ, start_response):
+        headers = [('Content-type', 'text/html')]
         try:
             meeplib.get_curr_user()
         except NameError:
-            meeplib.delete_curr_user()
-        headers = [('Content-type', 'text/html')]
-        
+            headers.append(('Location', '/'))
+            start_response('401 Unauthorized', headers)
+            return ["""<a href='/'>Click to login</a>"""]
+
         start_response("200 OK", headers)
         username = meeplib.get_curr_user()
 
@@ -45,12 +56,12 @@ class MeepExampleApp(object):
     def create_user(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
         
-        start_response("302 Found", headers)
-        return """
+        start_response("200 OK", headers)
+        return ["""
             Enter your username and password: <p><form action='create_user_action' method='POST'>
             Username: <input type='text' name='username'><br>
             Password:<input type='password' name='password'><br>
-            <input type='submit' value='Create User'></form</p>"""
+            <input type='submit' value='Create User'></form</p>"""]
 
     def create_user_action(self, environ, start_response):
         print environ['wsgi.input']
@@ -96,7 +107,7 @@ class MeepExampleApp(object):
 
         # set content-type
         headers = [('Content-type', 'text/html')]
-       
+
         headers.append((k, v))
         start_response('302 Found', headers)
         
@@ -142,12 +153,12 @@ class MeepExampleApp(object):
             s.append('title: %s<p>' % (m.title))
             s.append('message: %s<p>' % (m.post))
             s.append('author: %s<p>' % (m.author.username))
-            s.append("<form action='../delete_action' method='POST'><input type='number' hidden='true' name='mid' value=%d><input type='number' hidden='true' name='tid' value=%d><input type='submit' value='Delete message'></form>" % (m.id, topic.id))
+            s.append("<form action='../delete_action' method='POST'><input type='number' hidden='true' name='mid' value=%d><input type='number' hidden='true' name='tid' value=%d><input type='text' hidden='true' name='twill' value='twill'><input type='submit' value='Delete message'></form>" % (m.id, topic.id))
             s.append('<hr>')
 
         s.append("<form action='../add_message_topic_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='number' hidden='true' name='topicid' value=%d><input type='submit'></form>" % (topic.id))
         
-        s.append("<br><form action='../delete_topic_action' method='POST'><input type='number' hidden='true' name='tid' value=%d><input type='submit' value='Delete topic'></form>" % (topic.id))
+        s.append("<br><form action='../delete_topic_action' method='POST'><input type='number' hidden='true' name='tid' value=%d><input type='text' hidden='true' name='twill' value='twill'><input type='submit' value='Delete topic'></form>" % (topic.id))
         
         s.append("<a href='../../main_page'>index</a>")
             
@@ -174,8 +185,7 @@ class MeepExampleApp(object):
         start_response("200 OK", headers)
         
         return ["".join(s)]
-
-        
+     
     def add_topic(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
         
@@ -211,7 +221,6 @@ class MeepExampleApp(object):
         return """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
 
     def add_message_action(self, environ, start_response):
-        print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
 
         title = form['title'].value
@@ -252,15 +261,19 @@ class MeepExampleApp(object):
         print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
 
+        #Get the message
         messageId = form['mid'].value
         message = meeplib.get_message(int(messageId))
-        meeplib.delete_message(message)
-        #This could all be written on one line if one so chose
-        #meeplib.delete_message(meeplib.get_message(int(form['mid'].value)))
         
+        #Delete the message from the topic
         topicId = form['tid'].value
         topic = meeplib.get_topic(int(topicId))
         topic.delete_message_from_topic(message)
+        
+        #Delete the message altogether
+        meeplib.delete_message(message)
+        #This could all be written on one line if one so chose
+        #meeplib.delete_message(meeplib.get_message(int(form['mid'].value)))
         
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list_topics'))

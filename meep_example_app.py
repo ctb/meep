@@ -124,11 +124,13 @@ Password:<input type='password' name='password'><br>
             s.append("""
             <form action='delete_message' method='POST'>
                 <input type='hidden' name='id' value='%d' />
+                <input type='text' hidden='true' name='twill' value='twill'>
                 <input type='submit' value='Delete' />
             </form>""" % (m.id,))
             s.append("""
             <form action='reply' method='POST'>
                 <input type='hidden' name='id' value='%d' />
+                <input type='text' hidden='true' name='twill' value='twill'>
                 <input type='submit' value='Reply to Message' />
             </form>""" % (m.id,))
             s.append('<hr>')

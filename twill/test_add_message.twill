@@ -1,0 +1,16 @@
+go http://localhost:8000/
+
+fv 1 username 'test'
+fv 1 password 'test'
+submit
+
+url /main_page
+find 'test'
+
+follow "Add a message"
+fv 1 title 'Functional Test Title'
+fv 1 message 'Functional test message'
+submit
+
+url /m/list
+find 'Functional Test Title'

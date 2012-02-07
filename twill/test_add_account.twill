@@ -1,0 +1,14 @@
+go http://localhost:8000/
+
+follow 'Create an Account'
+
+fv 1 username 'Ftest'
+fv 1 password 'Ftest'
+submit
+
+fv 1 username 'Ftest'
+fv 1 password 'Ftest'
+submit
+
+url /main_page
+find 'Ftest'

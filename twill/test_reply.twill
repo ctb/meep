@@ -1,0 +1,22 @@
+go http://localhost:8000/
+
+fv 1 username 'test'
+fv 1 password 'test'
+submit
+
+url /main_page
+
+follow "Show messages"
+
+fv 2 twill 'reply'
+submit
+
+fv 1 title 'RE: Reply Test Title'
+fv 1 message 'Reply test message'
+submit
+
+
+url /m/list
+find 'Reply Test Title'
+
+

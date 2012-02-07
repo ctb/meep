@@ -1,0 +1,19 @@
+go http://localhost:8000/
+
+fv 1 username 'test'
+fv 1 password 'test'
+submit
+
+url /main_page
+find 'test'
+
+follow "Show messages"
+
+url /m/list
+find 'my title'
+
+fv 1 twill 'deleteme'
+submit
+
+url /m/list
+notfind 'my title'

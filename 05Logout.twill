@@ -1,0 +1,4 @@
+go http://localhost:8000/
+follow 'Log out'
+code 200
+find 'Please login to create and delete messages'

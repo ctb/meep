@@ -1,0 +1,10 @@
+go http://localhost:8000/m/list
+
+fv 2 replyText 'Im a twill Reply'
+submit bttnReply
+
+code 200
+
+url /m/list
+find 'Im a twill Reply'
+

@@ -173,7 +173,7 @@ class MeepExampleApp(object):
 			<div class="messageCont">
 				<div class="messageTitle">
 					<p>%s</p>
-					<input type='submit' id='bttnSubmit' name='bttnSubmit' value='Delete' onclick="return confirm('Are you sure you want to delete this message?');" />
+					<input type='submit' id='bttnDelete' name='bttnSubmit' value='Delete' onclick="return confirm('Are you sure you want to delete this message?');" />
 				</div>
 				<div class="message">%s</div>
 				<div class="messageReply">
@@ -187,7 +187,7 @@ class MeepExampleApp(object):
 				</div>
 				<div class="replyCont">
 					Reply: <textarea type='text' name='replyText' class="replyInput" rows="2" ></textarea>
-					<input type='submit' id='bttnSubmit' name='bttnSubmit' value='Reply' />
+					<input type='submit' id='bttnReply' name='bttnSubmit' value='Reply' />
 				</div>
 			</div>
 			<input type='hidden' name='id' value='%d' />

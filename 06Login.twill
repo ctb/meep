@@ -1,0 +1,9 @@
+go http://localhost:8000/
+follow 'Log in'
+fv 1 username 'hkb261'
+fv 1 password 'test'
+submit
+
+code 200
+
+find 'hkb261'

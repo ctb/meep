@@ -36,31 +36,31 @@ class TestApp(unittest.TestCase):
         assert 'Delete' in data[0]
         assert 'Search' in data[0]
 
-##    def test_search_messages(self):
-##        environ = {}                    # make a fake dict
-##        environ['PATH_INFO'] = '/m/search'
-##
-##        def fake_start_response(status, headers):
-##            print "STATUS", status
-##            assert status == '200 OK'
-##            assert ('Content-type', 'text/html') in headers
-##        data = self.app(environ, fake_start_response)
-##
-##        assert 'Your Search Results' in data[0]              ##key features are present
-##        assert 'Reply' in data[0]
-##        assert 'Delete' in data[0]
-##        assert 'Search for Messages?' in data[0]
-    def test_reply_box(self):
+    def test_search_messages(self):
         environ = {}                    # make a fake dict
-        environ['PATH_INFO'] = '/m/add_reply_action'
-        environ['wsgi.input'] = """FieldStorage(None, None, [MiniFieldStorage('message_id', '0'), MiniFieldStorage('reply', 'COW')])"""
-
+        environ['PATH_INFO'] = '/m/search'
+        environ['wsgi.input'] = 'cow'   #how to pass something in for here
         def fake_start_response(status, headers):
+            #print "STATUS", status
             assert status == '200 OK'
             assert ('Content-type', 'text/html') in headers
         data = self.app(environ, fake_start_response)
 
-        assert 'Reply' in data[0]              ##key features are present
+        assert 'Your Search Results' in data[0]              ##key features are present
+        assert 'Reply' in data[0]
+        assert 'Delete' in data[0]
+        assert 'Search for Messages?' in data[0]
+    def test_post_reply(self):
+        environ = {}
+        environ['PATH_INFO'] = '/m/post_reply'
+        environ['QUERY_STRING'] = 'id=0'
+
+        def fake_start_response(status, headers):
+            assert status == '200 OK'
+            assert ('Content-type', 'text/html') in headers
+
+        data = self.app(environ, fake_start_response)
+        assert 'Reply' in data
     def test_add_message(self):
         environ = {}                    # make a fake dict
         environ['PATH_INFO'] = '/m/add'

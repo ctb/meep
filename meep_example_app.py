@@ -30,9 +30,9 @@ class MeepExampleApp(object):
         try:
             cookie = Cookie.SimpleCookie(environ["HTTP_COOKIE"])
             username = cookie["username"].value
-            print "Username = %s" % username
+            #print "Username = %s" % username
         except:
-            print "session cookie not set! defaulting username"
+            #print "session cookie not set! defaulting username"
             username = ''
         
         user = meeplib.get_user(username)
@@ -47,9 +47,9 @@ class MeepExampleApp(object):
         try:
             cookie = Cookie.SimpleCookie(environ["HTTP_COOKIE"])
             username = cookie["username"].value
-            print "Username = %s" % username
+            #print "Username = %s" % username
         except:
-            print "session cookie not set! defaulting username"
+            #print "session cookie not set! defaulting username"
             username = ''
         
         user = meeplib.get_user(username)
@@ -123,9 +123,9 @@ class MeepExampleApp(object):
         try:
             cookie = Cookie.SimpleCookie(environ["HTTP_COOKIE"])
             username = cookie["username"].value
-            print "Username = %s" % username
+            #print "Username = %s" % username
         except:
-            print "session cookie not set! defaulting username"
+            #print "session cookie not set! defaulting username"
             username = ''
         
         user = meeplib.get_user(username)
@@ -151,9 +151,9 @@ class MeepExampleApp(object):
         try:
             cookie = Cookie.SimpleCookie(environ["HTTP_COOKIE"])
             username = cookie["username"].value
-            print "Username = %s" % username
+            #print "Username = %s" % username
         except:
-            print "session cookie not set! defaulting username"
+            #print "session cookie not set! defaulting username"
             username = ''
         
         user = meeplib.get_user(username)
@@ -238,9 +238,9 @@ class MeepExampleApp(object):
         try:
             cookie = Cookie.SimpleCookie(environ["HTTP_COOKIE"])
             username = cookie["username"].value
-            print "Username = %s" % username
+            #print "Username = %s" % username
         except:
-            print "session cookie not set! defaulting username"
+            #print "session cookie not set! defaulting username"
             username = ''
         
         user = meeplib.get_user(username)
@@ -287,9 +287,9 @@ class MeepExampleApp(object):
         try:
             cookie = Cookie.SimpleCookie(environ["HTTP_COOKIE"])
             username = cookie["username"].value
-            print "Username = %s" % username
+            #print "Username = %s" % username
         except:
-            print "session cookie not set! defaulting username"
+            #print "session cookie not set! defaulting username"
             username = ''
         
         user = meeplib.get_user(username)
@@ -346,9 +346,9 @@ class MeepExampleApp(object):
         try:
             cookie = Cookie.SimpleCookie(environ["HTTP_COOKIE"])
             username = cookie["username"].value
-            print "Username = %s" % username
+            #print "Username = %s" % username
         except:
-            print "session cookie not set! defaulting username"
+            #print "session cookie not set! defaulting username"
             username = ''
         
         user = meeplib.get_user(username)
@@ -380,9 +380,9 @@ class MeepExampleApp(object):
         try:
             cookie = Cookie.SimpleCookie(environ["HTTP_COOKIE"])
             username = cookie["username"].value
-            print "Username = %s" % username
+            #print "Username = %s" % username
         except:
-            print "session cookie not set! defaulting username"
+            #print "session cookie not set! defaulting username"
             username = ''
         
         user = meeplib.get_user(username)

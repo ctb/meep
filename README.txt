@@ -1,5 +1,5 @@
-meeplib for CSE 491, 2012, at MSU.  YYY something else!
+meeplib for CSE 491, 2012, at MSU.
 
 Titus Brown, ctb@msu.edu.
 
-Attempting a push.
+Test -- does this make sense as a way for me to annotate your code?

@@ -1,45 +1,18 @@
 import meeplib
 import traceback
 import cgi
-import pickle	
 
-def initialize():
-    pass
 
 class MeepExampleApp(object):
     """
     WSGI app object.
     """
     def __init__(self):
+    	meeplib.initialize()
         self.username = None
-        self.filename = 'save.pickle'
-        try:
-           fp = open(self.filename)
-           # load data
-           obj = pickle.load(fp)
-           fp.close()
-           meeplib._users = obj[0]
-           meeplib._user_ids = obj[1]
-           meeplib._messages = obj[2]
-        except:  # file does not exist/cannot be opened
-           # create a default user
-           u = meeplib.User('test', 'foo')
-           # create a single message
-           meeplib.Message('my title', 'This is my message!', u)
-
-    def save(self):
-        obj = []
-        obj.append(meeplib._users)
-        obj.append(meeplib._user_ids)
-        obj.append(meeplib._messages)
-        try:
-           fp = open(self.filename, 'w')
-           pickle.dump(obj, fp)
-           fp.close()
-        except IOError:
-           pass
 
     def index(self, environ, start_response):
+        print "number of users: %d" %(len(meeplib._users),)
         start_response("200 OK", [('Content-type', 'text/html')])
         s=["""Please login to create and delete messages<p><a href='/login'>Log in</a><p><a href='/create_user'>Create a New User</a><p><a href='/m/list'>Show messages</a>"""]
         if self.username is not None:
@@ -48,6 +21,8 @@ class MeepExampleApp(object):
 
     def login(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
+
+        print "number of users: %d" %(len(meeplib._users),)
 
         print "do i have input?", environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
@@ -170,7 +145,6 @@ class MeepExampleApp(object):
                 v = '/'
                 headers.append((k, v))
                 self.username = username
-                self.save()
         elif password != '' or password2 != '':
             s.append('''Creation Failed! <br>
             Please provide a Username<p>''')
@@ -191,37 +165,37 @@ class MeepExampleApp(object):
         messages = meeplib.get_all_messages()
 
         template = """
-		<form action='alterMessage' method='POST'>
-			<div class="messageCont">
-				<div class="messageTitle">
-					<p>%s</p>
-					<input type='submit' id='bttnDelete' name='bttnSubmit' value='Delete' onclick="return confirm('Are you sure you want to delete this message?');" />
-				</div>
-				<div class="message">%s</div>
-				<div class="messageReply">
-					By: %s
-				</div>
-				<div class="replies">
-					{replies}
-				</div>
-				<div class="messageReply %s">
-					&nbsp;<a href="#">Reply</a>
-				</div>
-				<div class="replyCont">
-					Reply: <textarea type='text' name='replyText' class="replyInput" rows="2" ></textarea>
-					<input type='submit' id='bttnReply' name='bttnSubmit' value='Reply' />
-				</div>
-			</div>
-			<input type='hidden' name='id' value='%d' />
-		</form>
-		"""
-		
+        <form action='alterMessage' method='POST'>
+            <div class="messageCont">
+                <div class="messageTitle">
+                    <p>%s</p>
+                    <input type='submit' id='bttnDelete' name='bttnSubmit' value='Delete' onclick="return confirm('Are you sure you want to delete this message?');" />
+                </div>
+                <div class="message">%s</div>
+                <div class="messageReply">
+                    By: %s
+                </div>
+                <div class="replies">
+                    {replies}
+                </div>
+                <div class="messageReply %s">
+                    &nbsp;<a href="#">Reply</a>
+                </div>
+                <div class="replyCont">
+                    Reply: <textarea type='text' name='replyText' class="replyInput" rows="2" ></textarea>
+                    <input type='submit' id='bttnReply' name='bttnSubmit' value='Reply' />
+                </div>
+            </div>
+            <input type='hidden' name='id' value='%d' />
+        </form>
+        """
+        
         replyTemp = """
 <div class="reply">
-	<p>%s</p>
-	<div class="messageReply">
-		By: %s
-	</div>
+    <p>%s</p>
+    <div class="messageReply">
+        By: %s
+    </div>
 </div>
 """  
         s = []
@@ -242,11 +216,11 @@ class MeepExampleApp(object):
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
         
-        return html
+        return [html]
 
     def alter_message_action(self, environ, start_response):
         try:
-        	form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
+            form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
             #params = dict([part.split('=') for part in environ['QUERY_STRING'].split('&')])
             #msgId = int(params['id'])
         except:
@@ -277,7 +251,6 @@ class MeepExampleApp(object):
                 response = "302 Found"
                 headers.append(('Location', '/m/list'))
                 errorMsg = "message removed"
-                self.save()
             else:
                 errorMsg = "You cannot delete another user's post."
         elif action == "Reply":
@@ -289,7 +262,6 @@ class MeepExampleApp(object):
             response = "302 Found"
             headers.append(('Location', '/m/list'))
             errorMsg = "message replied"
-            self.save()
 
         start_response(response, headers)
         return [errorMsg]
@@ -322,7 +294,6 @@ class MeepExampleApp(object):
         user = meeplib.get_user(self.username)
 
         new_message = meeplib.Message(title, message, user)
-        self.save()
 
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list'))

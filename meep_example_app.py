@@ -44,6 +44,22 @@ class MeepExampleApp(object):
         return s
 
     def login(self, environ, start_response):
+        # get cookie if there is one
+        try:
+            cookie = Cookie.SimpleCookie(environ["HTTP_COOKIE"])
+            username = cookie["username"].value
+            print "Username = %s" % username
+        except:
+            print "session cookie not set! defaulting username"
+            username = ''
+        
+        user = meeplib.get_user(username)
+        if user is not None:
+            headers = [('Content-type', 'text/html')]
+            headers.append(('Location', '/'))
+            start_response("302 Found", headers)
+            return ["You must be logged in to use that feature."]
+
         headers = [('Content-type', 'text/html')]
 
         print environ['wsgi.input']
@@ -105,12 +121,21 @@ class MeepExampleApp(object):
         return [''.join(s)]
 
     def logout(self, environ, start_response):
-        if self.username is None:
+        # get cookie if there is one
+        try:
+            cookie = Cookie.SimpleCookie(environ["HTTP_COOKIE"])
+            username = cookie["username"].value
+            print "Username = %s" % username
+        except:
+            print "session cookie not set! defaulting username"
+            username = ''
+        
+        user = meeplib.get_user(username)
+        if user is None:
             headers = [('Content-type', 'text/html')]
             headers.append(('Location', '/'))
             start_response("302 Found", headers)
             return ["You must be logged in to use that feature."]
-        self.username =  None
 
         headers = [('Content-type', 'text/html')]
 
@@ -118,6 +143,8 @@ class MeepExampleApp(object):
         k = 'Location'
         v = '/'
         headers.append((k, v))
+        cookie_name, cookie_val = meepcookie.make_set_cookie_header('username','')
+        headers.append((cookie_name, cookie_val))
         start_response('302 Found', headers)
         return "no such content"
 

@@ -3,7 +3,6 @@ import meep_example_app
 
 class TestApp(unittest.TestCase):
     def setUp(self):
-        meep_example_app.initialize()
         app = meep_example_app.MeepExampleApp()
         self.app = app
 
@@ -28,6 +27,9 @@ class TestApp(unittest.TestCase):
             assert ('Content-type', 'text/html') in headers
 
        data = self.app(environ, fake_start_response)
+       assert 'username:' in data[0]
+       assert 'password:' in data[0]
+       assert 'confirm password:' in data[0]
 
     def test_Login(self):
        environ = {}
@@ -38,16 +40,20 @@ class TestApp(unittest.TestCase):
             assert ('Content-type', 'text/html') in headers
 
        data = self.app(environ, fake_start_response)
+       assert 'Or Create a New User' in data[0]
+       assert 'username' in data[0]
+       assert 'password' in data[0]
 
     def test_Show_Messages(self):
-       environ = {}
-       environ['PATH_INFO'] ='/m/list'
-       environ['wsgi.input'] = ''
-       def fake_start_response(status, headers):
-            assert status == '200 OK'
-            assert ('Content-type', 'text/html') in headers
+        environ = {}
+        environ['PATH_INFO'] ='/m/list'
+        environ['wsgi.input'] = ''
+        def fake_start_response(status, headers):
+             assert status == '200 OK'
+             assert ('Content-type', 'text/html') in headers
 
-       data = self.app(environ, fake_start_response)
+        data = self.app(environ, fake_start_response)
+        assert '''Hayden Boroski's Message Board''' in data[0]       
         
 
     def tearDown(self):

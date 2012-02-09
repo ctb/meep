@@ -283,13 +283,23 @@ class MeepExampleApp(object):
         return ["".join(s)]
 
     def add_thread(self, environ, start_response):
-        headers = [('Content-type', 'text/html')]
-
-        if self.username is None:
+        # get cookie if there is one
+        try:
+            cookie = Cookie.SimpleCookie(environ["HTTP_COOKIE"])
+            username = cookie["username"].value
+            print "Username = %s" % username
+        except:
+            print "session cookie not set! defaulting username"
+            username = ''
+        
+        user = meeplib.get_user(username)
+        if user is None:
             headers = [('Content-type', 'text/html')]
             headers.append(('Location', '/'))
             start_response("302 Found", headers)
-            return ["You must be logged in to use that feature."]
+            return ["You must be logged out to use that feature."]
+
+        headers = [('Content-type', 'text/html')]
 
         print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
@@ -313,7 +323,6 @@ class MeepExampleApp(object):
         elif title != '' and message == '':
             s.append("Message was empty. <p>")
         elif title != '' and message != '':
-            user = meeplib.get_user(self.username)
             new_message = meeplib.Message(message, user)
             t = meeplib.Thread(title)
             t.add_post(new_message)

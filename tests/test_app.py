@@ -35,7 +35,6 @@ class TestApp(unittest.TestCase):
         assert 'Show threads' in data[0]
 
     def test_thread_list(self):
-        self.app.username = 'test' # force login
         environ = {}                    # make a fake dict
         environ['PATH_INFO'] = '/m/list'
 

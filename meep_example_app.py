@@ -376,15 +376,26 @@ class MeepExampleApp(object):
         return["post deleted"]
         
     def reply(self, environ, start_response):
-        headers = [('Content-type', 'text/html')]
-
-        print environ['wsgi.input']
-        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
-        if self.username is None:
+        # get cookie if there is one
+        try:
+            cookie = Cookie.SimpleCookie(environ["HTTP_COOKIE"])
+            username = cookie["username"].value
+            print "Username = %s" % username
+        except:
+            print "session cookie not set! defaulting username"
+            username = ''
+        
+        user = meeplib.get_user(username)
+        if user is None:
             headers = [('Content-type', 'text/html')]
             headers.append(('Location', '/'))
             start_response("302 Found", headers)
             return ["You must be logged in to use that feature."]
+
+        headers = [('Content-type', 'text/html')]
+
+        print environ['wsgi.input']
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
 
         thread_id = int(form['thread_id'].value)
         t = meeplib.get_thread(thread_id)
@@ -407,7 +418,6 @@ class MeepExampleApp(object):
 
         # post is non-empty
         if post != '':
-            user = meeplib.get_user(self.username)
             new_message = meeplib.Message(post, user)
             t.add_post(new_message)
             meeplib.save_state()

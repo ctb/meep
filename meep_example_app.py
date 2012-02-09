@@ -234,7 +234,16 @@ class MeepExampleApp(object):
 
     def list_messages(self, environ, start_response):
         threads = meeplib.get_all_threads()
-        user = meeplib.get_user(self.username)
+        # get cookie if there is one
+        try:
+            cookie = Cookie.SimpleCookie(environ["HTTP_COOKIE"])
+            username = cookie["username"].value
+            print "Username = %s" % username
+        except:
+            print "session cookie not set! defaulting username"
+            username = ''
+        
+        user = meeplib.get_user(username)
         s = []
         if threads:
             for t in threads:
@@ -256,12 +265,13 @@ class MeepExampleApp(object):
                         <input name='delete' type='submit' value='Delete Message' />
                         </form>
                         """  % (t.id, m.id))
-                s.append("""
-                <form action='reply' method='POST'>
-                <input name='thread_id' type='hidden' value='%d' />
-                <input name='reply' type='submit' value='Reply to' />
-                </form>
-                """ % (t.id))
+                if user is not None:
+                    s.append("""
+                    <form action='reply' method='POST'>
+                    <input name='thread_id' type='hidden' value='%d' />
+                    <input name='reply' type='submit' value='Reply to' />
+                    </form>
+                    """ % (t.id))
         else:
             s.append("There are no threads to display.<p>")
 

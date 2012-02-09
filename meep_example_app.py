@@ -1,4 +1,6 @@
 import meeplib
+import meepcookie
+import Cookie
 import traceback
 import cgi
 
@@ -25,9 +27,20 @@ class MeepExampleApp(object):
 
     def index(self, environ, start_response):
         start_response("200 OK", [('Content-type', 'text/html')])
-        s=["""Please login to create and delete messages.<p><a href='/login'>Log in</a><p><a href='/create_user'>Create a New User</a><p>"""]
-        if self.username is not None:
-            s = ["""you are logged in as user: %s.<p><a href='/logout'>Log out</a><p><a href='/m/add_thread'>New thread</a><p><a href='/m/list'>Show threads</a>""" % (self.username,)]
+        # get cookie if there is one
+        try:
+            cookie = Cookie.SimpleCookie(environ["HTTP_COOKIE"])
+            username = cookie["username"].value
+            print "Username = %s" % username
+        except:
+            print "session cookie not set! defaulting username"
+            username = ''
+        
+        user = meeplib.get_user(username)
+        if user is None:
+            s = ["""Please login to create and delete messages.<p><a href='/login'>Log in</a><p><a href='/create_user'>Create a New User</a><p>"""]
+        elif user is not None:
+            s = ["""you are logged in as user: %s.<p><a href='/logout'>Log out</a><p><a href='/m/add_thread'>New thread</a><p><a href='/m/list'>Show threads</a>""" % (username,)]
         return s
 
     def login(self, environ, start_response):
@@ -61,7 +74,10 @@ class MeepExampleApp(object):
                 k = 'Location'
                 v = '/'
                 headers.append((k, v))
-                self.username = username
+                #self.username = username
+                # set the cookie to the username string
+                cookie_name, cookie_val = meepcookie.make_set_cookie_header('username',user.username)
+                headers.append((cookie_name, cookie_val))
             elif user is None:
                 s.append('''Login Failed! <br>
                     The Username you provided does not exist<p>''')

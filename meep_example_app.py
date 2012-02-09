@@ -297,7 +297,7 @@ class MeepExampleApp(object):
             headers = [('Content-type', 'text/html')]
             headers.append(('Location', '/'))
             start_response("302 Found", headers)
-            return ["You must be logged out to use that feature."]
+            return ["You must be logged in to use that feature."]
 
         headers = [('Content-type', 'text/html')]
 
@@ -342,13 +342,24 @@ class MeepExampleApp(object):
         return ["".join(s)]
 
     def delete_message_action(self, environ, start_response):
-        print environ['wsgi.input']
-        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
-        if self.username is None:
+        # get cookie if there is one
+        try:
+            cookie = Cookie.SimpleCookie(environ["HTTP_COOKIE"])
+            username = cookie["username"].value
+            print "Username = %s" % username
+        except:
+            print "session cookie not set! defaulting username"
+            username = ''
+        
+        user = meeplib.get_user(username)
+        if user is None:
             headers = [('Content-type', 'text/html')]
             headers.append(('Location', '/'))
             start_response("302 Found", headers)
             return ["You must be logged in to use that feature."]
+
+        print environ['wsgi.input']
+        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
 
         thread_id = int(form['thread_id'].value)
         post_id = int(form['post_id'].value)

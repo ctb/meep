@@ -54,14 +54,12 @@ def save_state():
     fp.close()
 
 def load_state():
+    global _threads, _user_ids, _users
     try:
         filename = "meep.save"
         fp = open(filename, 'r')
         objects = pickle.load(fp)
         (_threads, _user_ids, _users) = objects
-        #print "successfully loaded"
-        #print _threads, _user_ids, _users
-        return _threads, _user_ids, _users
     except IOError:
         #print "meeplib.load_state() IOError"
         return {}, {}, {}

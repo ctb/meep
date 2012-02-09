@@ -22,7 +22,7 @@ class MeepExampleApp(object):
     WSGI app object.
     """
     def __init__(self):
-        meeplib._threads, meeplib._user_ids, meeplib._users = meeplib.load_state()
+        meeplib.load_state()
 
     def index(self, environ, start_response):
         start_response("200 OK", [('Content-type', 'text/html')])

@@ -71,6 +71,9 @@ def _reset():
 # Pickle implentation
 ###
 
+# CTB: interesting -- why different files for messages & users?
+# what if they fall out of sync?
+
 # Filename for messages
 _messages_filename = 'messages.pickle'
 
@@ -80,8 +83,10 @@ _users_filename = 'users.pickle'
 def _load_data():
     global _messages, _users, _user_ids
 
+    # CTB: Python convention is spaces after comments ('# Load messages data')
+    # I know, nitpicky, right?
     #Load messages data
-    fp1 = open(_messages_filename, 'rw')
+    fp1 = open(_messages_filename, 'rw') # CTB: why 'w'?
     _messages = pickle.load(fp1)
     #_print_messages()
     fp1.close()

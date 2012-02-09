@@ -4,6 +4,7 @@ import cgi
 
 def initialize():
 
+    # CTB: nice.
     try:
         meeplib._load_data()
     except IOError:
@@ -80,6 +81,10 @@ Password:<input type='password' name='password'><br>
         password = form['password'].value
 
         # Test whether variable is defined to be None
+
+        # CTB: might be clearer to write this as:
+        # if username and password: (handle good case)
+        # else: (handle bad case)
         if username is not None:
              if password is not None:
                  if meeplib.check_user(username, password) is False:
@@ -95,6 +100,8 @@ Password:<input type='password' name='password'><br>
                  returnStatement = """password none"""
         else:
             returnStatement = """username none"""
+
+        # CTB: what are k and v if there is no username or password?
 
         # set content-type
         headers = [('Content-type', 'text/html')]

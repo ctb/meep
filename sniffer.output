@@ -1,0 +1,137 @@
+Any clients will be served...
+Serving HTTP on 0.0.0.0 port 8001 ...
+### Connecting to index page, no cookie set ###
+	connect to localhost:8000
+Connecting to: localhost:8000 <socket._socketobject object at 0x1fee590>
+Sending: GET /  
+Sending header: ('accept-language', 'en-us,en;q=0.5')
+Sending header: ('accept-encoding', 'gzip,deflate')
+Sending header: ('connection', 'close')
+Sending header: ('keep-alive', '300')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.16) Gecko/20120131 Iceweasel/3.5.16 (like Firefox/3.5.16)')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
+Sending header: ('host', 'localhost:8000')
+Sending: ('HTTP/1.0 200 OK\r\n',)
+Sending: ('Date: Thu, 09 Feb 2012 22:48:33 GMT\r\n',)
+Sending: ('Server: WSGIServer/0.1 Python/2.6.6\r\nContent-type: text/html\r\nContent-Length: 123\r\n\r\n',)
+Sending: ("Please login to create and delete messages.<p><a href='/login'>Log in</a><p><a href='/create_user'>Create a New User</a><p>",)
+	bye
+### Getting favicon icon ###
+	connect to localhost:8000
+Connecting to: localhost:8000 <socket._socketobject object at 0x1fee600>
+Sending: GET /favicon.ico  
+Sending header: ('accept-language', 'en-us,en;q=0.5')
+Sending header: ('accept-encoding', 'gzip,deflate')
+Sending header: ('connection', 'close')
+Sending header: ('keep-alive', '300')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.16) Gecko/20120131 Iceweasel/3.5.16 (like Firefox/3.5.16)')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
+Sending header: ('host', 'localhost:8000')
+Sending: ('HTTP/1.0 404 Not Found\r\n',)
+Sending: ('Date: Thu, 09 Feb 2012 22:48:36 GMT\r\n',)
+Sending: ('Server: WSGIServer/0.1 Python/2.6.6\r\nContent-type: text/html\r\nContent-Length: 15\r\n\r\nPage not found.',)
+	bye
+### Connecting to login page, no cookie set ###
+	connect to localhost:8000
+Connecting to: localhost:8000 <socket._socketobject object at 0x1fee670>
+Sending: GET /login  
+Sending header: ('accept-language', 'en-us,en;q=0.5')
+Sending header: ('accept-encoding', 'gzip,deflate')
+Sending header: ('connection', 'close')
+Sending header: ('keep-alive', '300')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.16) Gecko/20120131 Iceweasel/3.5.16 (like Firefox/3.5.16)')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
+Sending header: ('host', 'localhost:8000')
+Sending header: ('referer', 'http://localhost:8000/')
+Sending: ('HTTP/1.0 302 Found\r\n',)
+Sending: ('Date: Thu, 09 Feb 2012 22:48:50 GMT\r\nServer: WSGIServer/0.1 Python/2.6.6\r\n',)
+Sending: ("Content-type: text/html\r\nContent-Length: 412\r\n\r\n\n                    <form action='login' method='post'>\n                        <label>username:</label> <input type='text' name='username' value=''> <br>\n                        <label>password:</label> <input type='password' name='password'> <br>\n                        <input type='submit' name='login button' value='Login'></form>\n\n                        <p><a href='/create_user'>Or Create a New User</a>",)
+	bye
+### Sending login information, no cookie set ###
+	connect to localhost:8000
+Connecting to: localhost:8000 <socket._socketobject object at 0x1fee670>
+Sending: POST /login  
+Sending header: ('content-length', '45')
+Sending header: ('accept-language', 'en-us,en;q=0.5')
+Sending header: ('accept-encoding', 'gzip,deflate')
+Sending header: ('connection', 'close')
+Sending header: ('keep-alive', '300')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.16) Gecko/20120131 Iceweasel/3.5.16 (like Firefox/3.5.16)')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
+Sending header: ('host', 'localhost:8000')
+Sending header: ('referer', 'http://localhost:8000/login')
+Sending header: ('content-type', 'application/x-www-form-urlencoded')
+Sending: ('username=test&password=foo&login+button=Login',)
+Sending: ("HTTP/1.0 302 Found\r\nDate: Thu, 09 Feb 2012 22:48:54 GMT\r\nServer: WSGIServer/0.1 Python/2.6.6\r\nContent-type: text/html\r\nLocation: /\r\nSet-Cookie: username=test; Path=/\r\nContent-Length: 416\r\n\r\n\n                    <form action='login' method='post'>\n                        <label>username:</label> <input type='text' name='username' value='test'> <br>\n                        <label>password:</label> <input type='password' name='password'> <br>\n                        <input type='submit' name='login button' value='Login'></form>\n\n                        <p><a href='/create_user'>Or Create a New User</a>",)
+	bye
+### Redirected to index page from successful login, cookie is set ###
+	connect to localhost:8000
+Connecting to: localhost:8000 <socket._socketobject object at 0x1fee670>
+Sending: GET /  
+Sending header: ('accept-language', 'en-us,en;q=0.5')
+Sending header: ('accept-encoding', 'gzip,deflate')
+Sending header: ('connection', 'close')
+Sending header: ('keep-alive', '300')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.16) Gecko/20120131 Iceweasel/3.5.16 (like Firefox/3.5.16)')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
+Sending header: ('host', 'localhost:8000')
+Sending header: ('referer', 'http://localhost:8000/login')
+Sending header: ('cookie', 'username=test')
+Sending: ("HTTP/1.0 200 OK\r\nDate: Thu, 09 Feb 2012 22:48:54 GMT\r\nServer: WSGIServer/0.1 Python/2.6.6\r\nContent-type: text/html\r\nContent-Length: 142\r\n\r\nyou are logged in as user: test.<p><a href='/logout'>Log out</a><p><a href='/m/add_thread'>New thread</a><p><a href='/m/list'>Show threads</a>",)
+	bye
+### Adding a thread, cookie is set ###
+	connect to localhost:8000
+Connecting to: localhost:8000 <socket._socketobject object at 0x1fee6e0>
+Sending: GET /m/add_thread  
+Sending header: ('accept-language', 'en-us,en;q=0.5')
+Sending header: ('accept-encoding', 'gzip,deflate')
+Sending header: ('connection', 'close')
+Sending header: ('keep-alive', '300')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.16) Gecko/20120131 Iceweasel/3.5.16 (like Firefox/3.5.16)')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
+Sending header: ('host', 'localhost:8000')
+Sending header: ('referer', 'http://localhost:8000/')
+Sending header: ('cookie', 'username=test')
+Sending: ("HTTP/1.0 302 Found\r\nDate: Thu, 09 Feb 2012 22:48:57 GMT\r\nServer: WSGIServer/0.1 Python/2.6.6\r\nContent-type: text/html\r\nContent-Length: 221\r\n\r\n\n        <form action='add_thread' method='POST'>\n        Title: <input type='text' name='title' value=''><br>\n        Message: <input type='text' name='message' value=''><br>\n        <input type='submit'></form>\n        ",)
+	bye
+### Sending thread information, cookie is set ###
+	connect to localhost:8000
+Connecting to: localhost:8000 <socket._socketobject object at 0x1fee6e0>
+Sending: POST /m/add_thread  
+Sending header: ('content-length', '53')
+Sending header: ('accept-language', 'en-us,en;q=0.5')
+Sending header: ('accept-encoding', 'gzip,deflate')
+Sending header: ('connection', 'close')
+Sending header: ('keep-alive', '300')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.16) Gecko/20120131 Iceweasel/3.5.16 (like Firefox/3.5.16)')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
+Sending header: ('host', 'localhost:8000')
+Sending header: ('referer', 'http://localhost:8000/m/add_thread')
+Sending header: ('cookie', 'username=test')
+Sending header: ('content-type', 'application/x-www-form-urlencoded')
+Sending: ('title=A+new+thread+for+logs%21&message=Interesting%21',)
+Sending: ("HTTP/1.0 302 Found\r\nDate: Thu, 09 Feb 2012 22:49:06 GMT\r\nServer: WSGIServer/0.1 Python/2.6.6\r\nContent-type: text/html\r\nLocation: /m/list\r\nContent-Length: 255\r\n\r\n\n        <form action='add_thread' method='POST'>\n        Title: <input type='text' name='title' value='A new thread for logs!'><br>\n        Message: <input type='text' name='message' value='Interesting!'><br>\n        <input type='submit'></form>\n        ",)
+	bye
+### Redirected to thread list from successful thread add, cookie is set ###
+	connect to localhost:8000
+Connecting to: localhost:8000 <socket._socketobject object at 0x1fee750>
+Sending: GET /m/list  
+Sending header: ('accept-language', 'en-us,en;q=0.5')
+Sending header: ('accept-encoding', 'gzip,deflate')
+Sending header: ('connection', 'close')
+Sending header: ('keep-alive', '300')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.16) Gecko/20120131 Iceweasel/3.5.16 (like Firefox/3.5.16)')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.7')
+Sending header: ('host', 'localhost:8000')
+Sending header: ('referer', 'http://localhost:8000/m/add_thread')
+Sending header: ('cookie', 'username=test')
+Sending: ("HTTP/1.0 200 OK\r\nDate: Thu, 09 Feb 2012 22:49:06 GMT\r\nServer: WSGIServer/0.1 Python/2.6.6\r\nContent-type: text/html\r\nContent-Length: 1424\r\n\r\n<hr><h2>foo</h2><p>A message!</p><p>Posted by: test</p>\n                        <form action='delete_action' method='POST'>\n                        <input name='thread_id' type='hidden' value='0' />\n                        <input name='post_id' type='hidden' value='0' />\n                        <input name='delete' type='submit' value='Delete Message' />\n                        </form>\n                        <hr><p>A response!</p><p>Posted by: newuser</p>\n                    <form action='reply' method='POST'>\n                    <input name='thread_id' type='hidden' value='0' />\n                    <input name='reply' type='submit' value='Reply to' />\n                    </form>\n                    <hr><h2>A new thread for logs!</h2><p>Interesting!</p><p>Posted by: test</p>\n                        <form action='delete_action' method='POST'>\n                        <input name='thread_id' type='hidden' value='1' />\n                        <input name='post_id' type='hidden' value='0' />\n                        <input name='delete' type='submit' value='Delete Message' />\n                        </form>\n                        \n                    <form action='reply' method='POST'>\n                    <input name='thread_id' type='hidden' value='1' />\n                    <input name='reply' type='submit' value='Reply to' />\n                    </form>\n                    <hr><a href='../../'>index</a>",)
+	bye

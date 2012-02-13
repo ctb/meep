@@ -26,9 +26,9 @@ class TestApp(unittest.TestCase):
         assert 'Create a New User' in data[0]
 
     def test_index_with_auth(self):
-        self.app.username = 'test' # force login
         environ = {}                    # make a fake dict
         environ['PATH_INFO'] = '/'
+        environ['HTTP_COOKIE'] = "username=test"
 
         def fake_start_response(status, headers):
             assert status == '200 OK'

@@ -1,12 +1,13 @@
 import meeplib
 import traceback
 import cgi
+import meepcookie
 
 
 def initialize():
    # try:
     #meeplib.saveUSER('test','foo',meeplib._get_next_user_id())
-    u = meeplib.User('test', 'foo',-1)
+    #u = meeplib.User('test', 'foo',-1)
     #meeplib.loadUSER()
    
    # except:
@@ -24,6 +25,7 @@ def initialize():
     #except:
     #    print "did not load"
     # done.
+    print "No Initiialize"
 
 class MeepExampleApp(object):
     """
@@ -33,21 +35,35 @@ class MeepExampleApp(object):
       
     def index(self, environ, start_response):
         start_response("200 OK", [('Content-type', 'text/html')])
+        #check cookie to find a  user, if nto set blank username
+       # print "Username", username, len(username)
 
-        username = 'test'
 
-        return ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a><p><p><a href='/m/IDTEST'>Get next User ID</a><p>""" % (username,)]
+        cookie = environ.get("HTTP_COOKIE")
+        print "THE COOKIE", cookie, len(cookie)
+        if cookie is None or len(cookie)==9:
+            print "NO USERNAME COOKIE"
+            username = ''
+        else:
+            username = cookie[len('username='):]
+            loggedInMessage = 'You are logged in as user: %s' % (username,)
+        if username=='':
+            return ["""you are not logged in %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a><p><p><a href='/m/IDTEST'>Get next User ID</a><p>""" % (username,)]
+        else:
+            return ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a><p><p><a href='/m/IDTEST'>Get next User ID</a><p>""" % (username,)]
 
     def login(self, environ, start_response):
         # hard code the username for now; this should come from Web input!
         username = 'test'
-
+        u = meeplib.User('test', 'foo',-1)
         # retrieve user
         user = meeplib.get_user(username)
-
+        print "User", user
         # set content-type
         headers = [('Content-type', 'text/html')]
-        
+        cookie_name, cookie_val = meepcookie.make_set_cookie_header('username',user.username)
+
+        headers.append((cookie_name, cookie_val))
         # send back a redirect to '/'
         k = 'Location'
         v = '/'
@@ -57,9 +73,12 @@ class MeepExampleApp(object):
         return "no such content"
 
     def logout(self, environ, start_response):
-        # does nothing
-        headers = [('Content-type', 'text/html')]
 
+        headers = [('Content-type', 'text/html')]
+        cookie_name, cookie_val = meepcookie.make_set_cookie_header('username','')
+
+        headers.append((cookie_name, cookie_val))
+        
         # send back a redirect to '/'
         k = 'Location'
         v = '/'

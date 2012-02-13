@@ -1,6 +1,10 @@
 import unittest
 import sys
-sys.path.append("..")
+import os.path
+cwd = os.path.dirname(__file__)
+importdir = os.path.abspath(os.path.join(cwd, '../'))
+if importdir not in sys.path:
+    sys.path.append(importdir)
 import meep_example_app
 
 class TestApp(unittest.TestCase):

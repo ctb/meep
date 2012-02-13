@@ -1,0 +1,70 @@
+HTTP/1.0 200 OK
+Date: Mon, 13 Feb 2012 19:46:35 GMT
+Server: WSGIServer/0.1 Python/2.7
+Content-type: text/html
+Content-Length: 218
+
+you are logged in as user: test.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a><p><p><a href='/m/IDTEST'>Get next User ID</a><p>HTTP/1.0 404 Not Found
+Date: Mon, 13 Feb 2012 19:46:35 GMT
+Server: WSGIServer/0.1 Python/2.7
+Content-type: text/html
+Content-Length: 15
+
+<form action='add_action' method='GET'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>HTTP/1.0 404 Not Found
+Date: Mon, 13 Feb 2012 19:50:42 GMT
+Server: WSGIServer/0.1 Python/2.7
+Content-type: text/html
+Content-Length: 15
+
+Page not found.HTTP/1.0 302 Found
+Date: Mon, 13 Feb 2012 19:50:52 GMT
+Server: WSGIServer/0.1 Python/2.7
+Content-type: text/html
+Location: /m/list
+Content-Length: 13
+
+message addedHTTP/1.0 200 OK
+Date: Mon, 13 Feb 2012 19:50:52 GMT
+Server: WSGIServer/0.1 Python/2.7
+Content-type: text/html
+Content-Length: 1093
+
+<hr>id: 0<p>title: asdf<p>message: as<p>author: None<p><a href='/m/post_reply?id=0'>Reply</a><p><dd>Replies:<hr /><dd>as<p></dd>id: 1<p>title: asd<p>message: aa<p>author: test<p><a href='/m/post_reply?id=1'>Reply</a><p>id: 2<p>title: asdsad<p>message: asasas<p>author: None<p><a href='/m/post_reply?id=2'>Reply</a><p>id: 3<p>title: adsa<p>message: asas<p>author: None<p><a href='/m/post_reply?id=3'>Reply</a><p>id: 4<p>title: The Title<p>message: The Message<p>author: test<p><a href='/m/post_reply?id=4'>Reply</a><p>id: 5<p>title: as<p>message: asd<p>author: None<p><a href='/m/post_reply?id=5'>Reply</a><p>id: 6<p>title: NEW<p>message: NEW<p>author: None<p><a href='/m/post_reply?id=6'>Reply</a><p>id: 7<p>title: MY TITLE<p>message: MY MESSAGE<p>author: None<p><a href='/m/post_reply?id=7'>Reply</a><p><hr><form action='delete_action' method='POST'>Delete a Message?<br> Message ID: <input type='text' name='id'><input type='submit'>Delete</form><form action='search_action' method='POST'>Search for Messages?<br> Message ID: <input type='text' name='text'><input type='submit'>Delete</form>HTTP/1.0 404 Not Found
+Date: Mon, 13 Feb 2012 19:50:52 GMT
+Server: WSGIServer/0.1 Python/2.7
+Content-type: text/html
+Content-Length: 15
+
+Page not found.
+
+Page not found.HTTP/1.0 200 OK
+Date: Mon, 13 Feb 2012 19:46:37 GMT
+Server: WSGIServer/0.1 Python/2.7
+Content-type: text/html
+
+<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>HTTP/1.0 404 Not Found
+Date: Mon, 13 Feb 2012 19:46:37 GMT
+Server: WSGIServer/0.1 Python/2.7
+Content-type: text/html
+Content-Length: 15
+
+Page not found.title=The+Title&message=The+MessageHTTP/1.0 302 Found
+Date: Mon, 13 Feb 2012 19:46:45 GMT
+Server: WSGIServer/0.1 Python/2.7
+Content-type: text/html
+Location: /m/list
+Content-Length: 13
+
+message addedHTTP/1.0 200 OK
+Date: Mon, 13 Feb 2012 19:46:46 GMT
+Server: WSGIServer/0.1 Python/2.7
+Content-type: text/html
+Content-Length: 806
+
+<hr>id: 0<p>title: asdf<p>message: as<p>author: None<p><a href='/m/post_reply?id=0'>Reply</a><p><dd>Replies:<hr /><dd>as<p></dd>id: 1<p>title: asd<p>message: aa<p>author: test<p><a href='/m/post_reply?id=1'>Reply</a><p>id: 2<p>title: asdsad<p>message: asasas<p>author: None<p><a href='/m/post_reply?id=2'>Reply</a><p>id: 3<p>title: adsa<p>message: asas<p>author: None<p><a href='/m/post_reply?id=3'>Reply</a><p>id: 4<p>title: The Title<p>message: The Message<p>author: test<p><a href='/m/post_reply?id=4'>Reply</a><p><hr><form action='delete_action' method='POST'>Delete a Message?<br> Message ID: <input type='text' name='id'><input type='submit'>Delete</form><form action='search_action' method='POST'>Search for Messages?<br> Message ID: <input type='text' name='text'><input type='submit'>Delete</form>HTTP/1.0 404 Not Found
+Date: Mon, 13 Feb 2012 19:46:46 GMT
+Server: WSGIServer/0.1 Python/2.7
+Content-type: text/html
+Content-Length: 15
+
+Page not found.

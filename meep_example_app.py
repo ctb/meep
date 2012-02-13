@@ -163,7 +163,7 @@ class MeepExampleApp(object):
         
         start_response("200 OK", headers)
 
-        return """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
+        return """<form action='add_action' method='GET'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
 
 ##    def search (self, environ, start_response):
 ##     

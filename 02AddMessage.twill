@@ -1,0 +1,10 @@
+go http://localhost:8000/
+follow "Add a message"
+
+fv 1 title 'test title FOO'
+fv 1 message 'this is my message'
+submit
+
+url /m/list
+find 'FOO'
+

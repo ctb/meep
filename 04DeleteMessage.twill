@@ -1,0 +1,12 @@
+go http://localhost:8000/m/list
+
+fv 2 replyText ''
+submit bttnDelete
+
+code 200
+
+url /m/list
+notfind 'Im a twill Reply'
+
+follow 'Index'
+code 200

@@ -1,6 +1,7 @@
 import meeplib
 import traceback
 import cgi
+import meepcookie
 
 def initialize():
     # create a default user
@@ -17,10 +18,16 @@ class MeepExampleApp(object):
     """
     def index(self, environ, start_response):
         start_response("200 OK", [('Content-type', 'text/html')])
+        username="test"
 
-        username = 'test'
-
-        return ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (username,)]
+        
+        cookie = environ.get("HTTP_COOKIE")
+        if cookie is None or (cookie[len('username='):]==''):
+            return ["""you are not logged in<p><a href='/login'>Log in</a><p><a href='/m/list'>Show messages</a>"""]
+        else:
+            return ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (username,)]
+  
+        
 
     def login(self, environ, start_response):
         # hard code the username for now; this should come from Web input!
@@ -31,7 +38,10 @@ class MeepExampleApp(object):
 
         # set content-type
         headers = [('Content-type', 'text/html')]
-        
+        #cookies
+        cookie_name, cookie_val = meepcookie.make_set_cookie_header('username',user.username)
+
+        headers.append((cookie_name, cookie_val))
         # send back a redirect to '/'
         k = 'Location'
         v = '/'
@@ -43,7 +53,9 @@ class MeepExampleApp(object):
     def logout(self, environ, start_response):
         # does nothing
         headers = [('Content-type', 'text/html')]
+        cookie_name, cookie_val = meepcookie.make_set_cookie_header('username','')
 
+        headers.append((cookie_name, cookie_val))
         # send back a redirect to '/'
         k = 'Location'
         v = '/'

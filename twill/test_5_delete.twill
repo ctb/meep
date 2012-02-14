@@ -1,0 +1,8 @@
+go http://localhost:8000
+go /m/list
+
+go /m/delete_reply_action?id_num=0
+notfind "Twill reply test"
+
+go /m/delete_message?id=1
+notfind "title: Twill"

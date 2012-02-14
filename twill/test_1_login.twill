@@ -1,0 +1,9 @@
+#Test for login
+go http://localhost:8000
+follow "Log in"
+
+fv 1 username "test"
+fv 1 password "foo"
+submit
+
+find "user: test"

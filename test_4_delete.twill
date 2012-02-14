@@ -1,5 +1,0 @@
-go http://localhost:8000
-go /m/list
-
-go /m/delete_message?id=1
-go /m/delete_reply_action?id_num=0

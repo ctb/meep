@@ -1,0 +1,8 @@
+go http://localhost:8000
+follow "Add a message"
+
+fv 1 title "Twill test"
+fv 1 message "Testing new message"
+submit
+
+find "title: Twill test"

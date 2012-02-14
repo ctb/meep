@@ -9,3 +9,6 @@ find "RANK: 2"
 go /m/decrease_msg_rank?id_num=0
 
 find "RANK: 1"
+
+go /m/decrease_msg_rank?id_num=0
+notfind "RANK: 1"

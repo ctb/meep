@@ -22,6 +22,7 @@ Functions and classes:
  * get_message(msg_id) - retrieves Message object for message with id msg_id.
 
 """
+import pickle
 
 __all__ = ['Message', 'get_all_messages', 'get_message', 'delete_message',
            'User', 'set_current_user', 'get_current_user', 'get_user',
@@ -74,7 +75,15 @@ def _reset():
     _replies = {}
     _current_user = ''
 
-###
+def load():
+    load_users()
+    load_messages()
+    try:
+	load_replies()
+    except:
+	print "No replies saved"
+
+###################################################
 
 class Message(object):
     """
@@ -98,6 +107,7 @@ class Message(object):
         
         # register this new message with the messages list:
         _messages[self.id] = self
+	save_messages()
 
 def get_all_messages(sort_by='id'):
     return _messages.values()
@@ -107,13 +117,42 @@ def get_message(id):
 
 def inc_msg_rank(msg):
     _messages[msg.id].rank += 1
+    save_messages()
 
 def dec_msg_rank(msg):
     _messages[msg.id].rank -= 1
+    save_messages()
 
 def delete_message(msg):
     assert isinstance(msg, Message)
     del _messages[msg.id]
+    save_messages()
+
+def save_messages():
+    messages = get_all_messages()
+    filename = "messages.pickle"
+    fp = open(filename, 'w')
+    for m in messages:
+	obj = (m.title, m.post, m.rank, m.author.username)
+	pickle.dump(obj, fp)
+    fp.close()
+
+def load_messages():
+    filename = "messages.pickle"
+    fp = open(filename, 'r')
+    test = True
+    while test:
+	try:
+	    obj = pickle.load(fp)
+	    (title, post, rank, username) = obj
+	    author = get_user(username)
+	    assert isinstance(author, User)
+	    Message(title, post, rank, author)
+	except:
+	    test = False
+    fp.close()
+
+#######################################################
 
 class Reply(object):
     """
@@ -134,10 +173,10 @@ class Reply(object):
 
     def _save_reply(self):
         self.id = _get_next_reply_id()
-        print id
         
         # register this new message with the messages list:
         _replies[self.id] = self
+	save_replies()
 
 def get_all_replies(sort_by='id'):
     return _replies.values()
@@ -147,15 +186,42 @@ def get_reply(id):
 
 def inc_reply_rank(reply):
     _replies[reply.id].rank += 1
+    save_replies()
 
 def dec_reply_rank(reply):
     _replies[reply.id].rank -= 1
+    save_replies()
 
 def delete_reply(reply):
     assert isinstance(reply, Reply)
     del _replies[reply.id]
+    save_replies()
 
-###
+def save_replies():
+    replies = get_all_replies()
+    filename = "replies.pickle"
+    fp = open(filename, 'w')
+    for r in replies:
+	obj = (r.id_num, r.reply, r.rank, r.author.username)
+	pickle.dump(obj, fp)
+    fp.close()
+
+def load_replies():
+    filename = "replies.pickle"
+    fp = open(filename, 'r')
+    test = True
+    while test:
+	try:
+	    obj = pickle.load(fp)
+	    (id_num, reply, rank, username) = obj
+	    author = get_user(username)
+	    assert isinstance(author, User)
+	    Reply(id_num, reply, rank, author)
+	except:
+	    test = False
+    fp.close()
+
+#######################################################
 
 class User(object):
     def __init__(self, username, password):
@@ -169,6 +235,7 @@ class User(object):
         # register new user ID with the users list:
         _user_ids[self.id] = self
         _users[self.username] = self
+	save_users()
 
 def get_user(username):
     return _users.get(username)         # return None if no such user
@@ -179,5 +246,26 @@ def get_all_users():
 def delete_user(user):
     del _users[user.username]
     del _user_ids[user.id]
+    save_users()
 
-#updated 1/31/2012
+def save_users():
+    users = get_all_users()
+    filename = "users.pickle"
+    fp = open(filename, 'w')
+    for u in users:
+	obj = (u.username, u.password)
+	pickle.dump(obj, fp)
+    fp.close()
+
+def load_users():
+    filename = "users.pickle"
+    fp = open(filename, 'r')
+    test = True
+    while test:
+	try:
+	    obj = pickle.load(fp)
+	    (user, password) = obj
+	    User(user, password)
+	except:
+	    test = False
+    fp.close()

@@ -1,28 +1,17 @@
 import meeplib
 import traceback
 import cgi
-import pickle
 
 def initialize():
-    global filename
-    filename = 'save.pickle'
     try:
-	fp = open(filename)
-	obj = pickle.load(fp)
-	fp.close()
+	meeplib.load()
+	print "Loading from pickle files"
     except:
-    	fp = open(filename, 'w')
 	# create a default user
 	u = meeplib.User('test', 'foo')
-	obj = ('user', 'test', 'foo')
-	pickle.dump(obj, fp)
 	# create a single message
 	meeplib.Message('my title', 'This is my message!', 0, u)
-	obj = ('my title', 'This is my message!', 0, u.username)
-	pickle.dump(obj, fp)
 	meeplib.User('new', 'test')
-	obj = ('user', 'new', 'test')
-	fp.close()
     # done
 
 class MeepExampleApp(object):
@@ -209,12 +198,7 @@ class MeepExampleApp(object):
      
 	global username
         user = meeplib.get_user(username)
-        new_message = meeplib.Message(title, message, rank, user.username)
-	global filename
-	fp = open(filename, 'w')
-	obj = (title, message, rank, user)
-	pickle.dump(obj, fp)
-	fp.close()
+        new_message = meeplib.Message(title, message, rank, user)
 
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list'))

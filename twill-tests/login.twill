@@ -1,0 +1,9 @@
+go http://localhost:8000/login
+code 200
+
+fv 1 user 'admin'
+fv 1 pass 'admin'
+submit
+
+url /login_action
+find 'You are logged in as admin'

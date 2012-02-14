@@ -1,0 +1,13 @@
+go http://localhost:8000/m/list
+code 200
+
+fv 2 reply '1'
+submit
+
+fv 1 title 'twill test reply'
+fv 1 message 'qjkxbmwvz'
+submit
+
+url /m/list
+find 'twill test reply'
+find 'qjkxbmwvz'

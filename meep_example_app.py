@@ -232,7 +232,6 @@ class MeepExampleApp(object):
         #adds reply to designated message
         message = meeplib.get_message(parent_id)
         message.add_reply(reply)
-        self.save()
 
         headers = [('Content-type', 'text/html')]
         headers.append(('Location', '/m/list'))

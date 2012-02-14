@@ -31,11 +31,11 @@ class TestMeepLib(unittest.TestCase):
     
     def test_add_reply(self):
         msg = meeplib.get_all_messages()[0]
-        new_message = meeplib.Message('reply', 'reply msg',  msg.author, True)
-        msg.add_reply(new_message)
-        
-        replies = msg.get_replies()
-        assert len(replies) == 1
+        reply = "I'm a reply."
+        msg.add_reply(reply)
+
+        myreply = msg.replies
+        assert len(myreply) == 1
         
     def test_delete_message(self):
         msg = meeplib.get_all_messages()[0]

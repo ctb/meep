@@ -109,8 +109,7 @@ class Message(object):
     'author' must be an object of type 'User'.
 
     """
-    def __init__(self, title, post, author, is_reply = False):
-        self.replies = {}
+    def __init__(self, title, post, author):
         self.title = title
         self.post = post
 
@@ -123,8 +122,10 @@ class Message(object):
     def _save_message(self):
         self.id = _get_next_message_id()
 
+
         # register this new message with the messages list:
         _messages[self.id] = self
+        _save()
         
     #addReply will add the reply paramter to the self.replies string array
     def add_reply(self, reply):

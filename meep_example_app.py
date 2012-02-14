@@ -1,6 +1,8 @@
 import meeplib
 import traceback
 import cgi
+from Cookie import SimpleCookie
+import meepcookie
 
 def initialize():
     try:
@@ -14,17 +16,24 @@ def initialize():
 	meeplib.User('new', 'test')
     # done
 
+def check_cookie(environ):
+    try:
+	cookie = SimpleCookie()
+	cookie.load(environ.get('HTTP_COOKIE'))
+	username = cookie['username'].value
+	return username
+    except:
+	return ''
+
 class MeepExampleApp(object):
     """
     WSGI app object.
     """
-    global username
-    username = ''
-
+    
     def index(self, environ, start_response):
         start_response("200 OK", [('Content-type', 'text/html')])
 	
-	global username
+	username = check_cookie(environ)
 
         return ["""you are logged in as user: %s<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (username,)]
 
@@ -39,7 +48,6 @@ class MeepExampleApp(object):
 	print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
 
-	global username
 	if "username" not in form or "password" not in form:
 	    #If either field is left blank on login, redirect to error page.
 	    headers = [('Content-type', 'text/html')] 
@@ -61,6 +69,8 @@ class MeepExampleApp(object):
 	    #login successful, redirect to index
 	    k = 'Location'
 	    v = '/'
+	    cookie_key, cookie_val = meepcookie.make_set_cookie_header('username', username)
+
 	else:
             #login failed, redirect to error page
 	    k = 'Location'
@@ -69,6 +79,7 @@ class MeepExampleApp(object):
         # set content-type
         headers = [('Content-type', 'text/html')]
         headers.append((k, v))
+	headers.append((cookie_key, cookie_val))
         start_response('302 Found', headers)
         
         return "no such content"
@@ -82,16 +93,15 @@ class MeepExampleApp(object):
 
     def logout(self, environ, start_response):
         #Resets username back to '' instead of current user
-	global username
-	username = ''
+	cookie_key, cookie_val = meepcookie.make_set_cookie_header('username', '')
         headers = [('Content-type', 'text/html')]
 
         # send back a redirect to '/'
         k = 'Location'
         v = '/'
         headers.append((k, v))
+	headers.append((cookie_key, cookie_val))
         start_response('302 Found', headers)
-        
         return "no such content"
 
     def list_messages(self, environ, start_response):
@@ -171,7 +181,7 @@ class MeepExampleApp(object):
 
     def add_message(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
-	global username
+	username = check_cookie(environ)
 	if username == '':
 	    #Send to error page if no user is logged in
 	    headers.append(('Location', '/m/no_user'))
@@ -196,7 +206,7 @@ class MeepExampleApp(object):
         rank = form['rank'].value
         rank = int(rank)
      
-	global username
+	username = check_cookie(environ)
         user = meeplib.get_user(username)
         new_message = meeplib.Message(title, message, rank, user)
 
@@ -258,7 +268,7 @@ class MeepExampleApp(object):
         rank = form['rank'].value
         rank = int(rank)
         
-	global username
+	username = check_cookie(environ)
         user = meeplib.get_user(username)
         
         new_reply = meeplib.Reply(id_num, reply, rank, user)
@@ -322,8 +332,6 @@ class MeepExampleApp(object):
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
 
         id_num = form['id_num'].value
-        #print "form"
-        #print (id,)
         id_number = int(id_num)
         
         meeplib.delete_reply(meeplib.get_reply(id_number))

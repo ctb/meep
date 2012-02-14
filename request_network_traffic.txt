@@ -1,0 +1,47 @@
+request network traffic for index page query:
+
+GET http://localhost:8000/ HTTP/1.1
+Host: localhost:8000
+Connection: keep-alive
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.46 Safari/535.11
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Encoding: gzip,deflate,sdch
+Accept-Language: en-US,en;q=0.8
+Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3
+Cookie: username=
+
+
+request network traffic for add message action with method=GET:
+
+GET http://localhost:8000/m/add_action?title=Space+Ghost&message=Coast+to+coast. HTTP/1.1
+Host: localhost:8000
+Connection: keep-alive
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.46 Safari/535.11
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Referer: http://localhost:8000/m/add
+Accept-Encoding: gzip,deflate,sdch
+Accept-Language: en-US,en;q=0.8
+Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3
+Cookie: username=foo
+
+
+
+request network traffic for add message action with method=POST:
+
+POST http://localhost:8000/m/add_action HTTP/1.1
+Host: localhost:8000
+Connection: keep-alive
+Content-Length: 49
+Cache-Control: max-age=0
+Origin: http://localhost:8000
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.46 Safari/535.11
+Content-Type: application/x-www-form-urlencoded
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Referer: http://localhost:8000/m/add
+Accept-Encoding: gzip,deflate,sdch
+Accept-Language: en-US,en;q=0.8
+Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3
+Cookie: username=zach
+
+title=Is+it+secret%3F%21&message=Is+it+safe%3F%21
+

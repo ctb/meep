@@ -1,0 +1,223 @@
+Any clients will be served...
+Serving HTTP on 0.0.0.0 port 8001 ...
+	connect to localhost.:8000
+Connecting to: localhost.:8000 <socket._socketobject object at 0x015177D8>
+Sending: GET /  
+Sending header: ('accept-language', 'en-US,en;q=0.8')
+Sending header: ('connection', 'close')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.46 Safari/535.11')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.3')
+Sending header: ('host', 'localhost.:8000')
+Sending header: ('referer', 'http://localhost.:8000/main_page')
+Sending header: ('cache-control', 'max-age=0')
+Sending header: ('cookie', 'username=')
+Sending header: ('accept-encoding', 'gzip,deflate,sdch')
+Sending: ('HTTP/1.0 200 OK\r\n',)
+Sending: ("Date: Tue, 14 Feb 2012 06:48:56 GMT\r\nServer: WSGIServer/0.1 Python/2.7.2\r\nContent-type: text/html\r\nContent-Length: 349\r\n\r\n\n                Login or <a href='/create_user'>Create an Account</a>\n                </br><p><form action='login' method='POST'>\n                Username: <input type='text' name='username'><br>\n                Password:<input type='password' name='password'><br>\n                <input type='submit' value='Login'></p></form>\n                    ",)
+	bye
+	connect to localhost.:8000
+Connecting to: localhost.:8000 <socket._socketobject object at 0x015177D8>
+Sending: GET /favicon.ico  
+Sending header: ('accept-language', 'en-US,en;q=0.8')
+Sending header: ('accept-encoding', 'gzip,deflate,sdch')
+Sending header: ('connection', 'close')
+Sending header: ('accept', '*/*')
+Sending header: ('user-agent', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.46 Safari/535.11')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.3')
+Sending header: ('host', 'localhost.:8000')
+Sending header: ('cookie', 'username=')
+Sending: ('HTTP/1.0 404 Not Found\r\n',)
+Sending: ('Date: Tue, 14 Feb 2012 06:48:56 GMT\r\nServer: WSGIServer/0.1 Python/2.7.2\r\nContent-type: text/html\r\nContent-Length: 15\r\n\r\nPage not found.',)
+	bye
+	connect to localhost.:8000
+Connecting to: localhost.:8000 <socket._socketobject object at 0x01517C38>
+Sending: POST /login  
+Sending header: ('origin', 'http://localhost.:8000')
+Sending header: ('content-length', '27')
+Sending header: ('accept-language', 'en-US,en;q=0.8')
+Sending header: ('connection', 'close')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.46 Safari/535.11')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.3')
+Sending header: ('host', 'localhost.:8000')
+Sending header: ('referer', 'http://localhost.:8000/')
+Sending header: ('cache-control', 'max-age=0')
+Sending header: ('cookie', 'username=')
+Sending header: ('content-type', 'application/x-www-form-urlencoded')
+Sending header: ('accept-encoding', 'gzip,deflate,sdch')
+Sending: ('username=test&password=test',)
+Sending: ('HTTP/1.0 302 Found\r\nDate: Tue, 14 Feb 2012 06:49:03 GMT\r\nServer: WSGIServer/0.1 Python/2.7.2\r\nContent-type: text/html\r\nSet-Cookie: username=test; Path=/\r\nLocation: /main_page\r\n\r\nInvalid Password. Please try again.',)
+	bye
+	connect to localhost.:8000
+Connecting to: localhost.:8000 <socket._socketobject object at 0x01517B90>
+Sending: GET /main_page  
+Sending header: ('accept-language', 'en-US,en;q=0.8')
+Sending header: ('connection', 'close')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.46 Safari/535.11')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.3')
+Sending header: ('host', 'localhost.:8000')
+Sending header: ('referer', 'http://localhost.:8000/')
+Sending header: ('cache-control', 'max-age=0')
+Sending header: ('cookie', 'username=test')
+Sending header: ('accept-encoding', 'gzip,deflate,sdch')
+Sending: ('HTTP/1.0 200 OK\r\n',)
+Sending: ("Date: Tue, 14 Feb 2012 06:49:04 GMT\r\nServer: WSGIServer/0.1 Python/2.7.2\r\nContent-type: text/html\r\nContent-Length: 159\r\n\r\nYou have successfully logged in as: test<p><a href='/m/add_topic'>Add a topic</a><p><p><a href='/m/list_topics'>Show topics</a><p><a href='/logout'>Log out</a>",)
+	bye
+	connect to localhost.:8000
+Connecting to: localhost.:8000 <socket._socketobject object at 0x01517BC8>
+Sending: GET /favicon.ico  
+Sending header: ('accept-language', 'en-US,en;q=0.8')
+Sending header: ('accept-encoding', 'gzip,deflate,sdch')
+Sending header: ('connection', 'close')
+Sending header: ('accept', '*/*')
+Sending header: ('user-agent', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.46 Safari/535.11')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.3')
+Sending header: ('host', 'localhost.:8000')
+Sending header: ('cookie', 'username=test')
+Sending: ('HTTP/1.0 404 Not Found\r\n',)
+Sending: ('Date: Tue, 14 Feb 2012 06:49:04 GMT\r\nServer: WSGIServer/0.1 Python/2.7.2\r\nContent-type: text/html\r\nContent-Length: 15\r\n\r\nPage not found.',)
+	bye
+	connect to localhost.:8000
+Connecting to: localhost.:8000 <socket._socketobject object at 0x01517C70>
+Sending: GET /m/add_topic  
+Sending header: ('accept-language', 'en-US,en;q=0.8')
+Sending header: ('accept-encoding', 'gzip,deflate,sdch')
+Sending header: ('connection', 'close')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.46 Safari/535.11')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.3')
+Sending header: ('host', 'localhost.:8000')
+Sending header: ('referer', 'http://localhost.:8000/main_page')
+Sending header: ('cookie', 'username=test')
+Sending: ('HTTP/1.0 200 OK\r\n',)
+Sending: ("Date: Tue, 14 Feb 2012 06:49:24 GMT\r\nServer: WSGIServer/0.1 Python/2.7.2\r\nContent-type: text/html\r\n\r\n<form action='add_topic_action' method='POST'>Add a new topic<br>Topic name: <input type='text' name='title'><br>Message title:<input type='text' name='msgtitle",)
+Sending: ("'><br>Message:<input type='text' name='message'><br><input type='submit'></form>",)
+	bye
+	connect to localhost.:8000
+Connecting to: localhost.:8000 <socket._socketobject object at 0x01517C70>
+Sending: GET /favicon.ico  
+Sending header: ('accept-language', 'en-US,en;q=0.8')
+Sending header: ('accept-encoding', 'gzip,deflate,sdch')
+Sending header: ('connection', 'close')
+Sending header: ('accept', '*/*')
+Sending header: ('user-agent', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.46 Safari/535.11')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.3')
+Sending header: ('host', 'localhost.:8000')
+Sending header: ('cookie', 'username=test')
+Sending: ('HTTP/1.0 404 Not Found\r\n',)
+Sending: ('Date: Tue, 14 Feb 2012 06:49:25 GMT\r\nServer: WSGIServer/0.1 Python/2.7.2\r\nContent-type: text/html\r\nContent-Length: 15\r\n\r\nPage not found.',)
+	bye
+	connect to localhost.:8000
+Connecting to: localhost.:8000 <socket._socketobject object at 0x01517D50>
+Sending: POST /m/add_topic_action  
+Sending header: ('origin', 'http://localhost.:8000')
+Sending header: ('content-length', '37')
+Sending header: ('accept-language', 'en-US,en;q=0.8')
+Sending header: ('connection', 'close')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.46 Safari/535.11')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.3')
+Sending header: ('host', 'localhost.:8000')
+Sending header: ('referer', 'http://localhost.:8000/m/add_topic')
+Sending header: ('cache-control', 'max-age=0')
+Sending header: ('cookie', 'username=test')
+Sending header: ('content-type', 'application/x-www-form-urlencoded')
+Sending header: ('accept-encoding', 'gzip,deflate,sdch')
+Sending: ('title=Test&msgtitle=test&message=test',)
+Sending: ('HTTP/1.0 302 Found\r\nDate: Tue, 14 Feb 2012 06:49:34 GMT\r\nServer: WSGIServer/0.1 Python/2.7.2\r\nContent-type: text/html\r\nLocation: /m/list_topics\r\nContent-Length: 11\r\n\r\ntopic added',)
+	bye
+	connect to toolbarqueries.google.com:443
+	connect to localhost.:8000
+Connecting to: localhost.:8000 <socket._socketobject object at 0x0151F148>
+Sending: GET /m/list_topics  
+Sending header: ('accept-language', 'en-US,en;q=0.8')
+Sending header: ('connection', 'close')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.46 Safari/535.11')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.3')
+Sending header: ('host', 'localhost.:8000')
+Sending header: ('referer', 'http://localhost.:8000/m/add_topic')
+Sending header: ('cache-control', 'max-age=0')
+Sending header: ('cookie', 'username=test')
+Sending header: ('accept-encoding', 'gzip,deflate,sdch')
+Sending: ('HTTP/1.0 200 OK\r\n',)
+Sending: ("Date: Tue, 14 Feb 2012 06:49:35 GMT\r\nServer: WSGIServer/0.1 Python/2.7.2\r\nContent-type: text/html\r\nContent-Length: 174\r\n\r\n<a href='/m/topics/view?id=0'>First Topic</a><hr><a href='/m/topics/view?id=1'>Testing123</a><hr><a href='/m/topics/view?id=2'>Test</a><hr><a href='../../main_page'>index</a>",)
+	bye
+Sending: ('\x16\x03\x01\x01\x94\x01\x00\x01\x90\x03\x01O:\x03\xff\x0e\x92s9}.)w\xf8\x94w\xe3j\x0ch\ry\x91\x1b\x11\xd3x|^\xcc\xbb \x00 \x1c\x137\xa1\xae\xa9\x81\xc9\xd3\xe7\xe2\x16kg\xfcv\xdbw\xc8\xc1\xbfsA\x16\xcd\x19\x9d\xc5\x04\xfb\xc1\x85\x00H\xc0\n\xc0\x14\x00\x88\x00\x87\x009\x008\xc0\x0f\xc0\x05\x00\x84\x005\xc0\x07\xc0\t\xc0\x11\xc0\x13\x00E\x00D\x00f\x003\x002\xc0\x0c\xc0\x0e\xc0\x02\xc0\x04\x00\x96\x00A\x00\x04\x00\x05\x00/\xc0\x08\xc0\x12\x00\x16\x00\x13\xc0\r\xc0\x03\xfe\xff\x00\n\x02\x01\x00\x00\xfe\x00\x00\x00\x1e\x00\x1c\x00\x00\x19toolbarqueries.google.com\xff\x01\x00\x01\x00\x00\n\x00\x08\x00\x06\x00\x17\x00\x18\x00\x19\x00\x0b\x00\x02\x01\x00\x00#\x00\xb4\xa91\xebnAj\xe7\x9c=\x82\xf3\x9b\x96\x9c\xf6\xf0\xc4\xd2o\x99"\x811\xc6\x14i\xb7\xe6sV\xf8b\xba%\xd3f\xaey\x8e\x81\x87\xf0\xe9\xdcs/\xba*\x9f?[\xca\xeaF\x1f\xe0(\xc7),\xbcF\x08\xaf+\xee\xf7\xc9\x9a\xc9z\r*I)\xe4ZI\xf0\xae\x8a\xae\xce\xba\xfc{\xe5\xa4\xc9\xdfV\xd0\xa0\xf2\xe7\xeb\xa2\xd7\x02\x8fM\xb7\x9e\xe0\x8dR\xcc\x1e0\xa6\xef\x0e\x04\xc2\xfd\x18\x91Q\xfc\x1a\xdd\xd8\xa7\xd5n\x94r\x83P\xab>gC\xb2r\x12\xefsp\xdae\xcaE<\x8d\x8dX\x14\xff\xf1\x84\x91"\x06\xde\xaf\x0b\\\xe4\xb0\x02\x1c\xaf\xc4\xa9\x0c\xd6:<\x9c\x03\xd2\x9d\x02\xb6\xb0\x10EmI3t\x00\x00\x00\x05\x00\x05\x01\x00\x00\x00\x00',)
+Sending: ("\x16\x03\x01\x00e\x02\x00\x00a\x03\x01O:\x04\x02=+\xf5\xd3Xd4\xd3ul\xe6\xc1\xf0a-\xacr\xcd\xf6\xf9!\x15\x8ex'%\x0c1 \x1c\x137\xa1\xae\xa9\x81\xc9\xd3\xe7\xe2\x16kg\xfcv\xdbw\xc8\xc1\xbfsA\x16\xcd\x19\x9d\xc5\x04\xfb\xc1\x85\xc0\x11\x00\x00\x19\xff\x01\x00\x01\x003t\x00\x10\x06spdy/2\x08http/1.1\x14\x03\x01\x00\x01\x01\x16\x03\x01\x00$\\\x8d8\xa0\x9a\x93\x19\x0c\x94\x0fSd\xadL*64 \xdf/\xea\x00\x03\x94\xe4\xddY\xd2\xb4\xa2\xdc\x11Vy\x95\xc0",)
+Sending: ('\x14\x03\x01\x00\x01\x01\x16\x03\x01\x00H\xa5\xee\x19\xc2\x1f]Y\x87|\x0640\xf7\x81\xdf\xfb\x1f\x80h\xa17q~\xa4\xec(\xb1\xf0\xf2\x96\xce\x85\x14\xe2J\x87Zi\xc0\xaf\x0f%\xde\xe1f\x12*2\x92d\x1f\x1fO`\xdeY\nUI\xf3\xf0\xc4c\x13\xado\xb3\x0bM\xc9w\x95',)
+Sending: ('\x17\x03\x01\x000\xf9\x1c\x9b\xe7A\x8b\xb3\x89\x08\x9b\x07\xf0\xca\xaf\xaf\x9cY\xf3\x1c~\xe0lk\xb23\t5\xd1\x86\xd1\x9c\xa9KCa\xd1\x92\xf6=\xa4\xf9\xb9\xfe\x84\xa9\xd3\x12\xf7\x17\x03\x01\x03\xfb=r{\xa1\xed9\xd0/0W\\\x0b\xb2\xabyN5\x11\x1f\xb6\xfd[f\xf1\x9f\x92\x02k\xf8\xe6\xe8}N=\xf7\xdf\xfa\xff\xce\xdc_0\x01\x03[\xa6\x94\x87x3\x00\xa6\xe5\xd6@JN\x80c=\xb3\xc7\xd3\x9ba\xa5\t\xfd\xa9\x00#\x060\x8c,/\xe5\xc5\\\\\x08\x89\xc1\xf0O\xa7zx\x10\xdd\xa9tF,\xb1\xa1\xf3\x89^\xe1#\x1c\x00\x89\x1f\xf5\xdfINL/\xb5\xc4`_\xddD\xca\xfeox\xd2\xde\x86\xd1=\xe8y\xab`8\x0f\xca\xf2\x95:\xb3\xd9\x10\xc2z\xbc]\xa3P\xa0>\x89\xd1\x8c\x1d\x16\xe0\xc0.\xa4\x07\xc7\xcb\x91\xae\xa39\xea\x96Q\xb5\x9dB&hx\xcf\xd6\xf9\x9a\xb0\x9f\xa6\xf2\x8c\xa7\x8d5\xb0\x0b\xa4\x18\x10\x19\xf6.\xf1\xb0>\x88\xd9qL\xceU\xb8\xca#\x99\xac\xdb\xd5\xe5l \xa2\xe4\xf1\x1d,\x9a]\xf5\xe9\xb9#\xd7C\xcb\xff_\xbci\x1b\xad\x99\xe2R=\x89E\xc6l\x17\xf6%\x1cZ5\xf2\x06y9p\x10\xb1$\xc4@\xe3,\x96Q\'ZX\\t\xfe\x11\x82W7D\xd3=t\x9cK\xdc\x1c\xe1R\x1c\x9b\x9c\x19H#\xda\x8d\x81\xd5\x87\xf1\xa2\xfc9\x00\x1a\xf6\x8e\x01!S\xd2~\xac\xd8\x84k\xf0q\xb1\x7fD`\xc9E\xe3Tv\xaag\xf7\xc8BD\xc0\x19\x03\xc5$@D\xf6g\xfe\xeb\xe9\x81\x85\xaa\xcavR\xc3\xda\x18\xcc\xc9\xcd\x8c\xca=>HN\xd9`.\xd4\xdf\x04\xb0S\xa3"\x11<6rw%\xae\xab\xdf;\xf1\x80\x8c{p\xdb\xa8\xfbz\xc0\xd1"\x91\xe7\xa9\xa0\x17\x04\x07\x02\x1cu\xbc\x92\xccr\xa4rJ\xc6\x1f\xd5\x8e$\xaf\xf0y\xab\x86\xfc\xdf\xb0{c\xdf)c\xf8\x16\xb9\x11\xec\xf2\x8aO\xa78\xf8\xea\x8c\xb1\xd23\xe5\r\x10M}\x95\xea\xa7\x81\xc0\xd5\r\x86Z\\FF\x17\xc0{\r\xbc:\xef\x9d\xff\xb6\xdf^\xe8z\xc9\xd2\x00\x1f\xdf\xe3\xb8cK\xe3\x08\xb01\xf65\x15:\xb5N0o\xbe->\xa9\x9b\xcd\xe0\xec\xb4l\xb8\xef\x1b\xb8\xe6\x93\xfd\xe2\x91OP\x11\x0fV\xcc\x96\xbe~\xa9\x8d\xf6a_\x98\x84\xc9F}<\xd0\xb4\x029\t\xae\xe6HSb\x82\xc55e\xbd\x8at\xfe\xd1(\xe3\x8eie\x87\x98\x8d\x87\xc8\x8f\xe0\xe4\x9a\xffW\xc0=\xf8\x9bM\x88+k{{\x92\xe6\xb6\xe2\x8b\x95\x14\xa4o\xac\x0e\xa2\x97\xfe\xe7\xe7j\xeb\xba\x11@\xfc\n\xb1\xa1nh\xabV\xbcX\xca\xd2\x1a8\x1c\x03\x16\xf2Ak\xe3X\x92\xf3\x04\xbb\xf3D\x11m\x8e\x1a\xfa\x1d\xc7\xc8\xd5\x8d\xfa\x9d\x8e5P\xe3\xa8\x8bu\xa2\x1f\x9a\xacZ\xb9\x00\x92\xb9,=\xc2\xf6_\x8f\xe1\x8d\x1d\xdc\xba\xd1j\xb1\xe3\xbb\xfb\xfa\x9a\x17\x05k\xa5\xe9\xc7\x92\x10?\xba\xa9-]\xf8D\xbb\xc9xq#\xfb\x8e@D\x15\xe5\xfd\x1f\xc5|\xf9#\xf7\xc2\x161Z\xbd\xaa\x9f\xc6\x14\xd1A\x16\x1c\xad\xa0\xab\xcb\x13\xd9:p\'\x8d\xa7O6*\x13\xc3\xcb\x89={8k\xcf\xc6|k[\xf4\xc5EQMsQ+\x94\xa5\xbf\x9bQ\xa3N\x17*\xb7\x05\x90:f\x16GP\xd5\xab\xa38\xad2O\xbc\xcey\xcbv\xb0\xce\x1a\x0f\xf2\xf7<\xab\xcd\xdd\x82\x0e\xa2\xb8\xd5Y\x12\x08b\xd0\xf3\xd5\x19\xb0\xfeev^Hg\x06\xd0\x06-\x9c\x7f\x1e\xb6s\xd1\x9cf\xb2\xa8&B\xc0\xe6\xc0\xc5\x86r\x8c\xab\xfb\xf3\xeb[o<K\x95i1tQO\xfb\xa0\xa421<T`\xda\xa0H\x11j\\\xa4\x0clP\'\xad,Q\n\xd3\xbe\xd9\x92\x8dy\xe8\xf8\xdd z\xe7\xe4|m\xc8\x80\xe2<Amq\x1e\xe9Na\xcf\xa9\xdcj\xff\xb27\xa7.:m\x81\x8f<d\x0c\x1f\x18^U\x0b\xffq\xfe@l\xcc"\xe0A|wd\x97p\xfc\xe7\xc1\xa4\xc1\xea\xa0\xc4\xeb\xd1\x7f[\xdd\xaa2]*\xd9\x11\x10\xf6\x8b\xfe\xb5s3;ei^\xa7\x0bT\xc2Y\xdf\x0fEu\xc4\xc93\'\xfa~9(\xbf\\?\xc9V\x9eP\xa7(\x97\xec7/\xb3\xcf\xb0\x1c\x13\xb4$A\x13\xcfhj\x1e\x18\xd4\x9cz\x07\x12\xdc4\x93\xb6\x97\xe4\x1c\xec\xa3\x81\x17\x03\x01\x01mw\x82\x90\x86\x15\xd8&b\xe4\t\xa3k\x94\xb6P\x0e&\x95\xbd\xb0\xe8\x14\xb2h\xae\xa4>n\x10\xe0Eu\x04\x1a$#(\xa8\xc1\xabq\x9a\xce\xa6[\xf7\x93y\x85\x1d\xd4\xd4\x7fZ\x96\xe8[\x99\x88)\x07K#\xe0\x9cW\xbc\xa5\xc5\xda\x8d\x08\xbf)C\xbc^\xaf\x91D\x06\xb1\xf4\x11\xd0(s~g\x1c^\x0c\xbb\xc5k\xdd:\x15\xa7\xccM\xe8u!\xa7\r\x97\x86k\'?\xdd\x0c1.\x9f\x13\xb8\x9c\xb0\x01\xcc\x1c7\x914\x9255\x82\xf7\x1f\x12q\xdd\xc9\xa0\x1c\xd8\xe4\xa7\xf7\xfc\xdf\'\x04bn\xe5\x91&;9;\x03\x9b!$\x16\x9d\x99\x16\xee\xe4Y\xed\x92\xe9{\x1d\xb2=G\xa9rX\xee\x80X\x9d\xf6%E\xb4\xe7\x91\x7f\xcdx\xaf\xafV\x1d0\xdaY*\xf3E6\xe8\x80\xcd\xeb\xd1\x9c#\xc2\x95\xca\xfd7\x8b\xfaB\xb0\x81\x9c\x05VK\x1af\xdbA_\xfd\x08\x17\xeb\r\x97(O 5\xecOEzEGG\xb84\xe1z\xb1\xb7\xf4!\x06eD\x01\x84\x0c\xd3\xf81\x86r\xda\xfb\x08\xbc\xca\x17P\xed\xfe\x01\xd0*\x01\xe6f)p\xa2\xee\xad\xda|1H\xa6\x8f\xa8\x9eH\x9dK\xbd\xbf\xb2\xd2G\x83n\xb4\x11e\xd7a5\xa1~\r\x87\xf3T\xa0\xa4\xa169n\xad&\x1d\xb3\x19WVkm(9\xf5\xc1B\x1c\xa0[\x181\xcd\xe4\x81\xc5D\x15N\x9a\xf5LY\xdb\xe6\xed~x2\x931\x97f\xe0\xbfM\x7f\xfb\x84N',)
+Sending: ('\x17\x03\x01\x00(\x14\xceS\x93o\xd0\xa0\xa1\xaf\xac\xb0\xda\xa6\x04\xca\x06\xa3\xf5\xfb\x00\t\xef&,\xfaJ\x12\n)\x1f\xb0\xfa\xb9\xb5k\xb6\xc8\x89\x7fB',)
+Sending: ('\x17\x03\x01\x00\xdc\x08h\xf0\xb5A\xe0y\xf7\xcbq\xc8\xef3\xfb\xe4x\xb2\x9cN\xbf(\x10\x1b\x99\xdc\x12\xbe\x11\xcd\x11=_\x11S\x93b\xd8\xeb\xc6Z\xd0\x892\xd5\x85\xd6\xf1e\x06\xce\x06\t\x15\xc1\xdb\xce+\x12\x06\x93\xcd5*\xe7\x82w\x05Acc\x84X%n\xba\xf8JvJo\xaa\x0e\xbe\xa7W\x80\xe6X\x0b\xbb\xf8\x18R\xf2[\x83\x08=\xfb\xae\xda\xf9\x18\x80^R\x865\xb6i*\xdf\xfa\xd5$x\x1c\xd0\x1feN\x85\xfa\x02\x03\xb8\x9b\xd2j\xda\xd9\x97\x8d\r\x0e2\x9f\x00\x9dW0Qw\x94\xfa\xb7\xab\x03\x80\xb57\x8c\xd7h\xbd\xd2\x19c\xb8>\xbe\xb7A\xde\xed\xbb,\xbc\xeb\x83\xc74\x9fx\xab\xc5u\x8cP|\xf4\xfc1VEl\x9c\x88\xbf)\xbe\n\x90A\xf2\xf4\xf8P\nPa\x7fn\x1d\xb5\t{\x89\xcbQz\x01\xdc\xe3\xb4 c\x8bg\xdd',)
+Sending: ('\x17\x03\x01\x00\x1c\xefKT\xf6\xa2\x11\x1f\x9b\xef\xe0$\xf6\x13z\x8d\x94\x17\xed\xb7\x19x\x1d\x10aO\xe03\xe1\x17\x03\x01\x00ZI\x83\xb0k\xcd,qdZ\xd0\x89\r\x95S\\\x894\xaf\x06\xc7vj\x07\xdbV\xfc\xd0\xa1\xcd\x1d~\x04\x9cI\xffn\x9dN\x17\xea\x85\x8e\xe6\xf8\xa5\x1di\x07\x9d\x87\xf4\xc0q4\x8f\xb1\xc7\xdcr\xd7\xb7\xb3\x1b\xe9\x88\xe8\x8a\x1d\xb7P\xe8\x14q\x15"p\xc4\x1a[Y|\xbdJ\x8b\x95+(\x1e\x7f\x0b',)
+	connect to localhost.:8000
+Connecting to: localhost.:8000 <socket._socketobject object at 0x0151F148>
+Sending: GET /favicon.ico  
+Sending header: ('accept-language', 'en-US,en;q=0.8')
+Sending header: ('accept-encoding', 'gzip,deflate,sdch')
+Sending header: ('connection', 'close')
+Sending header: ('accept', '*/*')
+Sending header: ('user-agent', 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.46 Safari/535.11')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.3')
+Sending header: ('host', 'localhost.:8000')
+Sending header: ('cookie', 'username=test')
+Sending: ('HTTP/1.0 404 Not Found\r\n',)
+Sending: ('Date: Tue, 14 Feb 2012 06:49:35 GMT\r\nServer: WSGIServer/0.1 Python/2.7.2\r\nContent-type: text/html\r\nContent-Length: 15\r\n\r\nPage not found.',)
+	bye
+Sending: ('\x17\x03\x01\x00 -\xc2\xb1\x898\xd0n\x83\xbc\xf9\xa2\xfd\x06\xaf^\xcfC2\x91\xda\x84caW\xe4?\xc2\xde\x82\x9c\x15\xde',)
+Sending: ('\x17\x03\x01\x00 c\xf5\xf9\xf1.\xa8\xd1\xfc\xb1\xa6\x99\x03\xb5]__\x91\xe1\xb55\rjgi6\xa2O&\xa8\x9dF4',)
+	idle 1
+	idle 2
+	idle 3
+	idle 4
+	idle 5
+	idle 6
+	idle 7
+	idle 8
+	idle 9
+	idle 10
+	idle 11
+	idle 12
+	idle 13
+	idle 14
+	idle 15
+	idle 16
+	idle 17
+	idle 18
+	idle 19
+	idle 20
+	idle 21
+	idle 22
+	idle 23
+	idle 24
+	idle 25
+	idle 26
+	idle 27
+	idle 28
+	idle 29
+	idle 30
+	idle 31
+	idle 32
+	idle 33
+	idle 34
+	idle 35
+	idle 36
+	idle 37
+	idle 38
+	idle 39
+	idle 40
+	idle 41
+	idle 42
+	idle 43
+	idle 44
+	idle 45
+	idle 46
+	idle 47
+	idle 48
+	idle 49
+	idle 50
+	idle 51
+	idle 52
+	idle 53

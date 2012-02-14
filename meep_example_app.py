@@ -2,7 +2,8 @@ import meeplib
 import traceback
 import cgi
 import pickle
-
+import Cookie
+import meepcookie
 
 
 class MeepExampleApp(object):
@@ -12,6 +13,14 @@ class MeepExampleApp(object):
     def __init__(self):
     	meeplib.initialize()
         self.username = None
+
+    def userManager(self, environ):
+        try:
+            cookie = Cookie.SimpleCookie(environ["HTTP_COOKIE"])
+            username = cookie["username"].value
+            return meeplib.get_user(username)
+        except:
+            return None
 
     def index(self, environ, start_response):
         print "number of users: %d" %(len(meeplib._users),)
@@ -55,6 +64,8 @@ class MeepExampleApp(object):
                 k = 'Location'
                 v = '/'
                 headers.append((k, v))
+                cookieName, cookieValue = meepcookie.make_set_cookie_header('username', user.username)
+                headers.append((cookieName, cookieValue))
                 self.username = username
             elif user is None:
                 s.append('''Login Failed! <br>
@@ -92,6 +103,9 @@ class MeepExampleApp(object):
         k = 'Location'
         v = '/'
         headers.append((k, v))
+        cookieName, cookieValue = \
+                    meepcookie.make_set_cookie_header('username', '')
+        headers.append((cookieName, cookieValue))
         start_response('302 Found', headers)
         return "no such content"
 
@@ -212,7 +226,7 @@ class MeepExampleApp(object):
 
         title = form['title'].value
         message = form['message'].value
-        user = meeplib.get_user(self.username)
+        user = self.userManager(environ)
 
         new_message = meeplib.Message(title, message, user)
         
@@ -301,3 +315,5 @@ class MeepExampleApp(object):
 #added reply functionality 1/23/12
 
 #merged login functionality from hkb261 2/13/12
+
+#Added cookies for users 2/14/12

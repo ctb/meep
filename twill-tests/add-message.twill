@@ -1,0 +1,10 @@
+go http://localhost:8000/m/add
+code 200
+
+fv 1 title 'twill test message'
+fv 1 message 'aoeuidhtns'
+submit
+
+url /m/list
+find 'twill test message'
+find 'aoeuidhtns'

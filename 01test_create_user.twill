@@ -1,0 +1,11 @@
+go http://localhost:8000/
+follow "Create a New User"
+
+fv 1 username 'zach'
+fv 1 password 'jones'
+fv 1 password_confirm 'jones'
+submit
+
+url /
+find 'zach'
+

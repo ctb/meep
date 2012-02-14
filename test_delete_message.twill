@@ -1,7 +1,0 @@
-go http://localhost:8000/
-follow "Show messages"
-
-follow "delete message 0"
-
-url /m/list
-info

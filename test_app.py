@@ -3,7 +3,10 @@ import meep_example_app
 
 class TestApp(unittest.TestCase):
     def setUp(self):
+<<<<<<< HEAD
         meep_example_app.initialize()
+=======
+>>>>>>> hkb261_master
         app = meep_example_app.MeepExampleApp()
         self.app = app
 
@@ -18,6 +21,7 @@ class TestApp(unittest.TestCase):
         data = self.app(environ, fake_start_response)
         assert 'Add a message' in data[0]
         assert 'Show messages' in data[0]
+        assert 'Create a New User' in data[0]
 
     def test_show_messages(self):
         environ = {}                    # make a fake dict
@@ -54,8 +58,41 @@ class TestApp(unittest.TestCase):
         data = self.app(environ, fake_start_response)
         assert 'Reply' in data[0]
 
+    def test_CreateUser(self):
+       environ = {}
+       environ['PATH_INFO'] ='/create_user'
+       environ['wsgi.input'] = ''
+       def fake_start_response(status, headers):
+            assert status == '302 Found'
+            assert ('Content-type', 'text/html') in headers
+
+       data = self.app(environ, fake_start_response)
+       assert 'username:' in data[0]
+       assert 'password:' in data[0]
+       assert 'confirm password:' in data[0]
+
+    def test_Login(self):
+       environ = {}
+       environ['PATH_INFO'] ='/login'
+       environ['wsgi.input'] = ''
+       def fake_start_response(status, headers):
+            assert status == '302 Found'
+            assert ('Content-type', 'text/html') in headers
+
+       data = self.app(environ, fake_start_response)
+       assert 'Or Create a New User' in data[0]
+       assert 'username' in data[0]
+       assert 'password' in data[0]
+      
+        
+>>>>>>> hkb261_master
+
     def tearDown(self):
         pass
 
 if __name__ == '__main__':
+<<<<<<< HEAD
     unittest.main()
+=======
+    unittest.main()
+>>>>>>> hkb261_master

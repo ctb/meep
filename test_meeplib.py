@@ -28,14 +28,29 @@ class TestMeepLib(unittest.TestCase):
         m = x[0]
 
         assert m.author == u
+    
+    def test_add_reply(self):
+        msg = meeplib.get_all_messages()[0]
+        new_message = meeplib.Message('reply', 'reply msg',  msg.author, True)
+        msg.add_reply(new_message)
+        
+        replies = msg.get_replies()
+        assert len(replies) == 1
+        
+    def test_delete_message(self):
+        msg = meeplib.get_all_messages()[0]
+        meeplib.delete_message(msg)
+        
+        assert len(meeplib.get_all_messages()) == 0
 
     def test_get_next_user(self):
         x = meeplib._get_next_user_id()
         assert x
 
     def tearDown(self):
-        m = meeplib.get_all_messages()[0]
-        meeplib.delete_message(m)
+        if len(meeplib.get_all_messages()) > 0:
+            m = meeplib.get_all_messages()[0]
+            meeplib.delete_message(m)
 
         u = meeplib.get_all_users()[0]
         meeplib.delete_user(u)

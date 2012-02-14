@@ -1,6 +1,7 @@
 import meeplib
 import traceback
 import cgi
+import meepcookie
 
 
 def initialize():
@@ -48,6 +49,21 @@ class MeepExampleApp(object):
 		start_response("302 Found", headers)  
 		return ["""Authentication Failed, please try again<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a><p>"""]
 
+        # set content-type
+        headers = [('Content-type', 'text/html')]
+
+        cookie_name, cookie_val = \
+                     meepcookie.make_set_cookie_header('username',
+                                                       user.username)
+        headers.append((cookie_name, cookie_val))
+        
+        # send back a redirect to '/'
+        k = 'Location'
+        v = '/'
+        headers.append((k, v))
+        start_response('302 Found', headers)
+        
+        return "no such content"
 
     def logout(self, environ, start_response):
         # does nothing
@@ -119,7 +135,6 @@ class MeepExampleApp(object):
         return form_code
 
     def add_message_action(self, environ, start_response):
-        print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
         if ('title' in form):
             title = form['title'].value

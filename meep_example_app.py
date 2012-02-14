@@ -298,4 +298,6 @@ class MeepExampleApp(object):
 
 #added delete functionality
 
-#added reply functionality 11/23/12
+#added reply functionality 1/23/12
+
+#merged login functionality from hkb261 2/13/12

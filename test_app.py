@@ -19,19 +19,6 @@ class TestApp(unittest.TestCase):
         assert 'Create an Account' in data[0]
         assert 'Username' in data[0]
         assert 'Password' in data[0]
-        
-    def test_create_account(self):
-        environ = {}                    # make a fake dict
-        environ['PATH_INFO'] = '/create_user'
-        environ['wsgi.input'] = ''
-        def fake_start_response(status, headers):
-            assert status == '200 OK'
-            assert ('Content-type', 'text/html') in headers
-
-        data = self.app(environ, fake_start_response)
-        assert 'Enter your username and password' in data[0]
-        assert 'Username' in data[0]
-        assert 'Password' in data[0]
 
     def test_main_page(self):
         environ = {}
@@ -58,8 +45,30 @@ class TestApp(unittest.TestCase):
         assert 'Add a topic' in data[0]
         assert 'Show topics' in data[0]
         assert 'Log out' in data[0]
-        
-    def test_show_topics(self):
+                
+    def test_create_user(self):
+        environ = {}                    # make a fake dict
+        environ['PATH_INFO'] = '/create_user'
+        environ['wsgi.input'] = ''
+        def fake_start_response(status, headers):
+            assert status == '200 OK'
+            assert ('Content-type', 'text/html') in headers
+
+        data = self.app(environ, fake_start_response)
+        assert 'Enter your username and password' in data[0]
+        assert 'Username' in data[0]
+        assert 'Password' in data[0]
+
+    def test_create_user_action(self):
+        pass
+
+    def test_login(self):
+        pass
+
+    def test_logout(self):
+        pass
+
+    def test_list_topics(self):
         environ = {}
         environ['PATH_INFO'] = '/m/list_topics'
         
@@ -70,6 +79,47 @@ class TestApp(unittest.TestCase):
         data = self.app(environ, fake_start_response)
         assert 'First Topic' in data[0]
         assert 'index' in data[0]
+
+    def test_view_topic(self):
+        environ = {}                    # make a fake dict
+        environ['PATH_INFO'] = '/m/topics/view'
+        environ['QUERY_STRING'] = 'id=0'
+
+        def fake_start_response(status, headers):
+            assert status == '200 OK'
+            assert ('Content-type', 'text/html') in headers
+
+        data = self.app(environ, fake_start_response)
+        assert 'First Topic' in data[0]
+        assert 'id: 0' in data[0]
+        assert 'title: my title' in data[0]
+        assert 'message: This is my message!' in data[0]
+        assert 'author: test' in data[0]
+        assert 'index' in data[0]
+
+    def test_list_messages(self):
+        pass
+
+    def test_add_topic(self):
+        pass
+
+    def test_add_topic_action(self):
+        pass
+
+    def test_add_message(self):
+        pass
+    
+    def test_add_message_action(self):
+        pass
+    
+    def test_add_message_topic_action(self):
+        pass    
+
+    def test_delete_message_action(self):
+        pass
+
+    def test_delete_topic_action(self):
+        pass
 
     def tearDown(self):
         pass

@@ -162,6 +162,9 @@ class MeepExampleApp(object):
         
         return "Logged out"
 
+    ###
+    #   LIST TOPICS
+    ###
     def list_topics(self, environ, start_response):
         topics = meeplib.get_all_topics()
         
@@ -185,6 +188,9 @@ class MeepExampleApp(object):
         topic = meeplib.get_topic(int(tId))
         messages = topic.get_messages()
         
+        headers = [('Content-type', 'text/html')]
+        start_response("200 OK", headers)
+
         s = []
         s.append('%s<br><br>' % (topic.title))
         for m in messages:
@@ -197,9 +203,6 @@ class MeepExampleApp(object):
         s.append("<form action='../add_message_topic_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='number' hidden='true' name='topicid' value=%d><input type='submit'></form>" % (topic.id))
         s.append("<br><form action='../delete_topic_action' method='POST'><input type='number' hidden='true' name='tid' value=%d><input type='text' hidden='true' name='twill' value='twill'><input type='submit' value='Delete topic'></form>" % (topic.id))
         s.append("<a href='../../main_page'>index</a>")
-            
-        headers = [('Content-type', 'text/html')]
-        start_response("200 OK", headers)
         
         return ["".join(s)]
     

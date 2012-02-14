@@ -131,7 +131,7 @@ class MeepExampleApp(object):
         headers = [('Content-type', 'text/html')]
         
         start_response("200 OK", headers)
-        form_code = """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'><input type='hidden' name='reply' value='%i'></form>""" % reply_id
+        form_code = """<form action='add_action' method='GET'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'><input type='hidden' name='reply' value='%i'></form>""" % reply_id
         return form_code
 
     def add_message_action(self, environ, start_response):

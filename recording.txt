@@ -1,0 +1,57 @@
+############################# Index ############################################
+
+	connect to localhost:8000
+Connecting to: localhost:8000 <socket._socketobject object at 0x7f937f6b2d70>
+localhost - - [14/Feb/2012 14:05:23] "GET http://localhost:8000/ HTTP/1.1" - -
+Sending: GET /  
+Sending header: ('accept-language', 'en-us,en;q=0.5')
+Sending header: ('connection', 'close')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0')
+Sending header: ('host', 'localhost:8000')
+Sending header: ('referer', 'http://localhost:8000/')
+Sending header: ('cache-control', 'max-age=0')
+Sending header: ('cookie', 'plushContainerWidth=100%25; plushNoTopMenu=0; plushRefreshRate=1; username=test')
+Sending header: ('accept-encoding', 'gzip, deflate')
+Sending: ('HTTP/1.0 200 OK\r\n',)
+Sending: ('Date: Tue, 14 Feb 2012 19:05:23 GMT\r\n',)
+Sending: ('Server: WSGIServer/0.1 Python/2.7.2+\r\n',)
+Sending: ("Content-type: text/html\r\nContent-Length: 182\r\n\r\nYou are not logged in, please login below.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a><p>",)
+	bye
+
+
+############################# method='get' ####################################
+
+	connect to localhost:8000
+Connecting to: localhost:8000 <socket._socketobject object at 0x7f937f6b2f30>
+localhost - - [14/Feb/2012 14:11:31] "GET http://localhost:8000/m/add_action?title=blah&message=blah&reply=-1 HTTP/1.1" - -
+Sending: GET /m/add_action  title=blah&message=blah&reply=-1
+Sending header: ('accept-language', 'en-us,en;q=0.5')
+Sending header: ('connection', 'close')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0')
+Sending header: ('host', 'localhost:8000')
+Sending header: ('referer', 'http://localhost:8000/m/add')
+Sending header: ('cookie', 'plushContainerWidth=100%25; plushNoTopMenu=0; plushRefreshRate=1; username=test')
+Sending header: ('accept-encoding', 'gzip, deflate')
+Sending: ('HTTP/1.0 302 Found\r\n',)
+Sending: ('Date: Tue, 14 Feb 2012 19:11:31 GMT\r\nServer: WSGIServer/0.1 Python/2.7.2+\r\nContent-type: text/html\r\nLocation: /m/list\r\nContent-Length: 13\r\n\r\nmessage added',)
+	bye
+
+
+############################# method='post' #####################################
+
+	connect to localhost:8000
+Connecting to: localhost:8000 <socket._socketobject object at 0x7f937f6b2ec0>
+localhost - - [14/Feb/2012 14:08:14] "GET http://localhost:8000/m/list HTTP/1.1" - -
+Sending: GET /m/list  
+Sending header: ('accept-language', 'en-us,en;q=0.5')
+Sending header: ('connection', 'close')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:10.0) Gecko/20100101 Firefox/10.0')
+Sending header: ('host', 'localhost:8000')
+Sending header: ('referer', 'http://localhost:8000/m/add')
+Sending header: ('cookie', 'plushContainerWidth=100%25; plushNoTopMenu=0; plushRefreshRate=1; username=test')
+Sending header: ('accept-encoding', 'gzip, deflate')
+Sending: ("HTTP/1.0 200 OK\r\nDate: Tue, 14 Feb 2012 19:08:14 GMT\r\nServer: WSGIServer/0.1 Python/2.7.2+\r\nContent-type: text/html\r\nContent-Length: 1178\r\n\r\n<table border='0'>\n<tr><td>\n<table border='0'>\n<tr><td width=33>\n\n</td><td width=311 style='background-color: #5eb85e;'>\nid: 0<br />\ntitle: my title<br />\nmessage: This is my message!<br />\nauthor: test<br />\n</td><td style='background-color: #5eb85e;'><table border='0'>\n<tr><td>\n<form action='del' method='POST'><input type='hidden' name='id' value='0'><input type='submit' value='delete'></form>\n</td></tr><tr><td>\n<form action='add' method='POST'><input type='hidden' name='reply' value='0'><input type='submit' value='reply'></form>\n</td></tr>\n</table>\n</td></tr>\n</table>\n</td></tr>\n<tr><td>\n<table border='0'>\n<tr><td width=33>\n\n</td><td width=311 style='background-color: #5eb85e;'>\nid: 1<br />\ntitle: blah<br />\nmessage: blah<br />\nauthor: test<br />\n</td><td style='background-color: #5eb85e;'><table border='0'>\n<tr><td>\n<form action='del' method='POST'><input type='hidden' name='id' value='1'><input type='submit' value='delete'></form>\n</td></tr><tr><td>\n<form action='add' method='POST'><input type='hidden' name='reply' value='1'><input type='submit' value='reply'></form>\n</td></tr>\n</table>\n</td></tr>\n</table>\n</td></tr>\n</table><hr><a href='../../'>index</a>",)
+	bye

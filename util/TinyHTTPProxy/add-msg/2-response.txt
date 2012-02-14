@@ -1,0 +1,8 @@
+HTTP/1.0 302 Found
+Date: Tue, 14 Feb 2012 19:00:51 GMT
+Server: WSGIServer/0.1 Python/2.5
+Content-type: text/html
+Location: /m/list
+Content-Length: 13
+
+message added

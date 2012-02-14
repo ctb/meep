@@ -66,7 +66,8 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
         global message_num
 	n = message_num
         message_num += 1
-        fp = open('msg%d.txt' % n, 'w')
+        ifp = open('msg%d.in.txt' % n, 'w')
+        ofp = open('msg%d.out.txt' % n, 'w')
 
         (scm, netloc, path, params, query, fragment) = urlparse.urlparse(
             self.path, 'http')
@@ -78,10 +79,10 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
             if self._connect_to(netloc, soc):
 		print 'Connecting to:', netloc, soc
                 self.log_request()
-#                fp.write("%s %s %s\r\n" % (
-#                    self.command,
-#                    urlparse.urlunparse(('', '', path, params, query, '')),
-#                    self.request_version))
+                ifp.write("%s %s %s\r\n" % (
+                    self.command,
+                    urlparse.urlunparse(('', '', path, params, query, '')),
+                    self.request_version))
                 soc.send("%s %s %s\r\n" % (
                     self.command,
                     urlparse.urlunparse(('', '', path, params, query, '')),
@@ -93,14 +94,16 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
                 for key_val in self.headers.items():
 		    print 'Sending header:', key_val
                     soc.send("%s: %s\r\n" % key_val)
-#                    fp.write("%s: %s\r\n" % key_val)
-#                fp.write("\r\n")
+                    ifp.write("%s: %s\r\n" % key_val)
+                ifp.write("\r\n")
 		soc.send("\r\n")
-                self._read_write(soc, fp=fp)
+                self._read_write(soc, fp=ofp)
         finally:
             print "\t" "bye"
             soc.close()
             self.connection.close()
+	    ifp.close()
+	    ofp.close()
 
     def _read_write(self, soc, max_idling=20, fp=None):
         iw = [self.connection, soc]

@@ -1,7 +1,0 @@
-HTTP/1.0 200 OK
-Date: Tue, 14 Feb 2012 18:49:48 GMT
-Server: WSGIServer/0.1 Python/2.5
-Content-type: text/html
-Content-Length: 169
-
-you are logged in as user: test.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>

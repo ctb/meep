@@ -1,7 +1,0 @@
-HTTP/1.0 404 Not Found
-Date: Tue, 14 Feb 2012 18:49:49 GMT
-Server: WSGIServer/0.1 Python/2.5
-Content-type: text/html
-Content-Length: 15
-
-Page not found.

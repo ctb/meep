@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}meep: list messages!{% endblock title %}
+
+{% block body %}
+
+ {% for item in messages %}
+
+  id: {{ item.id }}<p>
+  title: {{ item.title }}<p>
+  message: {{ item.post }}<p>
+  author: {{ item.author.username }}<p>
+  <hr>
+ {% endfor %}
+
+<a href='../../'>index</a>
+
+{% endblock body %}

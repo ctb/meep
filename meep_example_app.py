@@ -3,6 +3,8 @@ import traceback
 import cgi
 import meepcookie
 
+from jinja2 import Environment, FileSystemLoader
+
 def initialize():
     # create a default user
     u = meeplib.User('test', 'foo')
@@ -11,6 +13,13 @@ def initialize():
     meeplib.Message('my title', 'This is my message!', u)
 
     # done.
+
+env = Environment(loader=FileSystemLoader('templates'))
+
+def render_page(filename, **variables):
+    template = env.get_template(filename)
+    x = template.render(**variables)
+    return str(x)
 
 class MeepExampleApp(object):
     """
@@ -21,7 +30,7 @@ class MeepExampleApp(object):
 
         username = 'test'
 
-        return ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (username,)]
+        return [ render_page('index.html', username=username) ]
 
     def login(self, environ, start_response):
         # hard code the username for now; this should come from Web input!
@@ -61,27 +70,17 @@ class MeepExampleApp(object):
     def list_messages(self, environ, start_response):
         messages = meeplib.get_all_messages()
 
-        s = []
-        for m in messages:
-            s.append('id: %d<p>' % (m.id,))
-            s.append('title: %s<p>' % (m.title))
-            s.append('message: %s<p>' % (m.post))
-            s.append('author: %s<p>' % (m.author.username))
-            s.append('<hr>')
-
-        s.append("<a href='../../'>index</a>")
-            
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
         
-        return ["".join(s)]
-
+        return [ render_page('list_messages.html', messages=messages) ]
+    
     def add_message(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
         
         start_response("200 OK", headers)
 
-        return """<form action='add_action' method='GET'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
+        return [ render_page('add_message.html') ]
 
     def add_message_action(self, environ, start_response):
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
@@ -121,6 +120,7 @@ class MeepExampleApp(object):
             return fn(environ, start_response)
         except:
             tb = traceback.format_exc()
+            print tb
             x = "<h1>Error!</h1><pre>%s</pre>" % (tb,)
 
             status = '500 Internal Server Error'

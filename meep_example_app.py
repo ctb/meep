@@ -245,7 +245,8 @@ class MeepExampleApp(object):
         user = meeplib.get_user(username)
         s = []
         if threads:
-            s.append(render_page("list_threads.html", threads=threads)) 
+            for t in threads:
+                s.append(render_page("list_threads.html", thread_title=t.title, thread_id=t.id, messages=t.get_all_posts(), user=user)) 
         else:
             s.append("There are no threads to display.<p>")
 

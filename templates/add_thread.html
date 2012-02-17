@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Add Thread{% endblock title %}
+
+{% block body %}
+
+<form action='add_thread' method='POST'>
+Title: <input type='text' name='title' value='{{ title }}'><br>
+Message: <input type='text' name='message' value='{{ message }}'><br>
+<input type='submit'>
+</form>
+
+{% endblock body %}

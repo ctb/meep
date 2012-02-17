@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Create User{% endblock title %}
+
+{% block body %}
+
+<form action='create_user' method='post'>
+<label>username:</label> <input type='text' name='username' value='{{ username }}'> <br>
+<label>password:</label> <input type='password' name='password' value=''> <br>
+<label>confirm password:</label> <input type='password' name='password_confirm' value=''> <br>
+<input type='submit' name='create user button' value='Create'>
+</form>
+
+{% endblock body %}

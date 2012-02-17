@@ -4,6 +4,8 @@ import Cookie
 import traceback
 import cgi
 
+from jinja2 import Environment, FileSystemLoader
+
 def initialize():
     # create a default user
     u = meeplib.User('test', 'foo')
@@ -16,6 +18,14 @@ def initialize():
     t.add_post(m)
 
     # done.
+
+env = Environment(loader=FileSystemLoader('templates'))
+
+# render jinja2 template page and return as string in HTTP response
+def render_page(filename, **variables):
+    template = env.get_template(filename)
+    x = template.render(**variables)
+    return str(x)
 
 class MeepExampleApp(object):
     """
@@ -37,9 +47,9 @@ class MeepExampleApp(object):
         
         user = meeplib.get_user(username)
         if user is None:
-            s = ["""Please login to create and delete messages.<p><a href='/login'>Log in</a><p><a href='/create_user'>Create a New User</a><p>"""]
+            s = render_page("index.html")
         elif user is not None:
-            s = ["""you are logged in as user: %s.<p><a href='/logout'>Log out</a><p><a href='/m/add_thread'>New thread</a><p><a href='/m/list'>Show threads</a>""" % (username,)]
+            s = render_page("authindex.html", username=username)
         return s
 
     def login(self, environ, start_response):
@@ -109,13 +119,7 @@ class MeepExampleApp(object):
         start_response('302 Found', headers)
 
         ##if we have a valid username and password this is not executed
-        s.append('''
-                    <form action='login' method='post'>
-                        <label>username:</label> <input type='text' name='username' value='%s'> <br>
-                        <label>password:</label> <input type='password' name='password'> <br>
-                        <input type='submit' name='login button' value='Login'></form>
-
-                        <p><a href='/create_user'>Or Create a New User</a>''' %(username))
+        s.append(render_page("login.html", username=username))
         return [''.join(s)]
 
     def logout(self, environ, start_response):
@@ -218,18 +222,13 @@ class MeepExampleApp(object):
                 headers.append((cookie_name, cookie_val))
         elif password != '' or password2 != '':
             s.append('''Creation Failed! <br>
-            Please provide a username<.p>''')
+            Please provide a username.<p>''')
 
 
         start_response('302 Found', headers)
 
         ##if we have a valid username and password this is not executed
-        s.append('''
-                    <form action='create_user' method='post'>
-                        <label>username:</label> <input type='text' name='username' value='%s'> <br>
-                        <label>password:</label> <input type='password' name='password' value='%s'> <br>
-                        <label>confirm password:</label> <input type='password' name='password_confirm' value='%s'> <br>
-                        <input type='submit' name='create user button' value='Create'></form>''' %(username, password, password2))
+        s.append(render_page("create_user.html", username=username))
         return [''.join(s)]
 
     def list_messages(self, environ, start_response):
@@ -246,37 +245,10 @@ class MeepExampleApp(object):
         user = meeplib.get_user(username)
         s = []
         if threads:
-            for t in threads:
-                flag = 0
-                for m in t.get_all_posts():
-                    s.append('<hr>')
-                    if flag == 0: 
-                        s.append('<h2>%s</h2>' % (t.title))
-                        flag = 1
-                    s.append('<p>%s</p>' % (m.post))
-                    s.append('<p>Posted by: %s</p>' % (m.author.username))
-                    # append the delete message link
-                    # only if currently logged in user owns that post
-                    if m.author == user:
-                        s.append("""
-                        <form action='delete_action' method='POST'>
-                        <input name='thread_id' type='hidden' value='%d' />
-                        <input name='post_id' type='hidden' value='%d' />
-                        <input name='delete' type='submit' value='Delete Message' />
-                        </form>
-                        """  % (t.id, m.id))
-                if user is not None:
-                    s.append("""
-                    <form action='reply' method='POST'>
-                    <input name='thread_id' type='hidden' value='%d' />
-                    <input name='reply' type='submit' value='Reply to' />
-                    </form>
-                    """ % (t.id))
+            s.append(render_page("list_threads.html", threads=threads)) 
         else:
             s.append("There are no threads to display.<p>")
 
-        s.append('<hr>')
-        s.append("<a href='../../'>index</a>")
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
 
@@ -332,12 +304,7 @@ class MeepExampleApp(object):
         start_response("302 Found", headers)
 
         # doesn't get executed if we had valid input and created a thread
-        s.append("""
-        <form action='add_thread' method='POST'>
-        Title: <input type='text' name='title' value='%s'><br>
-        Message: <input type='text' name='message' value='%s'><br>
-        <input type='submit'></form>
-        """ % (title, message))
+        s.append(render_page("add_thread.html", title=title, message=message))
 
         return ["".join(s)]
 
@@ -426,14 +393,7 @@ class MeepExampleApp(object):
         start_response("302 Found", headers)
 
         # doesn't get executed unless we had valid input and replied to the thread
-        s.append("""
-        <form action='reply' method='POST'>
-        <input name='thread_id' type='hidden' value='%d' />
-        Message: <input type='text' name='post'><br>
-        <input type='submit'>
-        </form>
-        """ % (t.id))
-
+        s.append(render_page("reply.html", thread_id=t.id))
         return ["".join(s)]
 
     def __call__(self, environ, start_response):

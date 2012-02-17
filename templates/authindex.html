@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Index{% endblock title %}
+
+{% block body %}
+
+you are logged in as user: {{ username }}.<p>
+
+<a href='/logout'>Log out</a>
+
+<p>
+
+<a href='/m/add_thread'>New thread</a>
+
+<p>
+
+<a href='/m/list'>Show threads</a>
+
+{% endblock body %}

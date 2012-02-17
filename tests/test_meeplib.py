@@ -15,6 +15,7 @@ import meeplib
 
 class TestMeepLib(unittest.TestCase):
     def setUp(self):
+        meeplib._reset()
         u = meeplib.User('foo', 'bar')
         t = meeplib.Thread('the title')
         m = meeplib.Message('the content', u)
@@ -23,6 +24,7 @@ class TestMeepLib(unittest.TestCase):
     def test_for_message_existence(self):
         x = meeplib.get_all_threads()[0]
         y = x.get_all_posts()
+
         assert len(y) == 1
         assert x.title == 'the title'
         assert y[0].post == 'the content'
@@ -44,12 +46,7 @@ class TestMeepLib(unittest.TestCase):
         assert x != None
 
     def tearDown(self):
-        t = meeplib.get_all_threads()[0]
-        m = t.get_all_posts()[0]
-        t.delete_post(m)
-
-        u = meeplib.get_all_users()[0]
-        meeplib.delete_user(u)
+        meeplib._reset()
 
         assert len(meeplib._threads) == 0
         assert len(meeplib._users) == 0

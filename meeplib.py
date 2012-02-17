@@ -73,8 +73,8 @@ def _reset():
     """
     Clean out all persistent data structures, for testing purposes.
     """
-    global _messages, _users, _user_ids
-    _messages = {}
+    global _threads, _users, _user_ids
+    _threads = {}
     _users = {}
     _user_ids = {}
 

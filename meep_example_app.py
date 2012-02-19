@@ -364,15 +364,6 @@ class MeepExampleApp(object):
         t = meeplib.get_thread(thread_id)
         
         s = []
-        flag = 0
-        for m in t.get_all_posts():
-            s.append('<hr>')
-            if flag == 0: 
-                s.append('<h2>%s</h2>' % (t.title))
-                flag = 1
-            s.append('<p>%s</p>' % (m.post))
-            s.append('<p>Posted by: %s</p>' % (m.author.username))
-        s.append('<hr>')
 
         try:
             post = form['post'].value
@@ -388,8 +379,8 @@ class MeepExampleApp(object):
 
         start_response("302 Found", headers)
 
-        # doesn't get executed unless we had valid input and replied to the thread
-        s.append(render_page("reply.html", thread_id=t.id))
+        # doesn't get executed unless we had invalid input
+        s.append(render_page("reply.html", thread=t))
         return ["".join(s)]
 
     def __call__(self, environ, start_response):

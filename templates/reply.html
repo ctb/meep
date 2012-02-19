@@ -4,8 +4,19 @@
 
 {% block body %}
 
+<hr>
+<h2>{{ thread.title }}</h2>
+{% for message in thread.get_all_posts() %}
+
+<hr>
+<p>{{ message.post }}</p>
+<p>Posted by: {{ message.author.username }}</p>
+
+{% endfor %}
+<hr>
+
 <form action='reply' method='POST'>
-<input name='thread_id' type='hidden' value='{{ thread_id }}' />
+<input name='thread_id' type='hidden' value='{{ thread.id }}' />
 Message: <input type='text' name='post'><br>
 <input type='submit'>
 </form>

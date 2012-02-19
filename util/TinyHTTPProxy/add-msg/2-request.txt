@@ -1,4 +1,4 @@
-GET /m/add_action?title=test+title&message=test+message HTTP/1.1
+GET /m/add_thread?title=test+title&message=test+message HTTP/1.1
 accept-language: en-US,en;q=0.8
 accept-encoding: gzip,deflate,sdch
 connection: close

@@ -3,18 +3,13 @@
 {% block title %}Threads{% endblock title %}
 
 {% block body %}
-
 {% for thread in threads %}
-
     <hr>
     <h2>{{ thread.title }}</h2>
-
     {% for item in thread.get_all_posts() %}
-
     <hr>
     <p>{{ item.post }}</p>
     <p>Posted by: {{ item.author.username }}</p>
-
     {% if item.author == user %}
     <form action='delete_action' method='POST'>
     <input name='thread_id' type='hidden' value='{{ thread.id }}' />
@@ -22,19 +17,14 @@
     <input name='delete' type='submit' value='Delete Message' />
     </form>
     {% endif %}
-
     {% if user %}
     <form action='reply' method='POST'>
     <input name='thread_id' type='hidden' value='{{ thread.id }}' />
     <input name='reply' type='submit' value='Reply to' />
     </form>
     {% endif %}
-
     {% endfor %}
-
 {% endfor %}
-
 <hr>
 <a href='../../'>index</a>
-
 {% endblock body %}

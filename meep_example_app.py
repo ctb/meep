@@ -46,11 +46,7 @@ class MeepExampleApp(object):
             username = ''
         
         user = meeplib.get_user(username)
-        if user is None:
-            s = render_page("index.html")
-        elif user is not None:
-            s = render_page("authindex.html", username=username)
-        return s
+        return render_page("index.html", user=user)
 
     def login(self, environ, start_response):
         # get cookie if there is one

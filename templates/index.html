@@ -4,6 +4,8 @@
 
 {% block body %}
 
+{% if user == None %}
+
 Please login to create and delete messages.
 
 <p>
@@ -15,5 +17,21 @@ Please login to create and delete messages.
 <a href='/create_user'>Create a New User</a>
 
 <p>
+
+{% else %}
+
+you are logged in as user: {{ user.username }}.<p>
+
+<a href='/logout'>Log out</a>
+
+<p>
+
+<a href='/m/add_thread'>New thread</a>
+
+<p>
+
+<a href='/m/list'>Show threads</a>
+
+{% endif %}
 
 {% endblock body %}

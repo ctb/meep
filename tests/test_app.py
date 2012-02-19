@@ -23,8 +23,8 @@ class TestApp(unittest.TestCase):
             assert ('Content-type', 'text/html') in headers
 
         data = self.app(environ, fake_start_response)
-        assert 'Log in' in data[0]
-        assert 'Create a New User' in data[0]
+        assert 'Log in' in data
+        assert 'Create a New User' in data
 
     def test_index_with_auth(self):
         environ = {}                    # make a fake dict
@@ -36,8 +36,8 @@ class TestApp(unittest.TestCase):
             assert ('Content-type', 'text/html') in headers
 
         data = self.app(environ, fake_start_response)
-        assert 'New thread' in data[0]
-        assert 'Show threads' in data[0]
+        assert 'New thread' in data
+        assert 'Show threads' in data
 
     def test_thread_list(self):
         environ = {}                    # make a fake dict

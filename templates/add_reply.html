@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<form action='add_reply_action' method='POST'>
+
+Reply: <input type='text' name='reply'><br>
+
+<input type='hidden' value='{{ id_num }}' name='id_num'>
+
+<input type='hidden' value='0' name='rank'>
+
+<input type='submit'></form>
+
+{% endblock body %}

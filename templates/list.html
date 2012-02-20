@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+{% for m in messages %}
+	{% if not loop.first %}
+		<hr>
+	{% endif %}
+	id: {{ m.id }}<br>
+	title: {{ m.title }}<br>
+	message: {{ m.post }}<br>
+	author: {{ m.author.username }}<br>
+	rank: {{ m.rank }}<p>
+
+	<form action='add_reply' method='GET'>
+        <input type='hidden' value='{{ m.id }}' name='id_num'>
+        <input type='submit' value="Reply to Message">
+        </form>
+
+	<form action='increase_msg_rank' method='GET'>
+        <input type='hidden' value='{{ m.id }}' name='id_num'>
+        <input type='submit' value="Upvote Message">
+        </form>
+
+	<form action='decrease_msg_rank' method='GET'>
+        <input type='hidden' value='{{ m.id }}' name='id_num'>
+        <input type='submit' value="Downvote Message">
+        </form>
+
+	<form action="delete_message" method="POST">
+	<input type="hidden" name="id" value="{{ m.id }}">
+	<input type="submit" value="Delete Message">
+	</form>
+
+	{% for r in replies %}
+		{% if r.id_num == m.id %}
+			re: {{ m.title }}<br>
+			reply: {{ r.reply }}<br>
+			author: {{ r.author.username }}<br>
+			rank: {{ r.rank }}<p>
+
+			<form action='increase_reply_rank' method='POST'>
+			<input type="hidden" name="id_num" value="{{ r.id }}">
+			<input type="submit" value="Upvote reply">
+			</form>
+
+			<form action='decrease_reply_rank' method='POST'>
+			<input type="hidden" name="id_num" value="{{ r.id }}">
+			<input type="submit" value="Downvote reply">
+			</form>
+
+			<form action='delete_reply_action' method='POST'>
+			<input type="hidden" name="id_num" value="{{ r.id }}">
+			<input type="submit" value="Delete reply">
+			</form>
+		{% endif %}
+	{% endfor %}
+{% endfor %}
+
+
+<hr>
+<a href='../../'>index</a>
+
+{% endblock body %}

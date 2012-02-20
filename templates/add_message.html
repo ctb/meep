@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<form action='add_action' method='POST'>
+
+Title: <input type='text' name='title'><br>
+
+Message:<input type='text' name='message'><br>
+
+<input type='hidden' value='0' name='rank'>
+
+<input type='submit'></form>
+
+{% endblock body %}

@@ -3,6 +3,7 @@ import traceback
 import cgi
 from Cookie import SimpleCookie
 import meepcookie
+from jinja2 import Environment, FileSystemLoader
 
 def initialize():
     try:
@@ -15,6 +16,13 @@ def initialize():
 	meeplib.Message('my title', 'This is my message!', 0, u)
 	meeplib.User('new', 'test')
     # done
+
+env = Environment(loader=FileSystemLoader('templates'))
+
+def render_page(filename, **variables):
+    template = env.get_template(filename)
+    x = template.render(**variables)
+    return str(x)
 
 def check_cookie(environ):
     try:
@@ -35,14 +43,12 @@ class MeepExampleApp(object):
 	
 	username = check_cookie(environ)
 
-        return ["""you are logged in as user: %s<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (username,)]
+        return [ render_page('index.html', username=username) ]
 
     def login(self, environ, start_response):
-        headers = [('Content-type', 'text/html')]
-        
-        start_response("200 OK", headers)
+        start_response("200 OK", [('Content-type', 'text/html')])
 
-        return """<form action='login_action' method='POST'>Username: <input type='text' name='username' value=''><br>Password: <input type='password' name='password' value=''><br><input type='submit'></form>"""
+        return render_page('login.html')
 
     def login_action(self, environ, start_response):
 	print environ['wsgi.input']
@@ -87,9 +93,7 @@ class MeepExampleApp(object):
     def invalid_login(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
-	return """Invalid username or password<p>
-		<a href='/login'>Retry Login?</a><p>
-		<a href='../../'>Back to Home</a>"""
+	return render_page('invalid_login.html')
 
     def logout(self, environ, start_response):
         #Resets username back to '' instead of current user
@@ -108,76 +112,10 @@ class MeepExampleApp(object):
         messages = meeplib.get_all_messages()
         replies = meeplib.get_all_replies()
 
-        s = []
-        for m in messages:
-            s.append('id: %d<p>' % (m.id))
-            s.append('title: %s<p>' % (m.title))
-            s.append('message: %s<p>' % (m.post))
-            s.append('author: %s<p>' % (m.author.username))
-            s.append('RANK: %d<p>' % (m.rank))
-            s.append(
-                """<form action='add_reply' method='GET'>
-                <input type='hidden' value='%d' name='id_num'>
-                <input type='submit' value="Reply to Message">
-                </form>
-                """ % (m.id))
-    	    s.append(
-            	"""
-                <form action='increase_msg_rank' method='GET'>
-                <input type='hidden' value='%d' name='id_num'>
-                <input type='submit' value="Upvote Message">
-            	</form>
-            	""" % (m.id))
-   	    s.append(
-                """
-                <form action='decrease_msg_rank' method='GET'>
-                <input type='hidden' value='%d' name='id_num'>
-                <input type='submit' value="Downvote Message">
-                </form>
-                """ % (m.id))
-            s.append(
-		"""
-		<form action="delete_message" method="POST">
-		<input type="hidden" name="id" value="%d">
-		<input type="submit" value="Delete Message">
-		</form>
-		""" % (m.id))
-            
-            for r in replies:
-                if r.id_num ==  m.id:
-                    s.append('title: RE:%s<p>' % (m.title))
-                    s.append('reply: %s<p>' % (r.reply))
-                    s.append('author: %s<p>' % (r.author.username))
-            	    s.append('RANK: %d<p>' % (r.rank))
-                    s.append(
-                    	"""
-		        <form action='increase_reply_rank' method='GET'>
-		        <input type='hidden' value='%d' name='id_num'>
-		        <input type='submit' value="Upvote Reply">
-		        </form>
-		    	""" % (r.id))
-              	    s.append(
-                    	"""
-                    	<form action='decrease_reply_rank' method='GET'>
-                    	<input type='hidden' value='%d' name='id_num'>
-                    	<input type='submit' value="Downvote Reply">
-                    	</form>
-                    	""" % (r.id))
-                    s.append(
-                    	"""
-			<form action='delete_reply_action' method='GET'>
-                        <input type='hidden' value='%d' name='id_num'>
-                        <input type='submit' value="Delete Reply">
-                        </form>
-                     	""" % (r.id))
-                    s.append('<hr>')
-
-        s.append("<a href='../../'>index</a>")
-            
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
         
-        return ["".join(s)]
+        return [render_page('list.html', messages=messages, replies=replies)]
 
     def add_message(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
@@ -189,13 +127,7 @@ class MeepExampleApp(object):
 	    return "no such content"
 	else:
 	    start_response("200 OK", headers)
-            return 	"""
-			<form action='add_action' method='POST'>
-			Title: <input type='text' name='title'><br>
-			Message:<input type='text' name='message'><br>
-			<input type='hidden' value='0' name='rank'>
-			<input type='submit'></form>
-			"""
+            return render_page('add_message.html')
 
     def add_message_action(self, environ, start_response):
         print environ['wsgi.input']
@@ -246,17 +178,17 @@ class MeepExampleApp(object):
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
         headers = [('Content-type', 'text/html')]
 
-        id_num = form['id_num'].value
-        id_num = int(id_num)
-        
-        start_response("200 OK", headers)
-
-        return """<form action='add_reply_action' method='POST'>
-                  Reply: <input type='text' name='reply'>
-                  <input type='hidden' value='%d' name='id_num'>
-                  <input type='hidden' value='0' name='rank'>
-                  <br><input type='submit'></form>
-               """ % id_num
+	username = check_cookie(environ)
+	if username == '':
+	    #Send to error page if no user is logged in
+	    headers.append(('Location', '/m/no_user'))
+            start_response("302 found", headers)
+	    return "no such content"
+	else:
+	    start_response("200 OK", headers)
+            id_num = form['id_num'].value
+            id_num = int(id_num)
+            return render_page('add_reply.html', id_num=id_num)
 
     def add_reply_action(self, environ, start_response):
         print environ['wsgi.input']
@@ -279,11 +211,8 @@ class MeepExampleApp(object):
         return ["message added"]
 
     def no_user(self, environ, start_response):
-        headers = [('Content-type', 'text/html')]
-        start_response("200 OK", headers)
-	return """You can't submit a message if you aren't logged in!<p>
-		<a href='/login'>Log in</a><p>
-		<a href='../../'>Back to Home</a>"""
+        start_response("200 OK", [('Content-type', 'text/html')])
+	return render_page('no_user.html')
 
     def delete_message(self, environ, start_response):
 	print environ['wsgi.input']

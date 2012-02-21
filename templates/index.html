@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+{% if user %}
+
+ You are logged in as user: {{ user.username }}.
+ 
+ <p>
+ 
+ <a href='/m/add'>Add a message</a>
+ 
+ <p><a href='/logout'>Log out</a>
+ 
+ <p>
+ 
+ <a href='/m/list'>Show messages</a> 
+
+ {% else %}
+
+ Please login to create and delete messages.
+ 
+ <p>
+ 
+ <a href='/login'>Log in</a>
+ 
+ <p>
+ 
+ <a href='/create_user'>Create a New User</a>
+ 
+ <p>
+ 
+ <a href='/m/list'>Show messages</a>
+ 
+ {% endif %}
+
+ {% endblock body %}

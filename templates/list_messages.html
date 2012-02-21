@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}meep: list messages!{% endblock title %}
+
+{% block body %}
+
+ {% for item in messages %}
+
+  id: {{ item.id }}<p>
+  title: {{ item.title }}<p>
+  message: {{ item.post }}<p>
+  author: {{ item.author.username }}<p>
+  <a href=delete_message_action?id={{ item.id }}>
+  delete message {{item.id}}</a>
+  
+  <br/><br/><form action="reply_message_action" method="post">
+   Reply:<input type="text" name="replymsg">
+   <input type="hidden" value= {{ item.id }} name="parent_id">
+   <input type="submit" value="Reply"/></form>
+  <hr>
+  {% for r in item.replies %}
+   <p style="text-indent: 10px;font-style:italic">{{r}}</p>
+   <hr>
+   {% endfor %}
+ {% endfor %}
+
+<a href='../../'>index</a>
+
+{% endblock body %}

@@ -29,7 +29,6 @@ class MeepExampleApp(object):
 
       start_response("200 OK", [('Content-type', 'text/html')])
       return [ render_page('index.html', username=username) ]
-		#return ["""You are not logged in, please login below.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a><p>"""]
 
     def login(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
@@ -139,8 +138,7 @@ class MeepExampleApp(object):
         headers = [('Content-type', 'text/html')]
         
         start_response("200 OK", headers)
-        form_code = """<form action='add_action' method='GET'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'><input type='hidden' name='reply' value='%i'></form>""" % reply_id
-        return form_code
+        return [ render_page('add_message.html', replyID=reply_id) ]
 
     def add_message_action(self, environ, start_response):
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)

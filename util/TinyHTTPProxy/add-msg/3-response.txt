@@ -1,0 +1,7 @@
+HTTP/1.0 200 OK
+Date: Tue, 14 Feb 2012 19:00:51 GMT
+Server: WSGIServer/0.1 Python/2.5
+Content-type: text/html
+Content-Length: 173
+
+id: 0<p>title: my title<p>message: This is my message!<p>author: test<p><hr>id: 1<p>title: test title<p>message: test message<p>author: test<p><hr><a href='../../'>index</a>

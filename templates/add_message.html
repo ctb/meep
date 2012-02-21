@@ -7,6 +7,8 @@
 <form action='add_action' method='GET'>
 Title: <input type='text' name='title'><br>
 Message:<input type='text' name='message'><br>
-<input type='submit'></form>
+<input type='submit'><input type='hidden' name='reply' value={{ replyID }}>
+</form>
+
 
 {% endblock body %}

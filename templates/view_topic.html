@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}meep: view topic!{% endblock title %}
+
+{% block body %}
+
+    {{topic.title}}<br><br>
+
+    {% for message in messages %}
+
+        id: {{message.id}} <br>
+        title: {{message.title}} <br>
+        message: {{message.post}} <br>
+        author: {{message.author.username}} <br>
+        
+        <form action='../delete_action' method='POST'>
+            <input type='number' hidden='true' name='mid' value={{message.id}}>
+            <input type='number' hidden='true' name='tid' value={{topic.id}}>
+            <input type='text' hidden='true' name='twill' value='twill'>
+            <input type='submit' value='Delete message'>
+        </form>
+        
+        <hr>
+        
+        <form action='../add_message_topic_action' method='POST'>
+            Title: <input type='text' name='title'><br>
+            Message:<input type='text' name='message'><br>
+            <input type='number' hidden='true' name='topicid' value={{topic.id}}><input type='submit'>
+        </form>
+        
+        <form action='../delete_topic_action' method='POST'>
+            <input type='number' hidden='true' name='tid' value={{topic.id}}>
+            <input type='text' hidden='true' name='twill' value='twill'>
+            <input type='submit' value='Delete topic'>
+        </form>
+        
+    {% endfor %}
+
+    <a href='../../main_page'>index</a>
+
+{% endblock body %}

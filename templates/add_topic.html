@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}meep: add topic!{% endblock title %}
+
+{% block body %}
+
+    <form action='add_topic_action' method='POST'>
+        Add a new topic<br>
+        Topic name: <input type='text' name='title'><br>
+        Message title:<input type='text' name='msgtitle'><br>
+        Message:<input type='text' name='message'><br>
+        <input type='submit'>
+    </form>
+
+{% endblock body %}

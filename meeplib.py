@@ -250,7 +250,11 @@ def delete_curr_user(username):
     _curr_user.remove(_curr_user.index(0))
 
 def get_user(username):
-    return _users.get(username)         # return None if no such user
+    try:
+        return _users.pop(username)
+    except KeyError:
+        raise KeyError
+    
 
 def get_all_users():
     return _users.values()
@@ -263,8 +267,9 @@ def delete_user(user):
 def check_user(username, password):
     try:
         aUser = get_user(username)
-    except NameError:
+    except KeyError:
         aUser = None
+        return False
 
     if aUser.password == password:
         return True

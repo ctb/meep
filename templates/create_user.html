@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}meep: create users!{% endblock title %}
+
+{% block body %}
+
+    Enter your username and password: <p><form action='create_user_action' method='POST'>
+    
+    Username: <input type='text' name='username'><br>
+    
+    Password:<input type='password' name='password'><br>
+    
+    <input type='submit' value='Create User'></form</p>
+    
+{% endblock body %}

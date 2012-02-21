@@ -3,6 +3,7 @@ import traceback
 import cgi
 import meepcookie
 from Cookie import SimpleCookie, Morsel
+from jinja2 import Environment, FileSystemLoader
 
 def initialize():
     try:    
@@ -15,6 +16,13 @@ def initialize():
         # create a single message and topic
         meeplib.Topic('First Topic', meeplib.Message('my title', 'This is my message!', u), u)
 
+env = Environment(loader=FileSystemLoader('templates'))
+
+def render_page(filename, **variables):
+    template = env.get_template(filename)
+    x = template.render(**variables)
+    return str(x)        
+        
 class MeepExampleApp(object):
     """
     WSGI app object.
@@ -42,13 +50,7 @@ class MeepExampleApp(object):
         #If the cookie wasn't found, prompt the user to login
         else:
             start_response("200 OK", [('Content-type', 'text/html')])
-            return ["""
-                Login or <a href='/create_user'>Create an Account</a>
-                </br><p><form action='login' method='POST'>
-                Username: <input type='text' name='username'><br>
-                Password:<input type='password' name='password'><br>
-                <input type='submit' value='Login'></p></form>
-                    """]
+            return [ render_page('index.html') ]
 
     ###
     #   MAIN PAGE
@@ -65,7 +67,7 @@ class MeepExampleApp(object):
         start_response("200 OK", headers)
         username = meeplib.get_curr_user()
 
-        return ["""You have successfully logged in as: %s<p><a href='/m/add_topic'>Add a topic</a><p><p><a href='/m/list_topics'>Show topics</a><p><a href='/logout'>Log out</a>""" % (username,)]
+        return [ render_page('main_page.html', username=username) ]
 
     ###
     #   CREATE USER
@@ -74,11 +76,7 @@ class MeepExampleApp(object):
         headers = [('Content-type', 'text/html')]
         
         start_response("200 OK", headers)
-        return ["""
-            Enter your username and password: <p><form action='create_user_action' method='POST'>
-            Username: <input type='text' name='username'><br>
-            Password:<input type='password' name='password'><br>
-            <input type='submit' value='Create User'></form</p>"""]
+        return [ render_page('create_user.html') ]
 
     def create_user_action(self, environ, start_response):
         print environ['wsgi.input']
@@ -117,7 +115,7 @@ class MeepExampleApp(object):
                  if meeplib.check_user(username, password) is False:
                      k = 'Location'
                      v = '/'
-                     returnStatement = """<p>Invalid login.  Please try again.</p>"""
+                     returnStatement = """Invalid login"""
            
                  else:
                      meeplib.set_curr_user(username)
@@ -166,18 +164,12 @@ class MeepExampleApp(object):
     #   LIST TOPICS
     ###
     def list_topics(self, environ, start_response):
-        topics = meeplib.get_all_topics()
-        
-        s = []
-        for t in topics:
-            s.append("<a href='/m/topics/view?id=%d'>%s</a>" % (int(t.id), t.title))
-            s.append('<hr>')
-        s.append("<a href='../../main_page'>index</a>")
+        topics = meeplib.get_all_topics()   
         
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
-        
-        return ["".join(s)]
+
+        return [ render_page('view_topics.html', topics = topics) ]        
         
     ###
     #   VIEW TOPIC
@@ -190,25 +182,13 @@ class MeepExampleApp(object):
         
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
-
-        s = []
-        s.append('%s<br><br>' % (topic.title))
-        for m in messages:
-            s.append('id: %d<p>' % (m.id,))
-            s.append('title: %s<p>' % (m.title))
-            s.append('message: %s<p>' % (m.post))
-            s.append('author: %s<p>' % (m.author.username))
-            s.append("<form action='../delete_action' method='POST'><input type='number' hidden='true' name='mid' value=%d><input type='number' hidden='true' name='tid' value=%d><input type='text' hidden='true' name='twill' value='twill'><input type='submit' value='Delete message'></form>" % (m.id, topic.id))
-            s.append('<hr>')
-        s.append("<form action='../add_message_topic_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='number' hidden='true' name='topicid' value=%d><input type='submit'></form>" % (topic.id))
-        s.append("<br><form action='../delete_topic_action' method='POST'><input type='number' hidden='true' name='tid' value=%d><input type='text' hidden='true' name='twill' value='twill'><input type='submit' value='Delete topic'></form>" % (topic.id))
-        s.append("<a href='../../main_page'>index</a>")
         
-        return ["".join(s)]
+        return [ render_page('view_topic.html', messages=messages, topic=topic) ]
     
     ###
     #   VIEW MESSAGES
     ###
+    """ 
     def list_messages(self, environ, start_response):
         messages = meeplib.get_all_messages()
 
@@ -226,7 +206,8 @@ class MeepExampleApp(object):
         start_response("200 OK", headers)
         
         return ["".join(s)]
-     
+    """
+    
     ###
     #   ADD TOPIC
     ###
@@ -234,7 +215,7 @@ class MeepExampleApp(object):
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
 
-        return """<form action='add_topic_action' method='POST'>Add a new topic<br>Topic name: <input type='text' name='title'><br>Message title:<input type='text' name='msgtitle'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
+        return [ render_page('add_topic.html') ]
         
     def add_topic_action(self, environ, start_response):
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
@@ -260,6 +241,7 @@ class MeepExampleApp(object):
     ###
     #   ADD MESSAGE
     ###
+    """
     def add_message(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
@@ -284,7 +266,7 @@ class MeepExampleApp(object):
         headers.append(('Location', '/m/messages'))
         start_response("302 Found", headers)
         return ["message added"]
-
+    """
 
     ###
     #   ADD MESSAGE TO TOPIC
@@ -360,11 +342,11 @@ class MeepExampleApp(object):
                       '/logout': self.logout,
                       '/create_user': self.create_user,
                       '/create_user_action':self.create_user_action,
-                      '/m/list': self.list_messages,
+                      #'/m/list': self.list_messages,
                       '/m/list_topics': self.list_topics,
                       '/m/topics/view': self.view_topic,
-                      '/m/add': self.add_message,
-                      '/m/add_action': self.add_message_action,
+                      #'/m/add': self.add_message,
+                      #'/m/add_action': self.add_message_action,
                       '/m/add_message_topic_action': self.add_message_topic_action,
                       '/m/add_topic': self.add_topic,
                       '/m/add_topic_action': self.add_topic_action,

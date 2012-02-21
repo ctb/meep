@@ -25,10 +25,10 @@ class MeepExampleApp(object):
     WSGI app object.
     """
     def index(self, environ, start_response):
-		username = 'test'
-	
-		start_response("200 OK", [('Content-type', 'text/html')])
-    return [ render_page('index.html', username=username) ]
+      username = 'test'
+
+      start_response("200 OK", [('Content-type', 'text/html')])
+      return [ render_page('index.html', username=username) ]
 		#return ["""You are not logged in, please login below.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a><p>"""]
 
     def login(self, environ, start_response):

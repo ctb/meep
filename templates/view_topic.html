@@ -28,14 +28,14 @@
             <input type='number' hidden='true' name='topicid' value={{topic.id}}><input type='submit'>
         </form>
         
-        <form action='../delete_topic_action' method='POST'>
-            <input type='number' hidden='true' name='tid' value={{topic.id}}>
-            <input type='text' hidden='true' name='twill' value='twill'>
-            <input type='submit' value='Delete topic'>
-        </form>
-        
     {% endfor %}
 
+    <form action='../delete_topic_action' method='POST'>
+        <input type='number' hidden='true' name='tid' value={{topic.id}}>
+        <input type='text' hidden='true' name='twill' value='twill'>
+        <input type='submit' value='Delete topic'>
+    </form>
+    
     <a href='../../main_page'>index</a>
 
 {% endblock body %}

@@ -237,36 +237,6 @@ class MeepExampleApp(object):
         headers.append(('Location', '/m/list_topics'))
         start_response("302 Found", headers)
         return ["topic added"]
-        
-    ###
-    #   ADD MESSAGE
-    ###
-    """
-    def add_message(self, environ, start_response):
-        headers = [('Content-type', 'text/html')]
-        start_response("200 OK", headers)
-
-        return """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
-
-    def add_message_action(self, environ, start_response):
-        form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
-
-        #Get values off the form
-        title = form['title'].value
-        message = form['message'].value
-    
-        #Get current user
-        username = meeplib.get_curr_user()
-        user =  meeplib.get_user(username)
-
-        #Create new message
-        new_message = meeplib.Message(title, message, user)
-
-        headers = [('Content-type', 'text/html')]
-        headers.append(('Location', '/m/messages'))
-        start_response("302 Found", headers)
-        return ["message added"]
-    """
 
     ###
     #   ADD MESSAGE TO TOPIC

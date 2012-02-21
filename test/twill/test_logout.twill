@@ -1,11 +1,7 @@
-go http://localhost:8000/
-
-fv 1 username 'test'
-fv 1 password 'test'
-submit
+go http://localhost:8000/main_page
 
 url /main_page
-find 'test'
+find 'foo'
 
 follow 'Log out'
 

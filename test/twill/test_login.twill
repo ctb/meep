@@ -1,8 +1,11 @@
 go http://localhost:8000/
 
-fv 1 username 'test'
-fv 1 password 'test'
+url /
+find 'Login or'
+
+fv 1 username 'foo'
+fv 1 password 'bar'
 submit
 
 url /main_page
-find 'test'
+find 'foo'

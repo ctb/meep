@@ -1,5 +1,6 @@
 from meep_example_app import MeepExampleApp, initialize
 import os
+import sys
 import datetime
 
 def main():
@@ -12,26 +13,23 @@ def main():
         print datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
         print '\n'
 
-    while(True):
-        fileName = raw_input("Give me a text file to read (1-request.txt, 2-request.txt, 3-request.txt)...\n")
-        try:
-            fp = open(os.getcwd() + "\\SampleRequests\\" + fileName)
+    for arg in sys.argv: # for eery request
+        if (arg == sys.argv[0]):
+            continue
+        f = open(os.getcwd() + "/requests/" + arg)
+        for line in f.readlines(): # for eery line in the request
+            if line.startswith('GET'):
+                line = line.rstrip('\n')
+                words = line.split(' ')
+                environ['REQUEST_METHOD'] = 'GET'
+                environ['PATH_INFO'] = words[1]
+                environ['SERVER_PROTOCOL'] = words[2]
+            elif line.startswith('cookie:'):
+                line = line.rstrip('\n')
+                line = line.lstrip('cookie: ')
+                environ['HTTP_COOKIE'] = line
 
-            for line in fp.readlines():
-                if line.startswith('GET'):
-                    line = line.rstrip('\n')
-                    words = line.split(' ')
-                    environ['REQUEST_METHOD'] = 'GET'
-                    environ['PATH_INFO'] = words[1]
-                    environ['SERVER_PROTOCOL'] = words[2] #There's a bunch of other stuff we don't use I'm going to skip...
-                elif line.startswith('cookie:'):
-                    line = line.rstrip('\n')
-                    line = line.lstrip('cookie: ')
-                    environ['HTTP_COOKIE'] = line
-
-            app.__call__(environ, fake_start_response)
-        except IOError:
-            print "Couldn't read that file"
+        app.__call__(environ, fake_start_response) # respond
 
 
 main()

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results{% endblock title %}
+
+{% block body %}
+
+ {% for item in messages %}
+
+  id: {{ item.id }}<p>
+  title: {{ item.title }}<p>
+  message: {{ item.post }}<p>
+  author: {{ item.username }}<p>
+    {% if meeplib.has_replies(item.id) %}
+        <dd>Replies:<p><hr>
+        {% for reply in meeplib.get_replies(item.id) %}
+            {{ reply }}</p>
+        {% endfor %}</dd>
+    {% endif %}
+
+ {% endfor %}
+<form action='delete_action' method='POST'>Delete a Message?<br> Message ID: <input type='text' name='id'><input type='submit'></form>  
+
+<form action='search_action' method='POST'>Search for Messages?<br> Message ID: <input type='text' name='text'><input type='submit'></form>   
+
+
+<a href='../../'>index</a>
+
+{% endblock body %}

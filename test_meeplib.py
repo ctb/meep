@@ -9,12 +9,21 @@ import meeplib
 
 class TestMeepLib(unittest.TestCase):
     def setUp(self):
-        u = meeplib.User('foo', 'bar')
-        v = meeplib.User('foo2', 'bar2')
-        m = meeplib.Message('the title', 'the content', u)
+
+        x = meeplib.get_all_messages()
+        print "Messages",x
+        for message in x:
+            meeplib.delete_message(message)
+            
+        x = meeplib.get_all_messages()
+        print "Messages",x
+        u = meeplib.User('foo', 'bar',-1)
+        v = meeplib.User('foo2', 'bar2',-1)
+        m = meeplib.Message('the title', 'the content', u,-1)
 
     def test_for_message_existence(self):
         x = meeplib.get_all_messages()
+        print "num messages", x
         assert len(x) == 1
         assert x[0].title == 'the title'
         assert x[0].post == 'the content'

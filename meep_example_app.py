@@ -3,7 +3,14 @@ import traceback
 import cgi
 import meepcookie
 
+from jinja2 import Environment, FileSystemLoader
 
+env = Environment(loader=FileSystemLoader('templates'))
+
+def render_page(filename, **variables):
+    template = env.get_template(filename)
+    x = template.render(**variables)
+    return str(x)
 def initialize():
    # try:
     #meeplib.saveUSER('test','foo',meeplib._get_next_user_id())
@@ -27,6 +34,7 @@ def initialize():
     # done.
     print "No Initiialize"
 
+
 class MeepExampleApp(object):
     """
     WSGI app object.
@@ -40,17 +48,21 @@ class MeepExampleApp(object):
 
 
         cookie = environ.get("HTTP_COOKIE")
-        print "THE COOKIE", cookie, len(cookie)
+     
         if cookie is None or len(cookie)==9:
             print "NO USERNAME COOKIE"
             username = ''
+            loggedInMessage="Not Logged IN"
         else:
             username = cookie[len('username='):]
             loggedInMessage = 'You are logged in as user: %s' % (username,)
         if username=='':
-            return ["""you are not logged in %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a><p><p><a href='/m/IDTEST'>Get next User ID</a><p>""" % (username,)]
+            print "USERNAME IS BLANK"
+            return [ render_page('index.html', username="NONE") ]
+            #return ["""you are not logged in %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a><p><p><a href='/m/IDTEST'>Get next User ID</a><p>""" % (username,)]
         else:
-            return ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a><p><p><a href='/m/IDTEST'>Get next User ID</a><p>""" % (username,)]
+            #return ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a><p><p><a href='/m/IDTEST'>Get next User ID</a><p>""" % (username,)]
+            return [ render_page('index.html', username=username) ]
 
     def login(self, environ, start_response):
         # hard code the username for now; this should come from Web input!
@@ -87,32 +99,37 @@ class MeepExampleApp(object):
         
         return "no such content"
     def list_search(self, environ, start_response):
+        print "ENVIRON", environ
         results=meeplib.get_search_results()
         s = []
-        s.append('Your Search Results')
-        s.append('<hr>')
+
         print "RESULTS"
         print results 
         for result in results:
-            m=meeplib.get_message(result)
-            s.append('id: %d<p>' % (m.id,))
-            s.append('title: %s<p>' % (m.title))
-            s.append('message: %s<p>' % (m.post))
-            s.append('author: %s<p>' % (m.author.username))
-            s.append("<a href='/m/post_reply?id="+str(m.id)+"'>Reply</a><p>")
-            if meeplib.has_replies(m.id):
-                s.append('<dd>Replies:<hr />')
-                for r in meeplib.get_replies(m.id):
-                    s.append('<dd>%s<p>' % (r))
-                s.append('</dd>')
-
-            s.append('<hr>')
+            s.append(meeplib.get_message(result))
+##          m=meeplib.get_message(result)
+##            s.append('id: %d<p>' % (m.id,))
+##            s.append('title: %s<p>' % (m.title))
+##            s.append('message: %s<p>' % (m.post))
+##            try:
+##                s.append('author: %s<p>' % (m.author.username))
+##            except:
+##                s.append('author: %s<p>' % (m.author))
+##            s.append("<a href='/m/post_reply?id="+str(m.id)+"'>Reply</a><p>")
+##            if meeplib.has_replies(m.id):
+##                s.append('<dd>Replies:<hr />')
+##                for r in meeplib.get_replies(m.id):
+##                    s.append('<dd>%s<p>' % (r))
+##                s.append('</dd>')
+##
+##            s.append('<hr>')
        
-       
-        s.append("<form action='delete_action' method='POST'>Delete a Message?<br> Message ID: <input type='text' name='id'><input type='submit'>Delete</form>")    
+         #TODO MAKE IT DO SEARCH
+      #  s.append("<form action='delete_action' method='POST'>Delete a Message?<br> Message ID: <input type='text' name='id'><input type='submit'>Delete</form>")    
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
-        s.append("<form action='search_action' method='POST'>Search for Messages?<br> Message ID: <input type='text' name='text'><input type='submit'>Delete</form>")    
+       # s.append("<form action='search_action' method='POST'>Search for Messages?<br> Message ID: <input type='text' name='text'><input type='submit'>Delete</form>")    
+        return [ render_page('search_messages.html', messages=s, meeplib=meeplib) ]
 
         return ["".join(s)]
 
@@ -124,47 +141,48 @@ class MeepExampleApp(object):
 
         messages = meeplib.get_all_messages()
 
-        s = []
-        s.append('<hr>')
-        for m in messages:
-            print m.id
-            s.append('id: %d<p>' % (m.id,))
-            s.append('title: %s<p>' % (m.title))
-            s.append('message: %s<p>' % (m.post))
-            print "M",m
-            try:
-                s.append('author: %s<p>' % (m.author.username))
-            except:
-                s.append('author: %s<p>' % (m.author))
-         
- 
-           
+##        s = []
+##        s.append('<hr>')
+##        for m in messages:
+##            print m.id
+##            s.append('id: %d<p>' % (m.id,))
+##            s.append('title: %s<p>' % (m.title))
+##            s.append('message: %s<p>' % (m.post))
+##            print "M",m
+##            try:
+##                s.append('author: %s<p>' % (m.author.username))
+##            except:
+##                s.append('author: %s<p>' % (m.author))
+##         
+## 
+##           
+##
+##
+##            s.append("<a href='/m/post_reply?id="+str(m.id)+"'>Reply</a><p>")
+##            if meeplib.has_replies(m.id):
+##                s.append('<dd>Replies:<hr />')
+##                for r in meeplib.get_replies(m.id):
+##                    s.append('<dd>%s<p>' % (r))
+##                s.append('</dd>')
+##               
+##        s.append('<hr>')
 
 
-            s.append("<a href='/m/post_reply?id="+str(m.id)+"'>Reply</a><p>")
-            if meeplib.has_replies(m.id):
-                s.append('<dd>Replies:<hr />')
-                for r in meeplib.get_replies(m.id):
-                    s.append('<dd>%s<p>' % (r))
-                s.append('</dd>')
-               
-        s.append('<hr>')
-
-
-        s.append("<form action='delete_action' method='POST'>Delete a Message?<br> Message ID: <input type='text' name='id'><input type='submit'>Delete</form>")    
+       # s.append("<form action='delete_action' method='POST'>Delete a Message?<br> Message ID: <input type='text' name='id'><input type='submit'>Delete</form>")    
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
-        s.append("<form action='search_action' method='POST'>Search for Messages?<br> Message ID: <input type='text' name='text'><input type='submit'>Delete</form>")    
-
-        return ["".join(s)]
+        #s.append("<form action='search_action' method='POST'>Search for Messages?<br> Message ID: <input type='text' name='text'><input type='submit'>Delete</form>")    
+        return [ render_page('list_messages.html', messages=messages, meeplib=meeplib) ]
+    #TODO MAKE IT SHOW REPLIES
+        #return ["".join(s)]
 
     def add_message(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
         
         start_response("200 OK", headers)
 
-        return """<form action='add_action' method='GET'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
-
+       # return """<form action='add_action' method='GET'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
+        return [ render_page('add_message.html') ]
 ##    def search (self, environ, start_response):
 ##     
 ##        headers = [('Content-type', 'text/html')]

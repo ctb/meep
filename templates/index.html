@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+you are logged in as user: {{ username }}.<p>
+
+<a href='/m/add'>Add a message</a>
+
+<p>
+
+<a href='/login'>Log in</a>
+
+<p>
+
+<a href='/logout'>Log out</a>
+
+<p>
+
+<a href='/m/list'>Show messages</a>
+
+{% endblock body %}

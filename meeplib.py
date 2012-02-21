@@ -79,20 +79,20 @@ def loadMSG(save):
     Message(save[1], save[2], save[3],save[4])
     
 def loadUSER():
-    filename = 'users.pickle'
+    filename = 'C:/Users/Paul/meep/users.pickle'
     fp = open(filename)
     obj = pickle.load(fp)
     User(obj[0],obj[1],obj[2])
     print "LOADED USER",obj[0],obj[1],obj[2]
     
 def load():
-    filename = 'save.pickle'
+    filename = 'C:/Users/Paul/meep/save.pickle'
     fp = open(filename)
     obj = pickle.load(fp)
     for save in obj:
         if save[0]=="Message":
             loadMSG(save)
-    fp2=open("replies.pickle")
+    fp2=open("C:/Users/Paul/meep/replies.pickle")
     obj=pickle.load(fp2)
     print "REPLY OBJ", obj
     h=0
@@ -167,6 +167,7 @@ def get_all_messages(sort_by='id'):
     return _messages.values()
 
 def get_message(id):
+    print "Messages", _messages
     return _messages[id]
 
 def delete_message(msg):
@@ -216,10 +217,13 @@ def remove_message_from_dict(msg):
     for word in theTitle:
         wordset.add(word)
     for reply in _replies:
+        print "REPLY", reply, '\n'
+        print "msgid", msg.id
         if reply==msg.id:
             for word in _replies[reply]:
                 wordset.add(word)
     for word in wordset:
+        print "words",_words
         currentValue=_words[word]
         currentValue.remove(msg.id)
         _words[word]=currentValue
@@ -246,8 +250,11 @@ def search_message_dict(text):
     return resultIDSet
 
 def get_search_results():
-    print _searchIDs
-    return _searchIDs["test"]
+    print "Search",_searchIDs
+    if "test" in _searchIDs:
+        return _searchIDs["test"]
+    else:
+        return{}
     
 
 def add_reply(message_id, reply):
@@ -281,7 +288,9 @@ def has_replies(message_id):
 def get_replies(message_id):
     return _replies[message_id]
 def delete_reply(message_id):
-    _replies.pop(message_id)
+    print "replies", _replies
+    if message_id in _replies:
+        _replies.pop(message_id)
 
 
 ###

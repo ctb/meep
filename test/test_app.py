@@ -1,4 +1,7 @@
 import unittest
+import sys
+import os.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 import meep_example_app
 
 class TestApp(unittest.TestCase):
@@ -47,10 +50,12 @@ class TestApp(unittest.TestCase):
         assert 'Log out' in data[0]
                 
     def test_create_user(self):
+        print "TestCreateUser"
         environ = {}                    # make a fake dict
         environ['PATH_INFO'] = '/create_user'
         environ['wsgi.input'] = ''
         def fake_start_response(status, headers):
+            #print status
             assert status == '200 OK'
             assert ('Content-type', 'text/html') in headers
 

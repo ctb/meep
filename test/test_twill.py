@@ -49,5 +49,8 @@ def test():
     twill.execute_file(testdir+"test_add_message.twill", initial_url=_server_url)
     twill.execute_file(testdir+"test_delete_message.twill", initial_url=_server_url)
     twill.execute_file(testdir+"test_delete_topic.twill", initial_url=_server_url)
+    ###
+    #   TODO: kill server somehow
+    ###
 
     

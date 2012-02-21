@@ -2,6 +2,7 @@ import meeplib
 import traceback
 import cgi
 import meepcookie
+import os
 from Cookie import SimpleCookie, Morsel
 from jinja2 import Environment, FileSystemLoader
 
@@ -16,7 +17,11 @@ def initialize():
         # create a single message and topic
         meeplib.Topic('First Topic', meeplib.Message('my title', 'This is my message!', u), u)
 
-env = Environment(loader=FileSystemLoader('templates'))
+#Check if tests are running - if so, load the proper templates.
+if 'test' in os.getcwd():
+    env = Environment(loader=FileSystemLoader('../templates'))
+else:
+    env = Environment(loader=FileSystemLoader('templates'))
 
 def render_page(filename, **variables):
     template = env.get_template(filename)
@@ -186,29 +191,6 @@ class MeepExampleApp(object):
         return [ render_page('view_topic.html', messages=messages, topic=topic) ]
     
     ###
-    #   VIEW MESSAGES
-    ###
-    """ 
-    def list_messages(self, environ, start_response):
-        messages = meeplib.get_all_messages()
-
-        s = []
-        for m in messages:
-            s.append('id: %d<p>' % (m.id,))
-            s.append('title: %s<p>' % (m.title))
-            s.append('message: %s<p>' % (m.post))
-            s.append('author: %s<p>' % (m.author.username))
-            s.append("<form action='delete_action' method='POST'><input type='number' hidden='true' name='mid' value=%d><input type='submit' value='Delete message'></form>" % (m.id))
-            s.append('<hr>')
-        s.append("<a href='../main_page'>Back</a>")
-            
-        headers = [('Content-type', 'text/html')]
-        start_response("200 OK", headers)
-        
-        return ["".join(s)]
-    """
-    
-    ###
     #   ADD TOPIC
     ###
     def add_topic(self, environ, start_response):
@@ -312,11 +294,8 @@ class MeepExampleApp(object):
                       '/logout': self.logout,
                       '/create_user': self.create_user,
                       '/create_user_action':self.create_user_action,
-                      #'/m/list': self.list_messages,
                       '/m/list_topics': self.list_topics,
                       '/m/topics/view': self.view_topic,
-                      #'/m/add': self.add_message,
-                      #'/m/add_action': self.add_message_action,
                       '/m/add_message_topic_action': self.add_message_topic_action,
                       '/m/add_topic': self.add_topic,
                       '/m/add_topic_action': self.add_topic_action,
@@ -337,7 +316,7 @@ class MeepExampleApp(object):
         except:
             tb = traceback.format_exc()
             x = "<h1>Error!</h1><pre>%s</pre>" % (tb,)
-
+            
             status = '500 Internal Server Error'
             start_response(status, [('Content-type', 'text/html')])
             return [x]

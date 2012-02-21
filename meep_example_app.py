@@ -28,7 +28,7 @@ class MeepExampleApp(object):
         
         start_response("200 OK", headers)
 
-        return """<form action='login_action' method='POST'>Username: <input type='text' name='user'><br>Password:<input type='text' name='pass'><br><input type='submit'></form>"""
+        return """<form action='login_action' method='POST'>Username: <input type='text' name='user'><br>Password:<input type='password' name='pass'><br><input type='submit'></form>"""
 
     def login_message_action(self, environ, start_response):
         print environ['wsgi.input']

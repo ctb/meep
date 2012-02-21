@@ -105,9 +105,13 @@ class ProxyHandler (BaseHTTPServer.BaseHTTPRequestHandler):
                         out = soc
                     data = i.recv(8192)
                     if data:
-			print 'Sending:', (data,)
+                        print 'Sending:', (data,)
                         out.send(data)
                         count = 0
+                        fp = open("log.txt", 'wb')
+                        fp.write(data)
+                        fp.close()
+
             else:
                 print "\t" "idle", count
             if count == max_idling: break

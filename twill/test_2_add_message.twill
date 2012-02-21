@@ -1,5 +1,11 @@
 go http://localhost:8000
-follow "Add a message"
+follow "Log in"
+
+fv 1 username "test"
+fv 1 password "foo"
+submit
+
+follow "Add a Message"
 
 fv 1 title "Twill test"
 fv 1 message "Testing new message"

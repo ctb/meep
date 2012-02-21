@@ -4,11 +4,11 @@ follow "Show messages"
 go /m/increase_msg_rank?id_num=0
 go /m/increase_msg_rank?id_num=0
 
-find "RANK: 2"
+find "rank: 2"
 
 go /m/decrease_msg_rank?id_num=0
 
-find "RANK: 1"
+find "rank: 1"
 
 go /m/decrease_msg_rank?id_num=0
-notfind "RANK: 1"
+notfind "rank: 1"

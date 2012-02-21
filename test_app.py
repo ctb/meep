@@ -16,7 +16,7 @@ class TestApp(unittest.TestCase):
             assert ('Content-type', 'text/html') in headers
 
         data = self.app(environ, fake_start_response)
-        assert 'Add a message' in data[0]
+        assert 'Add a Message' in data[0]
         assert 'Show messages' in data[0]
 
     def test_list(self):

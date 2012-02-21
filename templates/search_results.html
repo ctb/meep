@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}meep: list messages!{% endblock title %}
+
+{% block body %}
+<p> Search Results: </p>
+ {% for item in messages %}
+
+  id: {{ item.id }}
+  <p class="title">title: {{ item.title }}</p>
+  <p class="message">message: {{ item.post }}</p>
+  <p>author: {{ item.author.username }}
+  <p>
+  <p><a href='/m/add_reply?id={{item.id}}'>Reply</a></p>
+  <p><a href='/m/delete_message?id={{item.id}}'>Delete Message</a></p>
+  <hr>
+  
+	
+
+ {% endfor %}
+
+<a href='../../'>index</a>
+
+{% endblock body %}

@@ -1,0 +1,8 @@
+go http://localhost:8000/
+
+fv 1 username 'test'
+fv 1 password 'test'
+submit
+
+url /main_page
+find 'test'

@@ -1,0 +1,32 @@
+go http://localhost:8000/
+
+fv 1 username 'test'
+fv 1 password 'test'
+submit
+
+url /main_page
+find 'test'
+
+follow "Add a topic"
+
+fv 1 title 'Testing add message - topic title 2'
+fv 1 msgtitle 'Test message title 2'
+fv 1 message 'Test message body 2'
+submit
+
+url /m/list_topics
+find 'Testing add message - topic title 2'
+
+follow 'Testing add message - topic title 2'
+url /m/topics/view\?id=.+
+find 'Testing add message - topic title 2'
+find 'Test message title 2'
+find 'Test message body 2'
+
+fv 2 title 'New message title bro'
+fv 2 message 'New message body bro'
+submit
+
+url /m/topics/view\?id=.+
+find 'New message title bro'
+find 'New message body bro'

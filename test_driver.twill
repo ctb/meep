@@ -1,7 +1,0 @@
-runfile test_logout.twill
-runfile test_create_account.twill
-runfile test_login.twill
-runfile test_add_topic.twill
-runfile test_delete_topic.twill
-runfile test_add_message.twill
-runfile test_delete_message.twill

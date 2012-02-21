@@ -2,7 +2,7 @@ import meeplib
 import traceback
 import cgi
 import meepcookie
-
+from jinja2 import Environment, FileSystemLoader
 
 def initialize():
     # create a default user
@@ -13,6 +13,13 @@ def initialize():
 
     # done.
 
+env = Environment(loader=FileSystemLoader('templates'))
+
+def render_page(filename, **variables):
+    template = env.get_template(filename)
+    x = template.render(**variables)
+    return str(x)
+
 class MeepExampleApp(object):
     """
     WSGI app object.
@@ -21,7 +28,8 @@ class MeepExampleApp(object):
 		username = 'test'
 	
 		start_response("200 OK", [('Content-type', 'text/html')])
-		return ["""You are not logged in, please login below.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a><p>"""]
+    return [ render_page('index.html', username=username) ]
+		#return ["""You are not logged in, please login below.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a><p>"""]
 
     def login(self, environ, start_response):
         headers = [('Content-type', 'text/html')]

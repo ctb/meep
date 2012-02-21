@@ -1,0 +1,12 @@
+GET /m/add HTTP/1.1
+accept-language: en-US,en;q=0.8
+connection: close
+accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7
+accept-charset: ISO-8859-1,utf-8;q=0.7,*;q=0.3
+host: localhost:8000
+referer: http://localhost:8000/
+cache-control: max-age=0
+cookie: username2=test; username=test
+accept-encoding: gzip,deflate,sdch
+

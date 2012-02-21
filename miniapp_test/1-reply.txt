@@ -1,0 +1,28 @@
+HTTP/1.0 200 OK
+Date: Tue, 21 Feb 2012 13:43:06 EST
+Server: WSGIServer/0.1 Python/2.5
+Content-type: text/html
+Content-Length: 280
+
+<html>
+<head>
+
+<title>meep!</title>
+
+</head>
+<body>
+
+
+<form action='add_action' method='POST'>
+
+Title: <input type='text' name='title'><br>
+
+Message:<input type='text' name='message'><br>
+
+<input type='hidden' value='0' name='rank'>
+
+<input type='submit'></form>
+
+
+</body>
+</html>

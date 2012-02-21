@@ -4,7 +4,15 @@ import cgi
 import pickle
 import Cookie
 import meepcookie
+from jinja2 import Environment, FileSystemLoader
 
+
+env = Environment(loader=FileSystemLoader('templates'))
+
+def render_page(filename, **variables):
+    template = env.get_template(filename)
+    x = template.render(**variables)
+    return str(x)
 
 class MeepExampleApp(object):
     """
@@ -24,11 +32,10 @@ class MeepExampleApp(object):
 
     def index(self, environ, start_response):
         print "number of users: %d" %(len(meeplib._users),)
+        user = self.userManager(environ)
         start_response("200 OK", [('Content-type', 'text/html')])
-        s=["""Please login to create and delete messages<p><a href='/login'>Log in</a><p><a href='/create_user'>Create a New User</a><p><a href='/m/list'>Show messages</a>"""]
-        if self.username is not None:
-            s = ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (self.username,)]
-        return s
+
+        return [ render_page('index.html', user=user) ]
 
     def login(self, environ, start_response):
         headers = [('Content-type', 'text/html')]
@@ -180,40 +187,23 @@ class MeepExampleApp(object):
     def list_messages(self, environ, start_response):
         messages = meeplib.get_all_messages()
         
-        s = []
-        for m in messages:
-            s.append('id: %d<p>' % (m.id,))
-            s.append('title: %s<p>' % (m.title))
-            s.append('message: %s<p>' % (m.post))
-            s.append('author: %s<p>' % (m.author.username))
-            s.append('<a href="delete_message_action?id='+str(m.id)+'">delete message '+str(m.id)+'</a>')
-            s.append('<br/><br/><form action="reply_message_action" method="post">' \
-            'Reply:<input type="text" name="replymsg">' \
-            '<input type="hidden" value="'+str(m.id)+'" name="parent_id"><input type="submit" value="Reply"/></form>')
-            s.append('<hr>')
-            for r in m.replies:
-                s.append('<p style="text-indent: 10px;font-style:italic">' + r + '</p>')
-                s.append('<hr>')
-
-        s.append("<a href='../../'>index</a>")
-            
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
         
-        return ["".join(s)]
+        return [ render_page('list_messages.html', messages=messages) ]
 
     def add_message(self, environ, start_response):
         if self.username is None:
             headers = [('Content-type', 'text/html')]
             start_response("302 Found", headers)
-            return ["You must be logged in to user this feature <p><a href='/login'>Log in</a><p><a href='/m/list'>Show messages</a>"]
-
+            return [ render_page('add_message_fail.html') ]
+        
         headers = [('Content-type', 'text/html')]
 
         start_response("200 OK", headers)
 
-        return '''<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>'''
-
+        return [ render_page('add_message.html') ]
+    
     def add_message_action(self, environ, start_response):
         if self.username is None:
             headers = [('Content-type', 'text/html')]
@@ -303,6 +293,7 @@ class MeepExampleApp(object):
             return fn(environ, start_response)
         except:
             tb = traceback.format_exc()
+            print tb
             x = "<h1>Error!</h1><pre>%s</pre>" % (tb,)
 
             status = '500 Internal Server Error'

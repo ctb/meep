@@ -3,6 +3,7 @@ import traceback
 import cgi
 import meepcookie
 
+from jinja2 import Environment, FileSystemLoader
 def initialize():
     # create a default user
     u = meeplib.User('test', 'foo')
@@ -11,7 +12,13 @@ def initialize():
     meeplib.Message('my title', 'This is my message!', u)
     meeplib.load()
     # done.
+env = Environment(loader=FileSystemLoader('templates'))
 
+def render_page(filename, **variables):
+    template = env.get_template(filename)
+    x = template.render(**variables)
+    return str(x)
+	 
 class MeepExampleApp(object):
     """
     WSGI app object.
@@ -23,10 +30,11 @@ class MeepExampleApp(object):
         
         cookie = environ.get("HTTP_COOKIE")
         if cookie is None or (cookie[len('username='):]==''):
-            return ["""you are not logged in<p><a href='/login'>Log in</a><p><a href='/m/list'>Show messages</a>"""]
+				welcome = "You are not logged in"
+				return [ render_page('index.html', username="",welcome=welcome) ]
         else:
-            return ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a>""" % (username,)]
-  
+				welcome = "you are logged in as user:"
+				return [ render_page('index.html', username=username,welcome=welcome) ]
         
 
     def login(self, environ, start_response):
@@ -67,66 +75,28 @@ class MeepExampleApp(object):
     def list_search(self, environ, start_response):
         results=meeplib.get_search_results()
         s = []
-        s.append('Your Search Results')
-        s.append('<hr>')
-        print "RESULTS"
-        print results
         for result in results:
-            m=meeplib.get_message(result)
-            s.append('id: %d<p>' % (m.id,))
-            s.append('title: %s<p>' % (m.title))
-            s.append('message: %s<p>' % (m.post))
-            try:
-                s.append('author: %s<p>' % (m.author.username))
-            except:
-                s.append('author: %s<p>' % (m.author))
-            s.append("<a href='/m/add_reply?id="+str(m.id)+"'>Reply</a><br />")
-            s.append("<a href='/m/delete_message?id="+str(m.id)+"'>Delete Message</a>")
-            replies = meeplib.get_replies(m.id)
+            s.append(meeplib.get_message(result))
+            # replies = meeplib.get_replies(m.id)
 
-            if (replies!=-1):
-                s.append('<div style="padding-left: 50px;">Replies:</div><br />')
-                for r in replies:
+            # if (replies!=-1):
+                # s.append('<div style="padding-left: 50px;">Replies:</div><br />')
+                # for r in replies:
                     
-                    s.append(""" <div style="padding-left: 70px;">&nbsp;%s</div><p>""" % r)
+                    # s.append(""" <div style="padding-left: 70px;">&nbsp;%s</div><p>""" % r)
 
-            s.append('<hr>')
+            # s.append('<hr>')
        
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
-        s.append("<form action='search_action' method='POST'>Search<input type='text' name='text'><input type='submit'></form>")
 
-        return ["".join(s)]
+        return [ render_page('search_results.html', messages=s) ]
     
     def list_messages(self, environ, start_response):
         messages = meeplib.get_all_messages()
-        s = []
-        for m in messages:
-            s.append('id: %d<p>' % (m.id,))
-            s.append('title: %s<p>' % (m.title))
-            s.append('message:<b> %s</b><p>' % (m.post))
-            try:
-                s.append('author: %s<p>' % (m.author.username))
-            except:
-                s.append('author: %s<p>' % (m.author))
-            s.append("<a href='/m/add_reply?id="+str(m.id)+"'>Reply</a><br />")
-            s.append("<a href='/m/delete_message?id="+str(m.id)+"'>Delete Message</a>")
-            replies = meeplib.get_replies(m.id)
-            if (replies!=-1):
-                s.append('<div style="padding-left: 50px;">Replies:</div><br />')
-                for r in replies:
-                    
-                    s.append(""" <div style="padding-left: 70px;">&nbsp;%s</div><p>""" % r)
-
-            s.append('<hr>')
-
-        s.append("<a href='../../'>index</a>")
-            
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)
-        s.append("<form action='search_action' method='POST'>Search<input type='text' name='text'><input type='submit'></form>")
-
-        return ["".join(s)]
+        return [ render_page('list_messages.html', messages=messages) ]
 
 
     def search_message_action(self, environ, start_response):
@@ -147,11 +117,11 @@ class MeepExampleApp(object):
         return ["message deleted"]
 
     def add_message(self, environ, start_response):
-        headers = [('Content-type', 'text/html')]
+			headers = [('Content-type', 'text/html')]
         
-        start_response("200 OK", headers)
+			start_response("200 OK", headers)
+			return [ render_page('add_message.html') ]
 
-        return """<form action='add_action' method='POST'>Title: <input type='text' name='title'><br>Message:<input type='text' name='message'><br><input type='submit'></form>"""
 
     def add_message_action(self, environ, start_response):
         print environ['wsgi.input']
@@ -186,12 +156,13 @@ class MeepExampleApp(object):
 
 
     def add_reply(self, environ, start_response):
-        qString = cgi.parse_qs(environ['QUERY_STRING'])
-        mId = qString.get('id', [''])[0]
-        headers = [('Content-type', 'text/html')]
-        
-        start_response("200 OK", headers)
-        return """<form action='add_reply_action' method='POST'><input type='hidden' name='id' value='%s'><br>Message:<input type='text' name='message'><br><input type='submit'></form>""" %mId
+		qString = cgi.parse_qs(environ['QUERY_STRING'])
+		mId = qString.get('id', [''])[0]
+		headers = [('Content-type', 'text/html')]
+
+		start_response("200 OK", headers)
+		return [ render_page('add_reply.html', mId=mId) ]
+
 
 
     def add_reply_action(self, environ, start_response):

@@ -6,6 +6,43 @@ fv 1 password 'jones'
 fv 1 password_confirm 'jones'
 submit
 
-url /
+follow 'Log in'
+fv 1 username 'zach'
+fv 1 password 'jones'
+submit
+
+code 200
+
 find 'zach'
 
+follow "Add a message"
+
+fv 1 title 'test title FOO'
+fv 1 message 'this is my message'
+submit
+
+url /m/list
+find 'FOO'
+
+url /
+
+follow "Show messages"
+
+fv 1 replymsg 'BAR'
+submit
+
+url /m/list
+find 'BAR'
+
+url /
+
+follow "Show messages"
+
+follow "delete message 0"
+
+url /m/list
+info
+
+follow 'Log out'
+code 200
+find 'Please login to create and delete messages'

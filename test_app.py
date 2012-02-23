@@ -27,8 +27,11 @@ class TestApp(unittest.TestCase):
             assert ('Content-type', 'text/html') in headers
 
         data = self.app(environ, fake_start_response)
-        assert 'my title' in data[0]
-        assert 'This is my message!' in data[0]
+        assert 'id:' in data[0]
+        assert 'title:' in data[0]
+        assert 'message:' in data[0]
+        assert 'author:' in data[0]
+
         
 
     def test_delete_message_action(self):

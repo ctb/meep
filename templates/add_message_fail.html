@@ -4,20 +4,9 @@
 
 {% block body %}
 
-{% if user %}
-
-<form action='add_action' method='GET'>
-Title: <input type='text' name='title'><br>
-Message:<input type='text' name='message'><br>
-<input type='submit'></form>
-
-{% else %}
-
 You must be logged in to user this feature<p>
 <a href='/login'>Log in</a>
 <p>
 <a href='/m/list'>Show messages</a>
-
-{% endif %}
 
 {% endblock body %}

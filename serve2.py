@@ -62,8 +62,9 @@ def handle_request(request):
         post_variables = allLines[-1]
         tmpVariables = post_variables.split('&')
         for variablePair in tmpVariables:
-            key,value = variablePair.split('=')
-            form_dict[key] = urllib.unquote_plus(value)
+            if variablePair != '':
+                key,value = variablePair.split('=')
+                form_dict[key] = urllib.unquote_plus(value)
 
     cookie = ''
     # get the cookie

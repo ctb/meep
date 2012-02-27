@@ -243,7 +243,7 @@ class MeepExampleApp(object):
         if threads:
             s.append(render_page("list_threads.html", threads=threads, user=user))
         else:
-            s.append("There are no threads to display.<p>")
+            s.append("There are no threads to display.<p><hr><a href='/'>index</a>")
 
         headers = [('Content-type', 'text/html')]
         start_response("200 OK", headers)

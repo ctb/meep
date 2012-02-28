@@ -8,19 +8,21 @@ from meep_example_app import MeepExampleApp, initialize
 initialize()
 app = MeepExampleApp()
 environ = {}
-global STATUS
-global HEADERS
-global TIME
+STATUS=""
+HEADERS=""
+TIME=""
 def fake_start_response(status, headers):     # wHat exactly does the fake_start resposne do, somehow it returns the html...
+
     STATUS=status
     HEADERS=headers
     TIME=datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    print status
-    print headers
+    print "STATUS",status
+    print "HEADERS",headers
     print datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     print '\n'
 
 def handle_connection(sock):
+
     while 1:
         try:
             data = sock.recv(4096)
@@ -46,11 +48,12 @@ def handle_connection(sock):
             data = app(environ, fake_start_response)
             #print "DATA[0]",data[0]
 
-            output= "HTTP/1.1 200 0K \r\n Date: Mon, 27, Feb 2012 10:27:15 EST \r\n Server: test/0.1 Python/2.5 \r\n Content-type: text/html \r\n Location: / \r\n "
+            output= "HTTP/1.1 "+ STATUS +"\r\n Date: "+TIME+ "\r\n Server: test/0.1 Python/2.5 \r\n Content-type: text/html \r\n Location: / \r\n "
             datalen=""
             datalen=str(len(data[0]))
             output += "Content-Length: " + datalen +"\r\n\r\n"
             output += data[0]
+            print "DATA[0]",data[0]
             print "THE OUTPUT",output
             sock.sendall(output)
             sock.close()

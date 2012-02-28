@@ -10,6 +10,26 @@
   title: {{ item.title }}<p>
   message: {{ item.post }}<p>
   author: {{ item.author.username }}<p>
+  
+  {% if user %}
+  <script type='text/javascript'>var clearedResponseText = false;</script>
+  <form action='reply' method='get'>
+  <input type='hidden' name='title' value='{{ item.title }}' />
+  <input type='hidden' name='parentPostID' value='{{ item.id }}' />
+  <input type='text' name='message' value='Enter a response here'
+      onclick="if (!clearedResponseText) {
+          value = ''; 
+          clearedResponseText = true;
+      }" />
+  <input type='submit' value='Submit response' />
+  </form>
+  <form action='remove' method='get'>
+   		<input type='hidden' name='messageID' value='{{ item.id }}' />
+   		<input type='submit' value='Delete this message' />
+  </form>
+  
+  {% endif %}
+
   <hr>
  {% endfor %}
 

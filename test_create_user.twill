@@ -1,0 +1,20 @@
+go http://localhost:8000/
+
+#nobody should be logged in initially
+notfind 'you are logged in as user'
+
+#Create New User
+follow "Create a New User"
+fv 1 username 'studenta'
+fv 1 password 'passworda'
+submit
+
+#Login with User
+follow "Log in"
+fv 1 username 'studenta'
+fv 1 password 'passworda'
+submit
+find 'you are logged in as user: studenta'
+
+#Log out for the next test
+follow "Log out"

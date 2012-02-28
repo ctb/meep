@@ -1,102 +1,85 @@
-from meep_example_app import MeepExampleApp, initialize
-import urllib
-import os.path
-import sys
 import datetime
+import sys
+import urllib
+from meep_example_app import MeepExampleApp, initialize
 
 global _status
 global _headers
-# the function we will use to pass to __call__
 def fake_start_response(status, headers):
     global _status
     global _headers
     _status = status
     _headers = headers
+    
+environMap = {
+        #REQUEST_METHOD / PATH_INFO will be parsed out in buildResponse
+        'accept-language' : 'HTTP_ACCEPT_LANGUAGE',
+        'accept-connection' : 'HTTP_CONNECTION',
+        'accept' : 'HTTP_ACCEPT',
+        'user-agent' : 'HTTP_USER_AGENT',
+        'accept-charset' : 'HTTP_ACCEPT_CHARSET',
+        'host' : 'HTTP_HOST',
+        'referer' : 'HTTP_REFERER',
+        #'cache-control' : ?, #can't find this variable
+        'cookie' : 'HTTP_COOKIE',
+        'accept-encoding' : 'HTTP_ACCEPT_ENCODING'
+       }
 
-argList = []
+def buildResponse(webRequest):
+    
+    #parse request
+    requestMap = {'wsgi.input' : ''}
+    
+    for line in webRequest:
+        line = line.strip() #remove leading and trailing whitespace
+        
+        if (line.startswith('GET') or 
+            line.startswith('POST')):
+            line = line.split()
+            requestMap['REQUEST_METHOD'] = line[0]
+            if line[1].find('?') == -1:
+                requestMap['PATH_INFO'] = line[1]
+            else:
+                tmpPath = line[1].split('?')
+                requestMap['PATH_INFO'] = tmpPath[0]
+                requestMap['QUERY_STRING'] = tmpPath[1]
 
-for arg in sys.argv:
-    argList.append(arg)
-
-# remove script path
-argList = argList[1:]
-
-if argList:
-    filepath = argList.pop(0)
-    filepath = os.path.abspath(filepath)
-else:
-    filepath = raw_input("Specify a filepath, can be absolute or relative: ")
-    filepath = os.path.abspath(filepath)
-
-try:
-    fh = open(filepath, 'r')
-except:
-    print filepath,
-    print "is not readable or does not exist. Exiting."
-    sys.exit()
-
-allLines = []
-for line in fh.readlines():
-    allLines.append(line.strip())
-fh.close()
-
-# read request line
-request = allLines.pop(0)
-# split on whitespace
-requestInfoList = request.split(' ')
-#print requestInfoList
-
-fullQueryList = requestInfoList[1].split('?')
-#print fullQueryList
-
-form_dict = {}
-
-# no variables to get
-if len(fullQueryList) == 1:
-    path_info = fullQueryList[0]
-# we need to do further processing on the variables
-else:
-    path_info = fullQueryList[0]
-    tmpVariables = fullQueryList[1].split('&')
-    for variablePair in tmpVariables:
-        key,value = variablePair.split('=')
-        form_dict[key] = urllib.unquote_plus(value)
-
-#print allLines
-
-cookie = ''
-# get the cookie
-for line in allLines:
-    tmp = line.split(':', 2)
-    if tmp[0] == 'cookie':
-        cookie = tmp[1].strip()
-
-#print 'cookie = ', cookie
-
-environ = {} # make a fake request dictionary
-environ['PATH_INFO'] = path_info
-environ['wsgi.input'] = ''
-environ['HTTP_COOKIE'] = cookie
-if len(form_dict):
-    environ['QUERY_STRING'] = urllib.urlencode(form_dict)
-
-initialize()
-app = MeepExampleApp()
-
-#print environ
-data = app(environ, fake_start_response)
-
-#print _status
-#print _headers
-
-#print data
-
-print "HTTP/1.0", _status
-now = datetime.datetime.now()
-print "Date:", now.strftime("%a, %d %b %Y %H:%M:%S EST")
-print "Server: WSGIServer/0.1 Python/2.5"
-for x in _headers:
-    print x
-print
-for x in data:
-    print x
+        else:
+            try:
+                line = line.split(':',1)
+                requestMap[environMap[line[0].lower()]] = line[1].strip()
+            except:
+                pass
+    
+    #build response
+    initialize()
+    app = MeepExampleApp()
+    response = app(requestMap, fake_start_response)
+    output = []
+    output.append('HTTP/1.0 ' + _status)
+    currentTime = datetime.datetime.now()
+    output.append('Date: ' + currentTime.strftime('%a, %d %b %Y %H:%M:%S EST'))
+    output.append('Server: WSGIServer/0.1 Python/2.5')
+    for tmpHeader in _headers:
+        output.append(tmpHeader[0] + ': ' + tmpHeader[1])
+    output.append('\r\n')
+    for r in response:
+        output.append(r)
+    return '\r\n'.join(output)
+    
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print "Usage: miniapp <input file> <output file>"
+    else:
+        try:
+            inFile = open(sys.argv[1], 'r')
+            request = inFile.readlines()
+            inFile.close()
+        except:
+            print "Cannot find input file"
+        outFile = open(sys.argv[2], 'w')
+        outFile.write(buildResponse(request))
+        outFile.close()
+        
+        
+    

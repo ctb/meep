@@ -2,20 +2,19 @@
 
 {% block body %}
 
-you are logged in as user: {{ username }}.<p>
+{% if not user %}
+<p>Please login to create and delete messages</p>
+   <p><a href='/login'>Log in</a></p>
+   <p><a href='/create_user'>Create a New User</a></p>
+   <p><a href='/m/list'>Show messages</a></p>
 
-<a href='/m/add'>Add a Message</a>
+{% else %}
+<p>you are logged in as user: {{ user.username }}</p>
+<p><a href='/m/add'>Add a message</a></p>
+<p><a href='/create_user'>Create a New User</a></p>
+<p><a href='/logout'>Log out</a></p>
+<p><a href='/m/list'>Show messages</a></p>
 
-<p>
-
-<a href='/login'>Log in</a>
-
-<p>
-
-<a href='/logout'>Log out</a>
-
-<p>
-
-<a href='/m/list'>Show messages</a>
+{% endif %}
 
 {% endblock body %}

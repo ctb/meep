@@ -1,0 +1,10 @@
+go http://localhost:8000/
+
+#nobody should be logged in
+notfind 'you are logged in as user'
+
+follow "Show messages"
+notfind 'Delete this message'
+notfind 'Submit response'
+follow "index"
+

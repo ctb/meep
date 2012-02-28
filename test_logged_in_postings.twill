@@ -1,0 +1,13 @@
+go http://localhost:8000/
+
+#Log in
+follow "Log in"
+fv 1 username 'studentx'
+fv 1 password 'passwordx'
+submit
+
+follow "Show messages"
+find 'Delete this message'
+find 'Submit response'
+follow "index"
+follow "Log out"

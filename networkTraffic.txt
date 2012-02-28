@@ -1,0 +1,335 @@
+
+
+Benjamin Katt@BENDESK ~/meep/util/TinyHTTPProxy (master)
+$ python TinyHTTPProxy.py 8001
+Any clients will be served...
+Serving HTTP on 0.0.0.0 port 8001 ...
+
+
+
+
+1. index page request
+
+
+
+        connect to localhost:8000
+Connecting to: localhost:8000 <socket._socketobject object at 0x025BE7A0>
+serial.alcohol-soft.com - - [11/Feb/2012 18:21:53] "GET http://localhost:8000/ H
+TTP/1.1" - -
+Sending: GET /
+Sending header: ('accept-language', 'en-US,en;q=0.8')
+Sending header: ('accept-encoding', 'gzip,deflate,sdch')
+Sending header: ('connection', 'close')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.
+9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/
+535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.3')
+Sending header: ('host', 'localhost:8000')
+Sending header: ('cookie', 'username=studentx')
+Sending: ('HTTP/1.0 200 OK\r\n',)
+Sending: ("Date: Sat, 11 Feb 2012 23:21:53 GMT\r\nServer: WSGIServer/0.1 Python/
+2.7.2\r\nContent-type: text/html\r\nContent-Length: 221\r\n\r\nyou are logged in
+ as user: studentx\n\t\t\t    <p><a href='/m/add'>Add a message</a>\n\t\t\t    <
+p><a href='/create_user'>Create a New User</a>\n\t\t\t    <p><a href='/logout'>L
+og out</a>\n\t\t\t    <p><a href='/m/list'>Show messages</a>",)
+        bye
+        connect to localhost:8000
+Connecting to: localhost:8000 <socket._socketobject object at 0x025BE7A0>
+serial.alcohol-soft.com - - [11/Feb/2012 18:21:53] "GET http://localhost:8000/fa
+vicon.ico HTTP/1.1" - -
+Sending: GET /favicon.ico
+Sending header: ('accept-language', 'en-US,en;q=0.8')
+Sending header: ('accept-encoding', 'gzip,deflate,sdch')
+Sending header: ('connection', 'close')
+Sending header: ('accept', '*/*')
+Sending header: ('user-agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/
+535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.3')
+Sending header: ('host', 'localhost:8000')
+Sending header: ('cookie', 'username=studentx')
+Sending: ('HTTP/1.0 404 Not Found\r\n',)
+Sending: ('Date: Sat, 11 Feb 2012 23:21:53 GMT\r\nServer: WSGIServer/0.1 Python/
+2.7.2\r\nContent-type: text/html\r\nContent-Length: 15\r\n\r\nPage not found.',)
+        bye
+
+
+
+
+
+
+
+2. add_message_action using method='get'
+
+
+
+        connect to localhost:8000
+Connecting to: localhost:8000 <socket._socketobject object at 0x025BE6F8>
+serial.alcohol-soft.com - - [11/Feb/2012 18:22:02] "GET http://localhost:8000/m/
+add HTTP/1.1" - -
+Sending: GET /m/add
+Sending header: ('accept-language', 'en-US,en;q=0.8')
+Sending header: ('accept-encoding', 'gzip,deflate,sdch')
+Sending header: ('connection', 'close')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.
+9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/
+535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.3')
+Sending header: ('host', 'localhost:8000')
+Sending header: ('referer', 'http://localhost:8000/')
+Sending header: ('cookie', 'username=studentx')
+Sending: ('HTTP/1.0 200 OK\r\n',)
+Sending: ("Date: Sat, 11 Feb 2012 23:22:02 GMT\r\nServer: WSGIServer/0.1 Python/
+2.7.2\r\nContent-type: text/html\r\n\r\n\n            <form action='add_action'
+method='get'>\n                <input type='hidden' name='parentPostID' value='-
+1' />\n                Title: ",)
+Sending: ("<input type='text' name='title'><br>\n                Message:<input
+type='text' name='message'><br>\n                <input type='submit'>\n
+    </form>\n            ",)
+        bye
+        connect to localhost:8000
+Connecting to: localhost:8000 <socket._socketobject object at 0x025BE928>
+serial.alcohol-soft.com - - [11/Feb/2012 18:22:02] "GET http://localhost:8000/fa
+vicon.ico HTTP/1.1" - -
+Sending: GET /favicon.ico
+Sending header: ('accept-language', 'en-US,en;q=0.8')
+Sending header: ('accept-encoding', 'gzip,deflate,sdch')
+Sending header: ('connection', 'close')
+Sending header: ('accept', '*/*')
+Sending header: ('user-agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/
+535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.3')
+Sending header: ('host', 'localhost:8000')
+Sending header: ('cookie', 'username=studentx')
+Sending: ('HTTP/1.0 404 Not Found\r\n',)
+Sending: ('Date: Sat, 11 Feb 2012 23:22:02 GMT\r\nServer: WSGIServer/0.1 Python/
+2.7.2\r\nContent-type: text/html\r\nContent-Length: 15\r\n\r\nPage not found.',)
+        bye
+        connect to localhost:8000
+Connecting to: localhost:8000 <socket._socketobject object at 0x025BE928>
+serial.alcohol-soft.com - - [11/Feb/2012 18:22:08] "GET http://localhost:8000/m/
+add_action?parentPostID=-1&title=title+1&message=message+1 HTTP/1.1" - -
+Sending: GET /m/add_action  parentPostID=-1&title=title+1&message=message+1
+Sending header: ('accept-language', 'en-US,en;q=0.8')
+Sending header: ('accept-encoding', 'gzip,deflate,sdch')
+Sending header: ('connection', 'close')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.
+9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/
+535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.3')
+Sending header: ('host', 'localhost:8000')
+Sending header: ('referer', 'http://localhost:8000/m/add')
+Sending header: ('cookie', 'username=studentx')
+Sending: ('HTTP/1.0 302 Found\r\n',)
+Sending: ('Date: Sat, 11 Feb 2012 23:22:08 GMT\r\nServer: WSGIServer/0.1 Python/
+2.7.2\r\nContent-type: text/html\r\nLocation: /m/list\r\nContent-Length: 13\r\n\
+r\nmessage added',)
+        bye
+        connect to localhost:8000
+Connecting to: localhost:8000 <socket._socketobject object at 0x025BE688>
+serial.alcohol-soft.com - - [11/Feb/2012 18:22:08] "GET http://localhost:8000/m/
+list HTTP/1.1" - -
+Sending: GET /m/list
+Sending header: ('accept-language', 'en-US,en;q=0.8')
+Sending header: ('accept-encoding', 'gzip,deflate,sdch')
+Sending header: ('connection', 'close')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.
+9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/
+535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.3')
+Sending header: ('host', 'localhost:8000')
+Sending header: ('referer', 'http://localhost:8000/m/add')
+Sending header: ('cookie', 'username=studentx')
+Sending: ('HTTP/1.0 200 OK\r\n',)
+Sending: ('Date: Sat, 11 Feb 2012 23:22:08 GMT\r\nServer: WSGIServer/0.1 Python/
+2.7.2\r\nContent-type: text/html\r\nContent-Length: 2022\r\n\r\n<div style=margi
+n-left:0px>id: 0<p>title: my title<p>message: This is my message!<p>author: test
+<p>\n                    <script type=\'text/javascript\'>var clearedResponseTex
+t = false;</script>\n                    <form action=\'reply\' method=\'POST\'>
+\n                    <input type=\'hidden\' name=\'title\' value=\'my title\' /
+>\n                    <input type=\'hidden\' name=\'parentPostID\' value=\'0\'
+/>\n                    <input type=\'text\' name=\'message\' value=\'Enter a re
+sponse here\'\n                        onclick="if (!clearedResponseText) {\n
+                         value = \'\'; \n                            clearedResp
+onseText = true;\n                        }" />\n                    <input type
+=\'submit\' value=\'Submit response\' />\n                    </form>\n
+           <form action=\'remove\' method=\'POST\'>\n                    <input
+type=\'hidden\' name=\'messageID\' value=\'0\' />\n                    <input ty
+pe=\'submit\' value=\'Delete this message\' />\n                    </form></div
+><hr><div style=margin-left:0px>id: 1<p>title: title 1<p>message: message 1<p>au
+thor: studentx<p>\n                    <script type=\'text/javascript\'>var clea
+redResponseText = false;</script>\n                    <form action=\'reply\' me
+thod=\'POST\'>\n                    <input type=\'hidden\' name=\'title\' value=
+\'title 1\' />\n                    <input type=\'hidden\' name=\'parentPostID\'
+ value=\'1\' />\n                    <input type=\'text\' name=\'message\' value
+=\'Enter a response here\'\n                        onclick="if (!clearedRespons
+eText) {\n                            value = \'\'; \n
+  clearedResponseText = true;\n                        }" />\n
+  <input type=\'submit\' value=\'Submit response\' />\n                    </for
+m>\n                    <form action=\'remove\' method=\'POST\'>\n
+      <input type=\'hidden\' name=\'messageID\' value=\'1\' />\n
+    <input type=\'submit\' value=\'Delete this message\' />\n
+ </form></div><hr><a href=\'../../\'>index</a>',)
+        bye
+        connect to localhost:8000
+Connecting to: localhost:8000 <socket._socketobject object at 0x025BE688>
+serial.alcohol-soft.com - - [11/Feb/2012 18:22:08] "GET http://localhost:8000/fa
+vicon.ico HTTP/1.1" - -
+Sending: GET /favicon.ico
+Sending header: ('accept-language', 'en-US,en;q=0.8')
+Sending header: ('accept-encoding', 'gzip,deflate,sdch')
+Sending header: ('connection', 'close')
+Sending header: ('accept', '*/*')
+Sending header: ('user-agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/
+535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.3')
+Sending header: ('host', 'localhost:8000')
+Sending header: ('cookie', 'username=studentx')
+Sending: ('HTTP/1.0 404 Not Found\r\n',)
+Sending: ('Date: Sat, 11 Feb 2012 23:22:08 GMT\r\nServer: WSGIServer/0.1 Python/
+2.7.2\r\nContent-type: text/html\r\nContent-Length: 15\r\n\r\nPage not found.',)
+
+        bye
+		
+		
+		
+		
+		
+
+
+
+
+
+
+3. add_message_action using method='post'
+
+        connect to localhost:8000
+Connecting to: localhost:8000 <socket._socketobject object at 0x0270E730>
+serial.alcohol-soft.com - - [11/Feb/2012 18:28:23] "POST http://localhost:8000/m
+/add_action HTTP/1.1" - -
+Sending: POST /m/add_action
+Sending header: ('origin', 'http://localhost:8000')
+Sending header: ('content-length', '47')
+Sending header: ('accept-language', 'en-US,en;q=0.8')
+Sending header: ('connection', 'close')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.
+9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/
+535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.3')
+Sending header: ('host', 'localhost:8000')
+Sending header: ('referer', 'http://localhost:8000/m/add')
+Sending header: ('cache-control', 'max-age=0')
+Sending header: ('cookie', 'username=studentx')
+Sending header: ('content-type', 'application/x-www-form-urlencoded')
+Sending header: ('accept-encoding', 'gzip,deflate,sdch')
+Sending: ('parentPostID=-1&title=title+3&message=message+3',)
+Sending: ('HTTP/1.0 302 Found\r\n',)
+Sending: ('Date: Sat, 11 Feb 2012 23:28:23 GMT\r\nServer: WSGIServer/0.1 Python/
+2.7.2\r\nContent-type: text/html\r\nLocation: /m/list\r\nContent-Length: 13\r\n\
+r\nmessage added',)
+        bye
+        connect to localhost:8000
+Connecting to: localhost:8000 <socket._socketobject object at 0x0270E7D8>
+serial.alcohol-soft.com - - [11/Feb/2012 18:28:23] "GET http://localhost:8000/m/
+list HTTP/1.1" - -
+Sending: GET /m/list
+Sending header: ('accept-language', 'en-US,en;q=0.8')
+Sending header: ('connection', 'close')
+Sending header: ('accept', 'text/html,application/xhtml+xml,application/xml;q=0.
+9,*/*;q=0.8')
+Sending header: ('user-agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/
+535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.3')
+Sending header: ('host', 'localhost:8000')
+Sending header: ('referer', 'http://localhost:8000/m/add')
+Sending header: ('cache-control', 'max-age=0')
+Sending header: ('cookie', 'username=studentx')
+Sending header: ('accept-encoding', 'gzip,deflate,sdch')
+Sending: ('HTTP/1.0 200 OK\r\n',)
+Sending: ('Date: Sat, 11 Feb 2012 23:28:23 GMT\r\nServer: WSGIServer/0.1 Python/
+2.7.2\r\nContent-type: text/html\r\nContent-Length: 4010\r\n\r\n<div style=margi
+n-left:0px>id: 0<p>title: my title<p>message: This is my message!<p>author: test
+<p>\n                    <script type=\'text/javascript\'>var clearedResponseTex
+t = false;</script>\n                    <form action=\'reply\' method=\'POST\'>
+\n                    <input type=\'hidden\' name=\'title\' value=\'my title\' /
+>\n                    <input type=\'hidden\' name=\'parentPostID\' value=\'0\'
+/>\n                    <input type=\'text\' name=\'message\' value=\'Enter a re
+sponse here\'\n                        onclick="if (!clearedResponseText) {\n
+                         value = \'\'; \n                            clearedResp
+onseText = true;\n                        }" />\n                    <input type
+=\'submit\' value=\'Submit response\' />\n                    </form>\n
+           <form action=\'remove\' method=\'POST\'>\n                    <input
+type=\'hidden\' name=\'messageID\' value=\'0\' />\n                    <input ty
+pe=\'submit\' value=\'Delete this message\' />\n                    </form></div
+><hr><div style=margin-left:0px>id: 1<p>title: title 1<p>message: message 1<p>au
+thor: studentx<p>\n                    <script type=\'text/javascript\'>var clea
+redResponseText = false;</script>\n                    <form action=\'reply\' me
+thod=\'POST\'>\n                    <input type=\'hidden\' name=\'title\' value=
+\'title 1\' />\n                    <input type=\'hidden\' name=\'parentPostID\'
+ value=\'1\' />\n                    <input type=\'text\' name=\'message\' value
+=\'Enter a response here\'\n                        onclick="if (!clearedRespons
+eText) {\n                            value = \'\'; \n
+  clearedResponseText = true;\n                        }" />\n
+  <input type=\'submit\' value=\'Submit response\' />\n                    </for
+m>\n                    <form action=\'remove\' method=\'POST\'>\n
+      <input type=\'hidden\' name=\'messageID\' value=\'1\' />\n
+    <input type=\'submit\' value=\'Delete this message\' />\n
+ </form></div><hr><div style=margin-left:0px>id: 2<p>title: title 2<p>message: m
+essage 2<p>author: studentx<p>\n                    <script type=\'text/javascri
+pt\'>var clearedResponseText = false;</script>\n                    <form action
+=\'reply\' method=\'POST\'>\n                    <input type=\'hidden\' name=\'t
+itle\' value=\'title 2\' />\n                    <input type=\'hidden\' name=\'p
+arentPostID\' value=\'2\' />\n                    <input type=\'text\' name=\'me
+ssage\' value=\'Enter a response here\'\n                        onclick="if (!c
+learedResponseText) {\n                            value = \'\'; \n
+               clearedResponseText = true;\n                        }" />\n
+               <input type=\'submit\' value=\'Submit response\' />\n
+        </form>\n                    <form action=\'remove\' method=\'POST\'>\n
+                   <input type=\'hidden\' name=\'messageID\' value=\'2\' />\n
+                 <input type=\'submit\' value=\'Delete this message\' />\n
+              </form></div><hr><div style=margin-left:0px>id: 3<p>title: title 3
+<p>message: message 3<p>author: studentx<p>\n                    <script type=\'
+text/javascript\'>var clearedResponseText = false;</script>\n
+ <form action=\'reply\' method=\'POST\'>\n                    <input type=\'hidd
+en\' name=\'title\' value=\'title 3\' />\n                    <input type=\'hidd
+en\' name=\'parentPostID\' value=\'3\' />\n                    <input type=\'tex
+t\' name=\'message\' value=\'Enter a response here\'\n                        on
+click="if (!clearedResponseText) {\n                            value = \'\'; \n
+                            clearedResponseText = true;\n
+ }" />\n                    <input type=\'submit\' value=\'Submit response\' />\
+n                    </form>\n                    <form action=\'remove\' method
+=\'POST\'>\n                    <input type=\'hidden\' name=\'messageID\' value=
+\'3\' />\n                    <input type=\'submit\' value=\'Delete this message
+\' />\n                    </form></div><hr><a href=\'../../\'>index</a>',)
+        bye
+        connect to localhost:8000
+Connecting to: localhost:8000 <socket._socketobject object at 0x0270E9D0>
+serial.alcohol-soft.com - - [11/Feb/2012 18:28:23] "GET http://localhost:8000/fa
+vicon.ico HTTP/1.1" - -
+Sending: GET /favicon.ico
+Sending header: ('accept-language', 'en-US,en;q=0.8')
+Sending header: ('accept-encoding', 'gzip,deflate,sdch')
+Sending header: ('connection', 'close')
+Sending header: ('accept', '*/*')
+Sending header: ('user-agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/
+535.7 (KHTML, like Gecko) Chrome/16.0.912.77 Safari/535.7')
+Sending header: ('accept-charset', 'ISO-8859-1,utf-8;q=0.7,*;q=0.3')
+Sending header: ('host', 'localhost:8000')
+Sending header: ('cookie', 'username=studentx')
+Sending: ('HTTP/1.0 404 Not Found\r\n',)
+Sending: ('Date: Sat, 11 Feb 2012 23:28:23 GMT\r\nServer: WSGIServer/0.1 Python/
+2.7.2\r\nContent-type: text/html\r\nContent-Length: 15\r\n\r\nPage not found.',)
+
+        bye
+
+
+Benjamin Katt@BENDESK ~/meep/util/TinyHTTPProxy (master)
+$
+
+
+
+

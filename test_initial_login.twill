@@ -1,0 +1,15 @@
+go http://localhost:8000/
+
+#nobody should be logged in initially
+notfind 'you are logged in as user'
+
+follow "Log in"
+fv 1 username 'studentx'
+fv 1 password 'passwordx'
+submit
+
+find 'you are logged in as user'
+
+#Log out for the next test
+follow "Log out"
+

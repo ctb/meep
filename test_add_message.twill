@@ -1,4 +1,11 @@
 go http://localhost:8000/
+
+#Must Log in to add a message
+follow "Log in"
+fv 1 username 'studentx'
+fv 1 password 'passwordx'
+submit
+
 follow "Add a message"
 
 fv 1 title 'test title FOO'
@@ -7,4 +14,8 @@ submit
 
 url /m/list
 find 'FOO'
+
+#Log out for the next twill test
+follow "index"
+follow "Log out"
 

@@ -4,11 +4,11 @@
 
 {% block body %}
 
-<form action='add_action' method='GET'>
-Title: <input type='text' name='title'><br>
-Message:<input type='text' name='message'><br>
-<input type='submit'><input type='hidden' name='reply' value={{ replyID }}>
+<form action='add_action' method='get'>
+    <input type='hidden' name='parentPostID' value='-1' />
+    Title: <input type='text' name='title'><br>
+    Message:<input type='text' name='message'><br>
+    <input type='submit'>
 </form>
-
 
 {% endblock body %}

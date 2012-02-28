@@ -1,0 +1,24 @@
+go http://localhost:8000/
+
+#Verify that the reponse does not already exist
+follow "Show messages"
+notfind 'This is an original response'
+follow "index"
+
+#Log in
+follow "Log in"
+fv 1 username 'studentx'
+fv 1 password 'passwordx'
+submit
+
+#Create a reponse
+follow "Show messages"
+find 'Submit response'
+fv 1 message 'This is an original response'
+submit
+find 'This is an original response'
+
+#Log out
+follow "index"
+follow "Log out"
+

@@ -1,0 +1,26 @@
+go http://localhost:8000/
+
+#Verify that the reponse exists (this test should run after test_create_response)
+follow "Show messages"
+find 'This is my message!'
+find 'This is an original response'
+follow "index"
+
+#Log in
+follow "Log in"
+fv 1 username 'studentx'
+fv 1 password 'passwordx'
+submit
+
+#Remove a message (and it's response)
+follow "Show messages"
+find 'Delete this message'
+fv 2 2 'fillerVal'
+submit
+notfind 'This is my message!'
+notfind 'This is an original response'
+
+#Log out
+follow "index"
+follow "Log out"
+

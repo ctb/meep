@@ -6,7 +6,7 @@ total = 0
 def print_me(message):
     global total
     
-    for i in range(2):
+    for i in range(30):
         print message, total
         total += 1
         time.sleep(1)

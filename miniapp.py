@@ -1,5 +1,5 @@
 from meep_example_app import MeepExampleApp, initialize
-import datatime
+import datetime
 import os
 
 def main():

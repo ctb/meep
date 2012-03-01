@@ -1,0 +1,69 @@
+#! /usr/bin/env python
+import sys
+import socket
+
+def handle_connection(sock):
+    do_close = False
+    
+    while 1:
+        try:
+            data = sock.recv(4096)
+            if not data:                # closed!  stop monitoring this socket.
+                do_close = True
+                break
+
+            print 'data:', (data,)
+
+            sock.sendall(data)
+
+            if '.\r\n' in data:
+                sock.close()
+                do_close = True         # stop monitoring this socket.
+                break
+        except socket.error:
+            print 'no data waiting...'
+            break
+
+    return do_close
+
+if __name__ == '__main__':
+    interface, port = sys.argv[1:3]
+    port = int(port)
+
+    print 'binding', interface, port
+    sock = socket.socket()
+    sock.bind( (interface, port) )
+    sock.listen(5)
+
+    sock.setblocking(0)
+
+    connections = []
+    while 1:
+
+        # loop, doing two things:
+        #   first, get a new connection
+        #   second, process (receive/send) data for each existing connection
+
+        # first, do we have a new connection waiting?
+        try:
+            print 'testing for new connection'
+            (client_sock, client_address) = sock.accept()
+
+            # if this succeeds, we got a new connection... no new connection
+            # raises a 'socket.error'
+            print 'got connection', client_address
+            client_sock.setblocking(0)
+            connections.append((client_sock, client_address))
+        except socket.error:            # no new connection! do nothing.
+            pass
+
+        # now, process data for existing connections.
+        open_connections = []
+        for (client_sock, client_address) in connections:
+            print 'processing data for', client_address
+            do_close = handle_connection(client_sock)
+
+            if not do_close:
+                open_connections.append((client_sock, client_address))
+
+        connections = open_connections

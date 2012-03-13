@@ -8,6 +8,8 @@ def main():
     app = MeepExampleApp()
     environ = {}
 
+    # CTB: interesting choice to hardcode this stuff -- works, I guess!
+    # bigger complaint is that this code isn't reusable for serve2!
     def custom_start_response(status, headers):
         print "HTTP/1.0", status
         print "Date:", datetime.datetime.now().strftime("%Y-%m-%d %H:%M")

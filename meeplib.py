@@ -229,7 +229,8 @@ def load():
         print "REPLY", reply
         i=0
         for msg in reply[1]:
-            add_reply(reply[0],reply[1][i])
+            add_reply(reply[0],reply[1][i]) # CTB: couldn't you just replace
+                                            # reply[1][i] with 'msg' here? 
             i+=1
         h+=1
 class User(object):

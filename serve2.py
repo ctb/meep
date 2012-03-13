@@ -108,3 +108,6 @@ if __name__ == "__main__":
                 sys.exit()
             except:
                 sys.exit()
+
+            # CTB: blanket excepts are bad... but I guess ok in this case.
+            # what about just putting 'sys.exit' after try/except? :)

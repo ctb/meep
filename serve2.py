@@ -54,12 +54,12 @@ def handle_request(request):
         path_info = fullQueryList[0]
         tmpVariables = fullQueryList[1].split('&')
         for variablePair in tmpVariables:
-            key,value = variablePair.split('=')
+            key,value = variablePair.split('=') # see urlparse.parse_qs (CTB)
             form_dict[key] = urllib.unquote_plus(value)
 
     # scoop up the odd case (POST request)
     if requestInfoList[0] == "POST":
-        post_variables = allLines[-1]
+        post_variables = allLines[-1]   # see urlparse.parse_qs (CTB)
         tmpVariables = post_variables.split('&')
         for variablePair in tmpVariables:
             if variablePair != '':
@@ -102,7 +102,7 @@ def handle_request(request):
     if type(data) is str:
         response += "Content-Length: %d\r\n\r\n" % (len(data))
         response += data
-    elif type(data) is list:
+    elif type(data) is list:            # CTB: why would this occur??
         response += "Content-Length: %d\r\n\r\n" % (len(data[0]))
         response += data[0]
 

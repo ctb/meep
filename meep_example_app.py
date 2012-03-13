@@ -116,7 +116,7 @@ class MeepExampleApp(object):
 
         ##if we have a valid username and password this is not executed
         s.append(render_page("login.html", username=username))
-        return [''.join(s)]
+        return [''.join(s)]             # CTB: you should do this in templates!
 
     def logout(self, environ, start_response):
         # get cookie if there is one
@@ -225,7 +225,7 @@ class MeepExampleApp(object):
 
         ##if we have a valid username and password this is not executed
         s.append(render_page("create_user.html", username=username))
-        return [''.join(s)]
+        return [''.join(s)]             # CTB: templates?
 
     def list_messages(self, environ, start_response):
         threads = meeplib.get_all_threads()

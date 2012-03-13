@@ -32,7 +32,12 @@ def buildResponse(webRequest):
     
     for line in webRequest:
         line = line.strip() #remove leading and trailing whitespace
-        
+
+        # ok, you *know* this has to be the first line; why not just pull
+        # it off at the beginning?  You could do:
+        # request_line = webRequest0]
+        # for line in webRequest[1:]: ...
+        #
         if (line.startswith('GET') or 
             line.startswith('POST')):
             line = line.split()
@@ -48,13 +53,15 @@ def buildResponse(webRequest):
             try:
                 line = line.split(':',1)
                 requestMap[environMap[line[0].lower()]] = line[1].strip()
-            except:
+            except:  # CTB: blanket 'except' statements are bad.  what are
+                     # you trying to catch here?  it should just be an
+                     # IndexError or a KeyError, right?
                 pass
     
     #build response
     initialize()
     app = MeepExampleApp()
-    response = app(requestMap, fake_start_response)
+    response = app(requestMap, fake_start_response) # nice.
     output = []
     output.append('HTTP/1.0 ' + _status)
     currentTime = datetime.datetime.now()
@@ -80,6 +87,4 @@ if __name__ == "__main__":
         outFile = open(sys.argv[2], 'w')
         outFile.write(buildResponse(request))
         outFile.close()
-        
-        
     

@@ -42,7 +42,7 @@ class TestApp(unittest.TestCase):
         form_dict = {'title':'Mock title', 'message':'Mock message', 'parentPostID':'-1'}
         environ['QUERY_STRING'] = urllib.urlencode(form_dict)
         def fake_start_response(status, headers):
-            #assert status == '200 OK'        #can't make this line pass
+            #assert status == '200 OK'        #can't make this line pass -- why not??
             assert ('Content-type', 'text/html') in headers
         data = self.app(environ, fake_start_response)
         assert data[0] == 'message added'  

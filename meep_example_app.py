@@ -123,7 +123,9 @@ class MeepExampleApp(object):
                       '/m/add': self.add_message,
                       '/m/add_action': self.add_message_action,
                       '/babypic': FileServerFn('image/jpeg',
-                                               'files/jessie.jpg')
+                                               'files/jessie.jpg'),
+                      '/style' : FileServerFn('text/css',
+                                              'files/style.css')
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.

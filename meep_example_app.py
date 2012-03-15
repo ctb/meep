@@ -29,7 +29,7 @@ class FileServerFn(object):
     def __call__(self, environ, start_response):
         try:
             fp = open(self.filename)
-        except OSerror:
+        except IOError:
             start_response("404 not found", [('Content-type', 'text/html'),])
             return 'file not found'
 

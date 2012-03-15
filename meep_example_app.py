@@ -21,6 +21,22 @@ def render_page(filename, **variables):
     x = template.render(**variables)
     return str(x)
 
+class FileServerFn(object):
+    def __init__(self, content_type, filename):
+        self.content_type = content_type
+        self.filename = filename
+
+    def __call__(self, environ, start_response):
+        try:
+            fp = open(self.filename)
+        except OSerror:
+            start_response("404 not found", [('Content-type', 'text/html'),])
+            return 'file not found'
+
+        data = fp.read()
+        start_response("200 OK", [('Content-type', self.content_type),])
+        return data
+
 class MeepExampleApp(object):
     """
     WSGI app object.
@@ -105,7 +121,9 @@ class MeepExampleApp(object):
                       '/logout': self.logout,
                       '/m/list': self.list_messages,
                       '/m/add': self.add_message,
-                      '/m/add_action': self.add_message_action
+                      '/m/add_action': self.add_message_action,
+                      '/babypic': FileServerFn('image/jpeg',
+                                               'files/jessie.jpg')
                       }
 
         # see if the URL is in 'call_dict'; if it is, call that function.

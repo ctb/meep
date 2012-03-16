@@ -11,15 +11,31 @@ environ = {}
 STATUS=""
 HEADERS=""
 TIME=""
+COOKIE=""
 def fake_start_response(status, headers):     # wHat exactly does the fake_start resposne do, somehow it returns the html...
 
     STATUS=status
-    HEADERS=headers
+    HEADERS=headers                  #the cookie is right in here, how do i send that to index
     TIME=datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    print "STATUS",status
-    print "HEADERS",headers
-    print datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    print '\n'
+ #   print "STATUS",status
+ #   print "HEADERS",headers
+   # environ['HTTP_COOKIE'] = "USER"
+    print len(headers)
+    for header in headers:
+        print header[0], "SPACE", header[1]
+        if header[0]=="Set-Cookie":
+            cookie=header[1]
+            print "COOKIE BEFORE I MESS WITH IT", cookie
+            cookielist=cookie.split(";")       #  "WONT WORK IF SOMEONES NAME HAS A :"
+            print "list",cookielist
+            cookie=cookielist[0]
+           
+            environ['HTTP_COOKIE'] = cookie
+            print "SET THE COOKIE", cookie
+            
+##    print datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+##    print '\n'
+    #whats going on in here?
 
 def handle_connection(sock):
 
@@ -29,32 +45,39 @@ def handle_connection(sock):
             if not data:
                 break
             data2=data.splitlines()
+            print 'data: What the Socket Recieves \n\n',
             for line in data2:
-                print 'data:', (line,)
+                print line
                 if line.startswith('GET'):
                     line = line.rstrip('\n')
                     words = line.split(' ')
                     environ['REQUEST_METHOD'] = 'GET'
                     environ['PATH_INFO'] = words[1]
                     environ['SERVER_PROTOCOL'] = words[2]
-                    print "THE GET LINE",line
-                elif line.startswith('cookie:'):
+                  #  print "THE GET LINE",line
+                elif line.startswith('Cookie: '):
                     line = line.rstrip('\n')
-                    line = line.lstrip('cookie: ')
-                    environ['HTTP_COOKIE'] = line
-                    print "THE COOKIE LINE:" ,line
-
+                    line = line.lstrip('Cookie: ')
+                   # environ['HTTP_COOKIE'] = line
+                  #  print "THE COOKIE LINE:" ,line
+           # print "SETTING ENVIRON COOKIE",COOKIE
+           # environ['HTTP_COOKIE'] = "username=USER"
+          #  print "Environ\n",environ
             app.__call__(environ, fake_start_response)
-            data = app(environ, fake_start_response)
-            #print "DATA[0]",data[0]
 
+            
+            data = app(environ, fake_start_response)
+           
+            #print "DATA[0]",data[0]
+       #     print "HEADERS", HEADERS
             output= "HTTP/1.1 "+ STATUS +"\r\n Date: "+TIME+ "\r\n Server: test/0.1 Python/2.5 \r\n Content-type: text/html \r\n Location: / \r\n "
             datalen=""
             datalen=str(len(data[0]))
             output += "Content-Length: " + datalen +"\r\n\r\n"
             output += data[0]
-            print "DATA[0]",data[0]
-            print "THE OUTPUT",output
+            
+        #    print "THE OUTPUT \n\n",output
+       #     print "DATA[0] \n\n",data[0]
             sock.sendall(output)
             sock.close()
 

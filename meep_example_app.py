@@ -12,6 +12,7 @@ def render_page(filename, **variables):
     x = template.render(**variables)
     return str(x)
 def initialize():
+   
    # try:
     #meeplib.saveUSER('test','foo',meeplib._get_next_user_id())
     #u = meeplib.User('test', 'foo',-1)
@@ -27,13 +28,13 @@ def initialize():
    # meeplib.Message('title', 'lol', u,-1)
     #meeplib.Message('my', 'test', u,-1)
    # meeplib.Message('test', 'my', u,-1)
-   # try:
-    meeplib.load()
-    #except:
-    #    print "did not load"
+    try:
+        meeplib.load()
+    except:
+        print "did not load"
     # done.
-    print "No Initiialize"
-
+   # print "No Initiialize"
+    print "INITIALIZED /n/n/n/n YES"
 
 class MeepExampleApp(object):
     """
@@ -48,23 +49,26 @@ class MeepExampleApp(object):
 
 
         cookie = environ.get("HTTP_COOKIE")
-     
+        print "YUMMY COOKIES \n\n\n", cookie, environ
         if cookie is None or len(cookie)==9:
             print "NO USERNAME COOKIE"
-            username = ''
+            username2 = ''
             loggedInMessage="Not Logged IN"
         else:
-            username = cookie[len('username='):]
-            loggedInMessage = 'You are logged in as user: %s' % (username,)
-        if username=='':
+            print len('username=')
+            username2 = cookie[9:]
+            print "USERNAME\n", username2,
+            loggedInMessage = 'You are logged in as user: %s' % (username2,)
+        if username2=='':
             print "USERNAME IS BLANK"
             return [ render_page('index.html', username="NONE") ]
             #return ["""you are not logged in %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a><p><p><a href='/m/IDTEST'>Get next User ID</a><p>""" % (username,)]
         else:
             #return ["""you are logged in as user: %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a><p><p><a href='/m/IDTEST'>Get next User ID</a><p>""" % (username,)]
-            return [ render_page('index.html', username=username) ]
+            return [ render_page('index.html', username=username2) ]
 
     def login(self, environ, start_response):
+        print "IN LOGIN \n\n\n"
         # hard code the username for now; this should come from Web input!
         username = 'test'
         u = meeplib.User('test', 'foo',-1)
@@ -81,6 +85,8 @@ class MeepExampleApp(object):
         v = '/'
         headers.append((k, v))
         start_response('302 Found', headers)
+        print "HEADERS INSIDE OF LOGIN \n\n"
+        print headers
         
         return "no such content"
 
@@ -95,8 +101,10 @@ class MeepExampleApp(object):
         k = 'Location'
         v = '/'
         headers.append((k, v))
-        start_response('302 Found', headers)
         
+        start_response('302 Found', headers)
+        print "HEADERS INSIDE OF LOGOUT \n\n"
+        print headers
         return "no such content"
     def list_search(self, environ, start_response):
         print "ENVIRON", environ

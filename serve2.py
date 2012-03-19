@@ -17,21 +17,21 @@ def fake_start_response(status, headers):     # wHat exactly does the fake_start
     STATUS=status
     HEADERS=headers                  #the cookie is right in here, how do i send that to index
     TIME=datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
- #   print "STATUS",status
- #   print "HEADERS",headers
+    print "STATUS",status
+    print "HEADERS",headers
    # environ['HTTP_COOKIE'] = "USER"
     print len(headers)
     for header in headers:
         print header[0], "SPACE", header[1]
         if header[0]=="Set-Cookie":
             cookie=header[1]
-            print "COOKIE BEFORE I MESS WITH IT", cookie
+          #  print "COOKIE BEFORE I MESS WITH IT", cookie
             cookielist=cookie.split(";")       #  "WONT WORK IF SOMEONES NAME HAS A :"
-            print "list",cookielist
+          #  print "list",cookielist
             cookie=cookielist[0]
            
             environ['HTTP_COOKIE'] = cookie
-            print "SET THE COOKIE", cookie
+        #    print "SET THE COOKIE", cookie
             
 ##    print datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
 ##    print '\n'
@@ -62,11 +62,22 @@ def handle_connection(sock):
                   #  print "THE COOKIE LINE:" ,line
            # print "SETTING ENVIRON COOKIE",COOKIE
            # environ['HTTP_COOKIE'] = "username=USER"
-          #  print "Environ\n",environ
-            app.__call__(environ, fake_start_response)
+            print "Environ\n",environ                            # should pathinfo contain only /m/addaction or should it contain the message and stuff too +rerouting
+
+
+            print "FAKE RESPONSE", fake_start_response
+
+          
+            app.__call__(environ, fake_start_response)          # routes us to the right place in meep example app?
 
             
-            data = app(environ, fake_start_response)
+            data = app(environ, fake_start_response)             #so the problem is before we get the data
+
+
+
+
+
+
            
             #print "DATA[0]",data[0]
        #     print "HEADERS", HEADERS
@@ -74,10 +85,10 @@ def handle_connection(sock):
             datalen=""
             datalen=str(len(data[0]))
             output += "Content-Length: " + datalen +"\r\n\r\n"
-            output += data[0]
+            output += data[0]                                           # the data being sent for the bad links is page not found
             
-        #    print "THE OUTPUT \n\n",output
-       #     print "DATA[0] \n\n",data[0]
+            print "THE OUTPUT \n\n",output
+            print "DATA[0] \n\n",data[0]
             sock.sendall(output)
             sock.close()
 
@@ -104,148 +115,3 @@ if __name__ == '__main__':
         print "DONE HANDELING CONNECTION"
 
 
-###! /usr/bin/env python
-##
-##import sys
-##import socket
-##import unittest
-##import meep_example_app
-##import urllib
-##import datetime
-##import signal
-##
-##e = {}
-##outputStatus = ''
-##outputHeaders = []
-##
-##def parse_Server_Line(l):
-##    global e
-##    parts = l.split()
-##    e['REQUEST_METHOD'] = parts[0]
-##    print "PARTS[0]",parts[0]
-##    if len(parts) > 2:
-##        e['SERVER_PROTOCOL'] = parts[2]
-##        print "PARTS[2]",parts[2]
-##    if parts[1].find('?') == -1:
-##        e['PATH_INFO'] = parts[1]
-##        print "PARTS[1]",parts[1]
-##    else:
-##        url = parts[1].split('?')
-##        e['PATH_INFO'] = url[0]
-##        e['QUERY_STRING'] = url[1]
-##        print "URL", url
-##
-##def parse_Content_Type(l):
-##    values = l.split(': ')[1]
-##    types = values.split(',')
-##    e['CONTENT_TYPE'] = types[0]
-##
-##def parse_Host(l):
-##    values = l.split(': ')[1]
-##    parts = values.split(':')
-##    e['SERVER_NAME'] = parts[0]
-##    if len(parts) > 1:
-##        e['SERVER_PORT'] = parts[1]
-##
-##def parse_cookie(l):
-##    e['HTTP_COOKIE'] = l.split(': ')[1]
-##
-##def parse_http_header(l):
-##	try:
-##		key,value = l.split(': ')
-##		key = 'HTTP_%s' % (key.upper().replace('-','_'),)
-##		e[key] = value
-##	except:
-##		pass
-##
-##def fake_start_response(status, headers):
-##	global outputStatus, outputHeaders
-##	outputStatus = status
-##	outputHeaders = headers
-##
-##def process_incoming(data,ip,port):
-##
-##	global e,outputStatus, outputHeaders
-##
-##	#LOAD DEFAULTS
-##	e['SCRIPT_NAME'] = ''
-##	e['REQUEST_METHOD'] = 'GET'
-##	e['PATH_INFO'] = '/'
-##	e['QUERY_STRING'] = ''
-##	e['SERVER_PROTOCOL'] = 'HTTP/1.1'
-##	e['SERVER_NAME'] = socket.gethostbyaddr("69.59.196.211")
-##	e['SERVER_PORT'] = str(port)
-##	e['CONTENT_TYPE'] = 'text/plain'
-##	e['CONTENT_LENGTH'] = '0'
-##	e['HTTP_COOKIE'] = ''
-##
-##	lines = data.splitlines()
-##	for l in lines:
-##		if l.startswith('GET'):
-##			parse_Server_Line(l)
-##			e['CONTENT_LENGTH'] = '0'
-##		elif l.lower().startswith('accept:'):
-##			parse_Content_Type(l)
-##		elif l.lower().startswith('host:'):
-##			parse_Host(l)
-##		elif l.lower().startswith('cookie'):
-##			parse_cookie(l)
-##		else:
-##			parse_http_header(l)
-##
-##	print 'processed headers:'
-##	for val in e:
-##		print '   %s: %s' % (val,e[val],)
-##
-##	app = meep_example_app.MeepExampleApp()
-##	print 'processing'
-##	data = app(e, fake_start_response)
-##	output = '%s %s\r\n' % (e['SERVER_PROTOCOL'], outputStatus)
-##	output += 'Date: %s EST\r\n' % datetime.datetime.now().strftime("%a, %d %b %Y %I:%M:%S")
-##	output += 'Server: HaydensAwesomeServer/0.1 Python/2.5\r\n'
-##	output += 'Content-type: %s\r\n' % (e['CONTENT_TYPE'],)
-##	output += 'Location: %s\r\n' % (e['PATH_INFO'],)
-##	if len(data) > 0:
-##		output += 'Content-Length: %d\r\n\r\n' % (len(data[0]),)
-##		output += data[0]
-##	else:
-##		output += 'Content-Length: 0\r\n\r\n'
-##	print 'done'
-##	print "THE OUTPUT", output
-##	print "DONT WITH THE OUTPUT"
-##	return output
-##
-##def handle_connection(sock):
-##    while 1:
-##        try:
-##            data = sock.recv(4096)
-##            if not data:
-##                break
-##                    
-##            print 'data received from IP: ', (sock.getsockname(),)
-##            ip,port = sock.getsockname()
-##            sock.sendall(process_incoming(data, ip, port))
-##            sock.close()
-##            break
-##        except socket.error:
-##            print 'error'
-##            break
-##
-##if __name__ == '__main__':
-##	interface, port = sys.argv[1:3]
-##	port = int(port)
-##
-##
-##	print 'binding', interface, port
-##	sock = socket.socket()
-##	sock.bind( (interface, port) )
-##	sock.listen(5)
-##
-##
-##	while 1:
-##		print 'waiting...'
-##		(client_sock, client_address) = sock.accept()
-##		print 'got connection', client_address
-##		handle_connection(client_sock)
-##
-##	sock.close()

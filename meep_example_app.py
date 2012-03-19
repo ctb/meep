@@ -49,18 +49,18 @@ class MeepExampleApp(object):
 
 
         cookie = environ.get("HTTP_COOKIE")
-        print "YUMMY COOKIES \n\n\n", cookie, environ
+      #  print "YUMMY COOKIES \n\n\n", cookie, environ
         if cookie is None or len(cookie)==9:
             print "NO USERNAME COOKIE"
             username2 = ''
             loggedInMessage="Not Logged IN"
         else:
-            print len('username=')
+        #    print len('username=')
             username2 = cookie[9:]
-            print "USERNAME\n", username2,
+        #    print "USERNAME\n", username2,
             loggedInMessage = 'You are logged in as user: %s' % (username2,)
         if username2=='':
-            print "USERNAME IS BLANK"
+        #    print "USERNAME IS BLANK"
             return [ render_page('index.html', username="NONE") ]
             #return ["""you are not logged in %s.<p><a href='/m/add'>Add a message</a><p><a href='/login'>Log in</a><p><a href='/logout'>Log out</a><p><a href='/m/list'>Show messages</a><p><p><a href='/m/IDTEST'>Get next User ID</a><p>""" % (username,)]
         else:
@@ -68,7 +68,9 @@ class MeepExampleApp(object):
             return [ render_page('index.html', username=username2) ]
 
     def login(self, environ, start_response):
+        
         print "IN LOGIN \n\n\n"
+        print "Environ:", environ, "start+response", start_response
         # hard code the username for now; this should come from Web input!
         username = 'test'
         u = meeplib.User('test', 'foo',-1)
@@ -107,7 +109,7 @@ class MeepExampleApp(object):
         print headers
         return "no such content"
     def list_search(self, environ, start_response):
-        print "ENVIRON", environ
+   #     print "ENVIRON", environ
         results=meeplib.get_search_results()
         s = []
 
@@ -185,6 +187,7 @@ class MeepExampleApp(object):
         #return ["".join(s)]
 
     def add_message(self, environ, start_response):
+        print "IN ADD MESSAGE"
         headers = [('Content-type', 'text/html')]
         
         start_response("200 OK", headers)
@@ -256,6 +259,7 @@ class MeepExampleApp(object):
 
         
     def add_message_action(self, environ, start_response):
+        print "TRYING TO ADD A MESSAGE!!!!\n"
         print environ['wsgi.input']
         form = cgi.FieldStorage(fp=environ['wsgi.input'], environ=environ)
        

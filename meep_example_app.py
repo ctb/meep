@@ -352,7 +352,7 @@ class MeepExampleApp(object):
 
         if fn is None:
             start_response("404 Not Found", [('Content-type', 'text/html')])
-            return ["Page not found."]
+            return ["Page not found." + repr(url) ]
 
         try:
             print "FN", fn

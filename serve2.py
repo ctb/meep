@@ -54,7 +54,9 @@ def handle_connection(sock):
                     environ['REQUEST_METHOD'] = 'GET'
                     environ['PATH_INFO'] = words[1]
                     environ['SERVER_PROTOCOL'] = words[2]
-                  #  print "THE GET LINE",line
+                    enivron['QUERY_STRING'] = '' # @CTB
+                    
+                    print "THE GET LINE",line
                 elif line.startswith('Cookie: '):
                     line = line.rstrip('\n')
                     line = line.lstrip('Cookie: ')

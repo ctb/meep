@@ -54,7 +54,7 @@ def handle_request(request):
     # we need to do further processing on the variables (GET request)
     else:
         path_info = fullQueryList[0]
-        tmpVariables = fullQueryList[1].split('&')
+        tmpVariables = fullQueryList[1].split('&') # 
         for variablePair in tmpVariables:
             key,value = variablePair.split('=')
             form_dict[key] = urllib.unquote_plus(value)
@@ -67,6 +67,9 @@ def handle_request(request):
             if variablePair != '':
                 key,value = variablePair.split('=')
                 form_dict[key] = urllib.unquote_plus(value)
+
+    # ok, this is interesting -- you decode the POST request, and then
+    # re-encode it in QUERY_STRING.  Heh.  OK. --CTB
 
     cookie = ''
     # get the cookie

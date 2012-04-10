@@ -27,7 +27,8 @@ class RootDirectory(Directory):
     def _q_index(self):
         return '''<html>
                     <body>Welcome to the Quixote demo.  Here is a
-                    <a href="hello">link</a>.
+                    <a href="hello">link</a>.  Also see <a href="sub/">the
+                    subdirectory.</a>
                     </body>
                   </html>
                 '''

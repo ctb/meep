@@ -1,0 +1,44 @@
+<!-- simple AJAX w/'document.ready' -->
+
+<head>
+
+<style type="text/css">
+   #wrapper {
+     width: 240px;
+     height: 80px;
+     margin: auto;
+     padding: 10px;
+     margin-top: 10px;
+     border: 1px solid black;
+     text-align: center;
+   }
+ </style> 
+
+<script src="jquery-1.3.2.min.js"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+   $("#generate").click(function() {
+      $("#quote").load("generate_quote");
+   })
+});
+
+</script>
+</head>
+
+<body>
+
+<div id="wrapper">
+  <input type="submit" id="generate" value="Generate!">
+  <div id="quote"></div>
+</div>
+
+<!--
+
+  0. execute JS code once finished loading
+  1. use in-document CSS for the heck of it.
+
+-->
+
+</body>

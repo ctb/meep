@@ -1,0 +1,26 @@
+<html>
+<head>
+<title>Foo</title>
+</head>
+<body>
+<script type="text/javascript">
+
+function change_title() {
+    var x = document.getElementById("my_input");
+    document.title = x.value;
+    return false;
+}
+
+document.write("The title is: " + document.title + "<p>");
+</script>
+
+<form onsubmit='return change_title()' method='POST'>
+
+New title: <input type="text" id='my_input'>
+
+<input type="submit" value='change title' >
+
+</form>
+
+</body>
+</html>

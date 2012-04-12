@@ -1,0 +1,99 @@
+<!-- chat server, from http://www.sitepoint.com/article/ajax-jquery/ -->
+
+<head>
+
+<style type="text/css">
+   #messagewindow {
+     height: 250px;
+     border: 1px solid;
+     padding: 5px;
+     overflow: auto;
+   }
+   #wrapper {
+     margin: auto;
+     width: 438px;
+   }
+ </style>
+
+<script src="jquery-1.3.2.min.js"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+  timestamp = 0;
+
+  function add_messages(xml) {
+     // retrieve 'status' from the XML; if nothing changed, exit.
+     if($("status", xml).text() == "2") return;
+
+     // update timestamp value from XML
+     timestamp = $("time", xml).text();
+
+     // for each 'message' block in the XML, retrieve author & content, then
+     // post.
+
+     $("message", xml).each( function(id) {
+        message = $("message", xml).get(id);
+
+        author = $("author", message).text();
+        content = $("text", message).text();
+
+        $("#messagewindow").prepend("<b>" + author + "</b>:" + content 
+                                    + "<br>");
+     });
+  };
+
+  // when the 'submit' button is pushed on the chatform,
+  $("form#chatform").submit(function() {
+
+     // send the message data to the URL 'post_message'
+     $.post("post_message",
+            { message    : $("#message").val(), 
+              user       : $("#author").val(),
+              last_time  : timestamp,
+            },
+            // apply 'add_messages' to update page with returned data
+            function(xml) {               
+              add_messages(xml)
+            }
+     );
+
+     // blank out the 'message' field in the form
+     $("#message").val("");
+
+     return false;
+  });
+
+  //
+  // execute below on load:
+  //
+
+  // blank out the 'loading' message
+  $("#loading").remove();
+
+  // get the current set of messages with timestamp 0
+  $.post("get_messages",
+         { last_time : timestamp },
+         function(xml) { add_messages(xml) }
+  );
+ 
+});
+
+</script>
+</head>
+
+<body>
+
+<div id="wrapper">
+  <p id="messagewindow"><span id="loading">Loading...</span></p>
+  <form id="chatform">
+
+Name: <input type="text" id="author" />
+Message: <input type="text" id="message" />
+
+   <input type="submit" value="ok" /><br />
+
+</form>
+</div>
+
+</body>

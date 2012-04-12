@@ -1,0 +1,31 @@
+<html>
+<body>
+<script type="text/javascript">
+
+function some_object_method(param) {
+   document.write("hello!  This is SomeObject's other param: ");
+   document.write(this.what);
+
+   document.write("<p> and this is my method param:");
+   document.write(param);
+}
+
+function SomeObject(what, other_param) {
+   this.foo = "hello";
+   this.what = other_param;
+   this.method = some_object_method;
+}
+
+x = new SomeObject("world", 2);
+
+document.write(x.foo + " " + x.what + "<p>");
+x.method("argument to SomeObject.method");
+
+for (z in x) {
+   document.write('<p>z is ' + z);
+   document.write('<p>x[z] is ' + x[z]);
+}
+
+</script>
+</body>
+</html>

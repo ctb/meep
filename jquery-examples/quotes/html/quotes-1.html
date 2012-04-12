@@ -1,0 +1,31 @@
+<!-- simple AJAX, linking dynamic page behavior to back-end code -->
+
+<head>
+<script src="jquery-1.3.2.min.js"></script>
+</head>
+
+<body>
+
+<input type="submit" id="generate" value="Generate!">
+
+<div id="quote">This is not the quote you are looking for.</div>
+
+<script type="text/javascript">
+
+$("#generate").click(function() {
+ $("#quote").load("generate_quote");
+});
+
+</script>
+
+<!--
+
+  0. assignment of 'onclick' tag *within JavaScript*
+  1. anonymous function creation
+  2. CSS selector by ID
+  3. AJAX 'load' function retrieves data from URL dynamically
+  4. BAD use of JS in body
+
+-->
+
+</body>

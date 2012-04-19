@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+<style type="text/css">
+   #wrapper {
+     width: 240px;
+     height: 120px;
+     margin: auto;
+     padding: 10px;
+     margin-top: 10px;
+     border: 1px solid black;
+     text-align: center;
+   }
+ </style> 
+
+
+    <script src="jquery-1.7.2.min.js"></script>
+    <script>
+        jQuery(window).ready(function(){
+            jQuery("#btnInit").click(initiate_geolocation);
+        });
+
+        function initiate_geolocation() {
+            navigator.geolocation.getCurrentPosition(handle_geolocation_query,handle_errors);
+        }
+
+        function handle_errors(error)
+        {
+            switch(error.code)
+            {
+                case error.PERMISSION_DENIED: alert("user did not share geolocation data");
+                break;
+
+                case error.POSITION_UNAVAILABLE: alert("could not detect current position");
+                break;
+
+                case error.TIMEOUT: alert("retrieving position timed out");
+                break;
+
+                default: alert("unknown error");
+                break;
+            }
+        }
+
+        function success(data, status, xxx) {
+	    s = ["Next bus arrives at: ", data.time,"<br>Route number: ",
+	         data.route_num,"<br>Route description: ",
+	         data.route_name].join('')
+            $('#result').html(s).css('color','black')
+        }
+
+        function handle_geolocation_query(position){
+            $('#result').html('loading...').css('color','red')
+	    $.post("../get_next_bus",
+                   { lat : position.coords.latitude,          // POST data
+	             lon : position.coords.longitude },
+                   success)
+        }
+    </script>
+  </head>
+  <body>
+
+   <div id="wrapper">
+    <div>
+      <button id="btnInit" >Find bus arrival time @ nearest stop</button>
+    </div>
+    <div id='result'>
+    </div>
+   </div>
+  </body>
+</html>
